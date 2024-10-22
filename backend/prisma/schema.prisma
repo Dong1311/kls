@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement()) // ID tự động tăng
+  username    String   @unique                      // Tên đăng nhập (phải là duy nhất)
+  password    String                                // Mật khẩu của người dùng
+  role        String                                // Vai trò của người dùng (ví dụ: admin, user)
+  createdAt   DateTime @default(now())              // Thời gian tạo tài khoản
+  updatedAt   DateTime @updatedAt                   // Thời gian cập nhật tài khoản cuối cùng
+}
+
+model KeHoachThuThap {
+  id          Int      @id @default(autoincrement())
+  soKeHoach   String   @unique
+  tieuDe      String
+  nguoiTao    String
+  nguoiDuyet  String?
+  ngayTao     DateTime @default(now())
+  noiDung     String?
+  donViNopLuu String?
+  ngayBatDau  DateTime?
+  ngayKetThuc DateTime?
+  taiLieuHD   String?
+  trangThai   String
+
+  hoSos       HoSo[]   // 1 Kế hoạch thu thập có nhiều Hồ sơ
+}
+
+model HoSo {
+  id                   Int      @id @default(autoincrement())
+  maHoSo               String   @unique
+  maDinhDanhCoQuan     String
+  mucLucSoNamHS        String
+  soVaKyHieuHoSo       String
+  tieuDeHoSo           String
+  thoiHanBaoQuan       String
+  cheDoSuDung          String
+  ngonNgu              String
+  thoiGianBatDau       DateTime?
+  thoiGianKetThuc      DateTime?
+  tongSoVanBanTrongHS  Int
+  chuGiai              String?
+  kyHieuThongTin       String?
+  tuKhoa               String?
+  soLuongTo            Int
+  soLuongTrang         Int
+  tinhTrangVatLy       String
+  trangThai            String
+
+  keHoachThuThapId     Int
+  keHoachThuThap       KeHoachThuThap @relation(fields: [keHoachThuThapId], references: [id]) // Quan hệ với Kế hoạch thu thập
+  taiLieus             TaiLieu[]      // 1 Hồ sơ có nhiều Tài liệu
+}
+
+model TaiLieu {
+  id                 Int      @id @default(autoincrement())
+  khungBienMuc       String
+  maDinhDanhVanBan   String   @unique
+  hoSoId             Int
+  hoSo               HoSo     @relation(fields: [hoSoId], references: [id]) // Quan hệ với Hồ sơ
+  sttTrongHoSo       Int
+  tenLoaiVanBan      String
+  soVanBan           String
+  kyHieuTaiLieu      String
+  ngayThangNamVB     DateTime
+  tenCoQuanBanHanh   String
+  trichYeuNoiDung    String
+  ngonNgu            String
+  soLuongTrang       Int
+  ghiChu             String?
+  kyHieuThongTin     String?
+  tuKhoa             String?
+  cheDoSuDung        String
+  mucDoTinCay        String
+  butTich            String?
+  tinhTrangVatLy     String
+}
+
+model BienBanBanGiao {
+  id                Int      @id @default(autoincrement())
+  soBienBan         String
+  tieuDe            String
+  ngayLap           DateTime
+  canCu            String
+  tenCoQuanThuThap  String
+  donViNopLuu       String
+  daiDienBenGiao    String
+  daiDienBenNhan    String
+  thoiGianHSTL      DateTime?
+  tinhTrangVatLy    String
+  trangThaiBienBan  String
+}
+
+model LichSuChinhSua {
+  id              Int      @id @default(autoincrement())
+  maHoatDong      Int
+  maHoSo          Int
+  maTaiLieu       Int
+  nguoiThucHien   String
+  thoiGianThucHien DateTime
+}
+
+model PhieuYeuCau {
+  id               Int      @id @default(autoincrement())
+  soPhieu          String
+  loaiHinhKhaiThac String
+  ngayYeuCau       DateTime
+  nguoiKhaiThac    String
+  nguoiDuyet       String
+  doiTuongKhaiThac String
+  mucDichKhaiThac  String
+  khaiThacTuNgay   DateTime
+  khaiThacDenNgay  DateTime
+  hinhThucKhaiThac String
+  loaiHoatDong     String
+  noiDungYeuCau    String
+  ghiChu           String?
+  trangThai        String
+}
+
+model PhieuTra {
+  id               Int      @id @default(autoincrement())
+  soPhieu          String
+  soPhieuYeuCau    String
+  ngayTao          DateTime
+  nguoiTao         String
+  trangThai        String
+}
+
+model QuyDinhTieuHuy {
+  id               Int      @id @default(autoincrement())
+  qdSo             String
+  tieuDeQuyetDinh  String
+  ngayTao          DateTime
+  nguoiDuyet       String
+  nguoiTao         String
+  noiDungTieuHuy   String
+  lyDoTieuHuy      String
+  trangThai        String
+}
+
+model DonViNopLuu {
+  id               Int      @id @default(autoincrement())
+  maDonVi          String
+  tenDonVi         String
+  diaChi           String
+  ghiChu           String?
+}
+
+model PhongBan {
+  id               Int      @id @default(autoincrement())
+  maPhongBan       String
+  tenPhongBan      String
+  maDonVi          String
+  ghiChu           String?
+}
+
+model CanBo {
+  id               Int      @id @default(autoincrement())
+  maCanBo          String
+  maDonVi          String
+  chucVu           String
+  ghiChu           String?
+}
+
+model Kho {
+  id               Int      @id @default(autoincrement())
+  maKho            String
+  tenKho           String
+  diaChiKho        String
+  ghiChu           String?
+}
+
+model PhongLuuTru {
+  id               Int      @id @default(autoincrement())
+  maPhongLuuTru    String
+  tenPhongLuuTru   String
+  coQuanBanHanh    String
+  ghiChu           String?
+}
