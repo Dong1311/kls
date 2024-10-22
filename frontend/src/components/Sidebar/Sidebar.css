@@ -1,0 +1,109 @@
+/* Sidebar chính */
+.sidebar {
+  background-color: #044D82;
+  color: white;
+  width: 350px;
+  height: 100vh;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #044D82 #004080;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+  margin-right: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #044D82;
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #0056b3;
+  border-radius: 10px;
+  border: 2px solid #044D82;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: #006dcc;
+}
+
+/* Định dạng các mục trong menu */
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  margin-bottom: 10px;
+}
+
+/* Định dạng link cho menu */
+.menu-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 30px;
+  text-decoration: none;
+  background-color: #044D82;
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.menu-link:hover {
+  background-color: #006dcc;
+  color: black;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.arrow-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+}
+
+/* Xoay mũi tên khi submenu mở */
+.rotate-arrow {
+  transform: rotate(90deg);
+}
+
+/* Submenu */
+.submenu {
+  list-style: none;
+  padding: 0; 
+  margin: 0;
+}
+
+.submenu-item {
+  margin: 10px 0 10px 40px;
+}
+
+.submenu-link {
+  padding: 10px 15px; 
+  font-size: 14px;
+  display: block;
+  text-decoration: none;
+  background-color: #044D82; 
+  color: white;
+  border-radius: 10px;
+  border: 1px solid white; 
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: left;
+}
+
+.submenu-link:hover {
+  background-color: white; /* Khi hover, nền sẽ chuyển thành trắng */
+  color: #044D82; /* Chữ sẽ chuyển thành màu xanh */
+  border-color: white; /* Border vẫn giữ màu trắng khi hover */
+}

@@ -1,0 +1,44 @@
+/* Header chính */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #044D82 !important; /* Màu nền của header */
+  padding: 10px 20px;
+  color: white;
+  font-family: Arial, sans-serif; 
+  height: 70px;
+}
+
+/* Logo và tên */
+.logo {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none; /* Loại bỏ gạch chân */
+  font-size: 18px; /* Kích thước chữ */
+}
+
+/* Hình ảnh logo */
+.logo-img {
+  height: 40px; /* Điều chỉnh kích thước logo */
+  margin-right: 10px; /* Khoảng cách giữa logo và text */
+}
+
+/* Khu vực bên phải của header (username và notification) */
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Tên người dùng */
+.username {
+  margin-right: 20px; /* Khoảng cách giữa username và biểu tượng thông báo */
+  font-size: 16px;
+}
+
+/* Biểu tượng thông báo */
+.notification {
+  font-size: 20px;
+  cursor: pointer; /* Con trỏ chuyển thành biểu tượng tay khi hover */
+}
