@@ -70,12 +70,12 @@ const LapKeHoachThuThap = () => {
           />
 
           {/* Ô tìm kiếm theo ngày bắt đầu */}
-          <input 
-            type="date" 
-            className="form-control me-2" 
+          <input
+            type="date"
+            className="form-control me-2"
             style={{ width: '200px' }}
             value={tuNgay}
-            onChange={(e) => setTuNgay(e.target.value)} 
+            onChange={(e) => setTuNgay(e.target.value)}
           />
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
@@ -11,8 +11,14 @@ import ChiTietKeHoachThuThap from './pages/KeHoachThuThap/ChiTietKeHoachThuThap'
 import AddKeHoachThuThap from './pages/KeHoachThuThap/AddKeHoachThuThap'; 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  // Kiểm tra trạng thái đăng nhập từ localStorage
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true'); 
   const location = useLocation();
+
+  useEffect(() => {
+    // Mỗi khi đăng nhập thành công, lưu trạng thái vào localStorage
+    localStorage.setItem('isLoggedIn', isLoggedIn);
+  }, [isLoggedIn]);
 
   if (!isLoggedIn && location.pathname !== '/login') {
     return <Navigate to="/login" />;

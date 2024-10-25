@@ -107,3 +107,57 @@
   color: #044D82; /* Chữ sẽ chuyển thành màu xanh */
   border-color: white; /* Border vẫn giữ màu trắng khi hover */
 }
+/* Vùng chứa nút cài đặt */
+.settings-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+/* Nút cài đặt */
+.settings-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.settings-icon {
+  width: 35px; /* Tăng kích thước icon */
+  height: 35px;
+}
+
+/* Popup cài đặt */
+.settings-popup {
+  position: absolute;
+  bottom: 60px;
+  left: 20px;
+  background-color: #044D82; /* Màu nền giống sidebar */
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+  width: 200px; /* Tăng chiều rộng của popup */
+}
+
+/* Các tùy chọn trong popup */
+.settings-option {
+  display: block;
+  background-color: #044D82; /* Màu nền giống sidebar */
+  color: white;
+  padding: 15px 20px; /* Tăng đệm cho nút để to hơn */
+  margin: 0; /* Không có khoảng cách giữa các nút */
+  width: 100%; /* Nút chiếm toàn bộ chiều rộng của popup */
+  text-align: left; /* Văn bản căn trái */
+  border: 1px solid white; /* Thêm border giống submenu */
+  border-radius: 10px; /* Bo góc cho nút */
+  cursor: pointer;
+  font-size: 16px; /* Tăng kích thước chữ */
+  margin-bottom: 10px; /* Thêm khoảng cách giữa các nút */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.settings-option:hover {
+  background-color: white; /* Khi hover, nền sẽ chuyển thành trắng */
+  color: #044D82; /* Màu chữ sẽ chuyển thành xanh */
+  border-color: white; /* Border màu trắng khi hover */
+}

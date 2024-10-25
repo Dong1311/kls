@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import MenuLink from '../MenuLink';  // Import MenuLink
-import SubmenuItem from '../SubmenuItem'; // Import SubmenuItem
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import MenuLink from '../MenuLink';  
+import SubmenuItem from '../SubmenuItem'; 
 import trangchuIcon from '../../assets/images/Module/TrangChu.png';
-
 import quanlykehoachIcon from '../../assets/images/Module/QuanLyKehoach.png';
 import bienmucchinlyIcon from '../../assets/images/Module/BienMucChinhLy.png';
 import khaithacsudungIcon from '../../assets/images/Module/KhaiThacSuDung.png';
@@ -11,13 +11,33 @@ import quanlydanhmucIcon from '../../assets/images/Module/QuanLyDanhMuc.png';
 import tieuhuyhosoIcon from '../../assets/images/Module/TieuHuyHoSo.png';
 import baocaothongkeIcon from '../../assets/images/Module/BaoCaoThongKe.png';
 
+import settingIcon from '../../assets/images/Function/Setting.png';
+import { AuthContext } from '../../context/AuthContext';
+
 import './Sidebar.css'; 
 
 const Sidebar = () => {
-  const [activeMenu, setActiveMenu] = useState(null);  // Trạng thái chung cho tất cả các submenu
+  const { role } = useContext(AuthContext);
+  const [activeMenu, setActiveMenu] = useState(null);  
+  const [showSettings, setShowSettings] = useState(false);
+  
+  const navigate = useNavigate(); 
 
   const toggleMenu = (menu) => {
-    setActiveMenu(activeMenu === menu ? null : menu);  // Đóng nếu nhấn lại, hoặc mở menu khác
+    setActiveMenu(activeMenu === menu ? null : menu); 
+  };
+
+  const toggleSettings = () => {
+    setShowSettings(!showSettings); 
+  };
+
+  const handleLogout = () => {
+    localStorage.clear(); 
+    window.location.href = '/login'; 
+  };
+
+  const goToHomePage = () => {
+    navigate('/'); 
   };
 
   return (
@@ -26,8 +46,9 @@ const Sidebar = () => {
         <MenuLink
           icon={trangchuIcon}
           title="Trang chủ"
-          toggleMenu={() => toggleMenu('trangChu')}
+          toggleMenu={goToHomePage}
           isOpen={activeMenu === 'trangChu'}
+          hideArrow = {true}
         />
 
         <MenuLink
@@ -36,8 +57,12 @@ const Sidebar = () => {
           toggleMenu={() => toggleMenu('keHoach')}
           isOpen={activeMenu === 'keHoach'}
         >
-          <SubmenuItem to="/lap-ke-hoach-thu-thap" text="Lập kế hoạch thu thập" />
-          <SubmenuItem to="/duyet-ke-hoach-thu-thap" text="Duyệt kế hoạch thu thập" />
+          {role === 'Lanh dao CQ bao quan' && (
+            <SubmenuItem to="/lap-ke-hoach-thu-thap" text="Lập kế hoạch thu thập" />
+          )}
+          {role === 'Lanh dao CQ bao quan' &&(
+            <SubmenuItem to="/duyet-ke-hoach-thu-thap" text="Duyệt kế hoạch thu thập" />
+          )}
           <SubmenuItem to="/danh-sach-ke-hoach-da-duyet" text="Danh sách kế hoạch đã duyệt" />
           <SubmenuItem to="/quan-ly-ho-so" text="Quản lý hồ sơ" />
           <SubmenuItem to="/quan-ly-tai-lieu" text="Quản lý tài liệu" />
@@ -117,6 +142,19 @@ const Sidebar = () => {
           <SubmenuItem to="/tra-cuu-tai-lieu" text="Tra cứu tài liệu" />
         </MenuLink>
       </ul>
+
+      <div className="settings-container">
+        <button className="settings-button" onClick={toggleSettings}>
+          <img src={settingIcon} alt="Cài đặt" className="settings-icon" />
+        </button>
+
+        {showSettings && (
+          <div className="settings-popup">
+            <button onClick={handleLogout} className="settings-option">Đăng xuất</button>
+            <button onClick={() => alert('Đổi mật khẩu')} className="settings-option">Đổi mật khẩu</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

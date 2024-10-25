@@ -2,8 +2,9 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
 import { ProgressBar } from 'react-bootstrap';
-
+import { AuthContext } from '../../context/AuthContext';
 const Dashboard = () => {
+  const { role } = useContext(AuthContext);
   return (
     <div className="container-fluid">
       <div className="row mt-4">

@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
-import logo from'../../assets/images/logo-bo-cong-an.jpg'
+import logo from '../../assets/images/logo-bo-cong-an.jpg';
+import {jwtDecode} from 'jwt-decode';
+import { UserContext } from '../../context/UserContext'; 
+import { AuthContext } from '../../context/AuthContext'; 
 
 const Login = ({ onLogin }) => {  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const { setRole } = useContext(AuthContext); 
+  const { updateName } = useContext(UserContext); 
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -23,7 +29,16 @@ const Login = ({ onLogin }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-          localStorage.setItem('token', data.token); 
+          localStorage.setItem('token', data.token);
+          
+          // Decode token để lấy thông tin name và role
+          const decodedToken = jwtDecode(data.token);
+          const role = decodedToken.role;
+          const name = decodedToken.name;
+
+          setRole(role);
+          updateName(name);
+
           onLogin(); 
           navigate('/'); 
         } else {
@@ -39,7 +54,7 @@ const Login = ({ onLogin }) => {
     <div className="login-container d-flex align-items-center justify-content-center">
       <div className="card p-4 shadow-lg login-card">
         <div className="text-center mb-4">
-          <img src={logo} alt="Logo" className="login-logo mb-3" /> {/* Logo */}
+          <img src={logo} alt="Logo" className="login-logo mb-3" /> 
           <h4>Đăng Nhập</h4>
         </div>
 

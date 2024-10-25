@@ -1,6 +1,6 @@
 import React from 'react';
 import arrowIcon from '../assets/images/next.png'
-const MenuLink = ({ icon, title, toggleMenu, isOpen, children }) => {
+const MenuLink = ({ icon, title, toggleMenu, isOpen, children,hideArrow }) => {
   return (
     <li className="menu-item">
       <div onClick={toggleMenu} className="menu-link">
@@ -10,6 +10,7 @@ const MenuLink = ({ icon, title, toggleMenu, isOpen, children }) => {
           src={arrowIcon} 
           alt="arrow"
           className={`arrow-icon ${isOpen ? 'rotate-arrow' : ''}`}
+          style={{ display: hideArrow ? 'none' : 'inline' }}
         />
       </div>
       {isOpen && (
