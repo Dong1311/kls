@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import searchIcon from '../../assets/images/Function/search.png';
-import addIcon from '../../assets/images/Function/Add.png';
-import gridIcon from '../../assets/images/Function/HanhDong.png';
-import deleteIcon from '../../assets/images/Function/DeleteFile.png';
-import editIcon from '../../assets/images/Function/ChinhSua.png';
-import infoIcon from '../../assets/images/Function/info.png';
+import infoIcon from '../../../assets/images/Function/info.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const DuyetKeHoachThuThap = () => {
@@ -20,6 +15,7 @@ const DuyetKeHoachThuThap = () => {
       tieuDe,
       nguoiDuyet,
       tuNgay,
+      trangThai: 'Đã trình duyệt', 
     }).toString();
   
     fetch(`/api/lap-ke-hoach-thu-thap?${query}`)
@@ -33,7 +29,7 @@ const DuyetKeHoachThuThap = () => {
   }, [tieuDe, nguoiDuyet, tuNgay]);
 
   const handleDetailClick = (id) => {
-    navigate(`/ke-hoach-thu-thap/${id}`);
+    navigate(`/ke-hoach-thu-thap-da-trinh-duyet/${id}`);
   };
 
   return (
@@ -41,7 +37,7 @@ const DuyetKeHoachThuThap = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="add" width="30" className="me-2" />
-          Lập kế hoạch thu thập
+          Duyệt kế hoạch thu thập
         </h5>
       </div>
 
@@ -78,12 +74,6 @@ const DuyetKeHoachThuThap = () => {
             onChange={(e) => setTuNgay(e.target.value)} 
           />
         </div>
-
-        {/* Nút thêm */}
-        <button className="btn btn-light" onClick={() => navigate('/ke-hoach-thu-thap/add')}>
-          <img src={addIcon} alt="add" width="20" />
-        </button>
-
       </div>
 
       <table className="table table-striped table-hover align-middle">
@@ -98,7 +88,6 @@ const DuyetKeHoachThuThap = () => {
             <th scope="col">Từ ngày</th>
             <th scope="col">Đến ngày</th>
             <th scope="col">Tình trạng</th>
-            <th scope="col">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -113,14 +102,7 @@ const DuyetKeHoachThuThap = () => {
               <td>{new Date(keHoach.ngayBatDau).toLocaleDateString()}</td>
               <td>{new Date(keHoach.ngayKetThuc).toLocaleDateString()}</td>
               <td>{keHoach.trangThai}</td>
-              <td>
-                <button className="btn btn-light me-2">
-                  <img src={editIcon} alt="edit" width="20" />
-                </button>
-                <button className="btn btn-light">
-                  <img src={deleteIcon} alt="delete" width="20" />
-                </button>
-              </td>
+
             </tr>
           ))}
         </tbody>

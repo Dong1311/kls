@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import searchIcon from '../../assets/images/Function/search.png';
-import addIcon from '../../assets/images/Function/Add.png';
-import gridIcon from '../../assets/images/Function/HanhDong.png';
-import deleteIcon from '../../assets/images/Function/DeleteFile.png';
-import editIcon from '../../assets/images/Function/ChinhSua.png';
-import infoIcon from '../../assets/images/Function/info.png';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import addIcon from '../../../assets/images/Function/Add.png';
+import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
+import editIcon from '../../../assets/images/Function/ChinhSua.png';
+import infoIcon from '../../../assets/images/Function/info.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const LapKeHoachThuThap = () => {
@@ -32,10 +31,6 @@ const LapKeHoachThuThap = () => {
   useEffect(() => {
     fetchKeHoachs();
   }, [tieuDe, nguoiDuyet, tuNgay]);
-
-  const handleDetailClick = (id) => {
-    navigate(`/ke-hoach-thu-thap/${id}`);
-  };
 
   return (
     <div className="container mt-4">
@@ -108,11 +103,28 @@ const LapKeHoachThuThap = () => {
                 <input type="checkbox" />
               </td>
               <td>{index + 1}</td>
-              <td><a href="#" onClick={() => handleDetailClick(keHoach.id)}>{keHoach.tieuDe}</a></td>
+              <td>
+              <td>
+              <td>
+                <Link 
+                  to={`/ke-hoach-thu-thap/${keHoach.id}`} 
+                  style={{ color: '#043371' }}
+                >
+                  {keHoach.tieuDe}
+                </Link>
+              </td>
+
+              </td>
+
+              </td>
               <td>{keHoach.nguoiDuyet}</td>
               <td>{new Date(keHoach.ngayBatDau).toLocaleDateString()}</td>
               <td>{new Date(keHoach.ngayKetThuc).toLocaleDateString()}</td>
-              <td>{keHoach.trangThai}</td>
+              <td>
+                <span style={getTrangThaiStyle(keHoach.trangThai)}>
+                  {keHoach.trangThai}
+                </span>
+              </td>
               <td>
                 <button className="btn btn-light me-2">
                   <img src={editIcon} alt="edit" width="20" />
@@ -127,6 +139,40 @@ const LapKeHoachThuThap = () => {
       </table>
     </div>
   );
+};
+
+const getTrangThaiStyle = (trangThai) => {
+  let backgroundColor = '';
+  let color = '#fff'; 
+  switch (trangThai) {
+    case 'Tạo mới':
+      backgroundColor = '#2289E7'; 
+      break;
+    case 'Đã trình duyệt':
+      backgroundColor = '#ffc107';
+      break;
+    case 'Đã duyệt':
+      backgroundColor = '#28a745'; 
+      break;
+    case 'Từ chối':
+      backgroundColor = '#dc3545'; 
+      break;
+    default:
+      backgroundColor = '#6c757d'; 
+      break;
+  }
+
+  return {
+    backgroundColor,
+    color,
+    padding: '5px 10px',
+    borderRadius: '8px',
+    display: 'inline-block',
+    fontWeight: '400', 
+    fontSize: '14px', 
+    minWidth: '110px', 
+    textAlign: 'center', 
+  };
 };
 
 export default LapKeHoachThuThap;

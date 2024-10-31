@@ -32,6 +32,17 @@ model KeHoachThuThap {
   trangThai   String
 
   hoSos       HoSo[]   // 1 Kế hoạch thu thập có nhiều Hồ sơ
+  taiLieuHuongDan  TaiLieuHuongDan?
+  
+}
+
+model TaiLieuHuongDan {
+  id               Int              @id @default(autoincrement()) // Mã tài liệu
+  tenTaiLieu       String           // Tên tài liệu
+  ngayTao          DateTime         @default(now())               
+  link             String           // Link dẫn tới tài liệu
+  keHoachThuThap   KeHoachThuThap?  @relation(fields: [keHoachThuThapId], references: [id]) // Quan hệ với Kế hoạch thu thập
+  keHoachThuThapId Int?              @unique // Đảm bảo mỗi kế hoạch chỉ có một tài liệu hướng dẫn
 }
 
 model HoSo {
@@ -42,7 +53,7 @@ model HoSo {
   soVaKyHieuHoSo       String
   tieuDeHoSo           String
   thoiHanBaoQuan       String
-  cheDoSuDung          String
+  cheDoSuDung          String?
   ngonNgu              String
   thoiGianBatDau       DateTime?
   thoiGianKetThuc      DateTime?
@@ -50,12 +61,15 @@ model HoSo {
   chuGiai              String?
   kyHieuThongTin       String?
   tuKhoa               String?
-  soLuongTo            Int
-  soLuongTrang         Int
   tinhTrangVatLy       String
   trangThai            String
-
+  nguoiTao             String?      
+  ngayTao              DateTime @default(now())
   keHoachThuThapId     Int
+  tongSoTaiLieu        Int?
+  tongSoTrang          Int?
+  donViNopLuu          String?
+
   keHoachThuThap       KeHoachThuThap @relation(fields: [keHoachThuThapId], references: [id]) // Quan hệ với Kế hoạch thu thập
   taiLieus             TaiLieu[]      // 1 Hồ sơ có nhiều Tài liệu
 }

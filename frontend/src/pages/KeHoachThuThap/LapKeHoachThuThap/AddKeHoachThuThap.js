@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import addIcon from '../../assets/images/Function/Add.png';
-import uploadIcon from '../../assets/images/Function/TaiFileLen.png';
+import addIcon from '../../../assets/images/Function/Add.png';
+import uploadIcon from '../../../assets/images/Function/TaiFileLen.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { UserContext } from '../../../context/UserContext';
+import CustomPopup from '../../../components/CustomPopUp'
 const AddKeHoachThuThap = () => {
+  const { name } = useContext(UserContext);
+  console.log("name: " + name);
   const [keHoach, setKeHoach] = useState({
     soKeHoach: '',
     tieuDe: '',
     ngayBatDau: '',
     ngayKetThuc: '',
     trangThai: 'Tạo mới',
-    noiDung: ''
+    noiDung: '',
+    nguoiTao: name 
   });
-
+  const [error, setError] = useState(null); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,23 +25,44 @@ const AddKeHoachThuThap = () => {
     setKeHoach({ ...keHoach, [name]: value });
   };
 
-  const handleSubmit = () => {
-    // Gửi dữ liệu lên server
+  const handleSubmit = (status) => {
+    if (!keHoach.soKeHoach || !keHoach.tieuDe || !keHoach.ngayBatDau || !keHoach.ngayKetThuc || !keHoach.noiDung) {
+      setError('Vui lòng nhập đầy đủ thông tin các trường bắt buộc');
+      return;
+    }
+    setError(null);
+
+    const updatedKeHoach = { ...keHoach, trangThai: status };
+      
     fetch('/api/lap-ke-hoach-thu-thap', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(keHoach),
+      body: JSON.stringify(updatedKeHoach),
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then((data) => {
+          throw new Error(data.message || 'Đã xảy ra lỗi');
+        });
+      }
+      return response.json();
+    })
     .then(data => {
       console.log('Success:', data);
       navigate('/lap-ke-hoach-thu-thap');
     })
     .catch((error) => {
-      console.error('Error:', error);
+      console.error('Error:', error.message);
+      setError(error.message); 
     });
+  };
+
+  const handleCancel = () => {
+    if (window.confirm('Đồng chí có chắc muốn hủy thêm mới?')) {
+      navigate('/lap-ke-hoach-thu-thap');
+    }
   };
 
   return (
@@ -45,6 +70,8 @@ const AddKeHoachThuThap = () => {
       <h5 className="mb-4">
         <i className="bi bi-info-circle"></i> Thêm kế hoạch thu thập
       </h5>
+
+      {error && <div className="alert alert-danger">{error}</div>} 
 
       <div className="row g-3 mb-4">
         {/* Số kế hoạch */}
@@ -122,12 +149,27 @@ const AddKeHoachThuThap = () => {
 
       {/* Buttons */}
       <div className="d-flex justify-content-end mb-4">
-        <button className="btn btn-primary mx-2 flex-grow-1" style={{ maxWidth: '150px' }} onClick={handleSubmit}>
-          Lưu
-        </button>
-        <button className="btn btn-secondary mx-2 flex-grow-1" style={{ maxWidth: '150px' }} onClick={() => navigate('/lap-ke-hoach-thu-thap')}>
-          Đóng
-        </button>
+        {/* Trình duyệt button */}
+
+        <CustomPopup className="btn btn-warning mx-2 flex-grow-1" style={{ maxWidth: '150px' }}
+          title="Trình duyệt"
+          text="Đồng chí có chắc muốn lưu và trình duyệt kế hoạch này?"
+          onConfirm={() => handleSubmit('Đã trình duyệt')}
+        />
+
+        {/* Lưu button */}
+
+        <CustomPopup className="btn btn-primary mx-2 flex-grow-1" style={{ maxWidth: '150px' }}
+          title="Lưu"
+          text="Đồng chí có chắc muốn lưu kế hoạch này?"
+          onConfirm={() => handleSubmit('Tạo mới')} 
+        />
+        {/* Đóng button */}
+        <CustomPopup className="btn btn-secondary mx-2 flex-grow-1" style={{ maxWidth: '150px' }}
+          title="Đóng"
+          text="Đồng chí có chắc muốn hủy thêm mới?"
+          onConfirm={() => navigate('/lap-ke-hoach-thu-thap')} 
+        />
       </div>
 
       {/* Danh sách tài liệu */}

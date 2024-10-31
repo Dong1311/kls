@@ -57,7 +57,7 @@ const Sidebar = () => {
           toggleMenu={() => toggleMenu('keHoach')}
           isOpen={activeMenu === 'keHoach'}
         >
-          {role === 'Lanh dao CQ bao quan' && (
+          {role === 'CB bao quan' && (
             <SubmenuItem to="/lap-ke-hoach-thu-thap" text="Lập kế hoạch thu thập" />
           )}
           {role === 'Lanh dao CQ bao quan' &&(

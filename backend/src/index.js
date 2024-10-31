@@ -17,6 +17,9 @@ app.use(methodOverride('_method'));
 
 app.use(cors());
 
+// Phục vụ các file tĩnh từ thư mục "src/file/tailieuhuongdan"
+app.use('/file/tailieuhuongdan', express.static(path.join(__dirname, '../../src/file/tailieuhuongdan')));
+
 app.use(
   session({
     secret: '123456',
