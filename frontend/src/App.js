@@ -30,6 +30,13 @@ import DanhSachHoSoDaTrinhDuyet from './pages/KeHoachThuThap/DuyetVaGuiHoSoNopLu
 import ChiTietHoSoDaTrinhDuyet from './pages/KeHoachThuThap/DuyetVaGuiHoSoNopLuu/ChiTietHoSoDaTrinhDuyet';
 import ChiTietTaiLieuDaTrinhDuyet from './pages/KeHoachThuThap/DuyetVaGuiHoSoNopLuu/ChiTietTaiLieuDaTrinhDuyet';
 
+import DanhSachHoSoDaTrinhNLLS from './pages/KeHoachThuThap/DanhSachHoSoDaNopLuu/DanhSachHoSoDaTrinhNLLS';
+import ChiTietHoSoDaTrinhNLLS from './pages/KeHoachThuThap/DanhSachHoSoDaNopLuu/ChiTietHoSoDaTrinhNLLS';
+import ChiTietTaiLieuDaTrinhNLLS from './pages/KeHoachThuThap/DanhSachHoSoDaNopLuu/ChiTietTaiLieuDaTrinhNLLS';
+
+import DanhSachHoSoTuChoiNLLS from './pages/KeHoachThuThap/TiepNhanHoSoTraLai/DanhSachHoSoTuChoiNLLS';
+import ChiTietHoSoTuChoiNLLS from './pages/KeHoachThuThap/TiepNhanHoSoTraLai/ChiTietHoSoTuChoiNLLS';
+import ChiTietTaiLieuTuChoiNLLS from './pages/KeHoachThuThap/TiepNhanHoSoTraLai/ChiTietTaiLieuTuChoiNLLS';
 function App() {
   // Kiểm tra trạng thái đăng nhập từ localStorage
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true'); 
@@ -84,6 +91,17 @@ function App() {
                       <Route path='danh-sach-ho-so-da-trinh-duyet' element={<DanhSachHoSoDaTrinhDuyet/>} />
                       <Route path="/ho-so-da-trinh-duyet/:id" element={<ChiTietHoSoDaTrinhDuyet />} />
                       <Route path="/ho-so-da-trinh-duyet/:hoSoId/tai-lieu/:taiLieuId" element={<ChiTietTaiLieuDaTrinhDuyet />} />
+
+                      <Route path='danh-sach-ho-so-da-trinh-nlls' element={<DanhSachHoSoDaTrinhNLLS/>} />
+                      <Route path="/ho-so-da-trinh-nlls/:id" element={<ChiTietHoSoDaTrinhNLLS />} />
+                      <Route path="/ho-so-da-trinh-nlls/:hoSoId/tai-lieu/:taiLieuId" element={<ChiTietTaiLieuDaTrinhNLLS />} />
+
+                      <Route path='danh-sach-ho-so-tu-choi-nlls' element={<DanhSachHoSoTuChoiNLLS/>} />
+                      <Route path="/ho-so-tu-choi-nlls/:id" element={<ChiTietHoSoTuChoiNLLS />} />
+                      <Route path="/ho-so-tu-choi-nlls/:hoSoId/tai-lieu/:taiLieuId" element={<ChiTietTaiLieuTuChoiNLLS />} />
+
+
+
 
                     </Routes>
                   </div>

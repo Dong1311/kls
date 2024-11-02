@@ -6,7 +6,7 @@ import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 import { Link } from 'react-router-dom';
 
-const ChiTietHoSoDaTrinhDuyet = () => {
+const ChiTietHoSoDaTrinhNLLS = () => {
   const { id } = useParams();
   const [hoSo, setHoSo] = useState(null);
   const [taiLieuList, setTaiLieuList] = useState([]);
@@ -37,49 +37,6 @@ const ChiTietHoSoDaTrinhDuyet = () => {
       .catch((error) => console.error('Lỗi khi lấy danh sách tài liệu:', error));
   }, [id]);
 
-  const handleDuyetVaGui = () => {
-    const updatedHoSo = { ...hoSo, trangThai: 'Đã trình NLLS' };
-    fetch(`/api/ho-so/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedHoSo),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Duyệt hồ sơ thất bại');
-        return response.json();
-      })
-      .then((data) => {
-        setHoSo(data);
-        alert('Hồ sơ đã được trình NLLS.');
-        navigate(-1);
-      })
-      .catch((error) => {
-        console.error('Lỗi khi duyệt hồ sơ:', error);
-        setError('Lỗi khi duyệt hồ sơ');
-      });
-  };
-
-  const handleTuChoi = () => {
-    const updatedHoSo = { ...hoSo, trangThai: 'Từ chối NLLS' };
-    fetch(`/api/ho-so/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedHoSo),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Từ chối hồ sơ thất bại');
-        return response.json();
-      })
-      .then((data) => {
-        setHoSo(data);
-        alert('Hồ sơ đã bị từ chối.');
-        navigate(-1);
-      })
-      .catch((error) => {
-        console.error('Lỗi khi từ chối hồ sơ:', error);
-        setError('Lỗi khi từ chối hồ sơ');
-      });
-  };
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
@@ -117,12 +74,6 @@ const ChiTietHoSoDaTrinhDuyet = () => {
       </div>
 
       <div className="d-flex justify-content-end mb-4">
-        <button className="btn btn-danger mx-2" onClick={handleTuChoi} style={{ minWidth: '180px' }}>
-          Từ chối
-        </button>
-        <button className="btn btn-success mx-2" onClick={handleDuyetVaGui} style={{ minWidth: '180px' }}>
-          Duyệt và gửi
-        </button>
         <button className="btn btn-secondary mx-2" onClick={() => navigate(-1)} style={{ minWidth: '180px' }}>
           Đóng
         </button>
@@ -145,7 +96,7 @@ const ChiTietHoSoDaTrinhDuyet = () => {
             </tr>
           </thead>
           <tbody>
-            {taiLieuList.length > 0 ? (
+          {taiLieuList.length > 0 ? (
               taiLieuList.map((taiLieu, index) => (
                 <tr key={taiLieu.id}>
                   <td>{index + 1}</td>
@@ -181,4 +132,4 @@ const ChiTietHoSoDaTrinhDuyet = () => {
   );
 };
 
-export default ChiTietHoSoDaTrinhDuyet;
+export default ChiTietHoSoDaTrinhNLLS;

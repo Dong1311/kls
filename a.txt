@@ -1,0 +1,11 @@
+$totalLines = 0
+git ls-files | Where-Object { $_ -notmatch "^node_modules/" } | ForEach-Object {
+    try {
+        $lines = (Get-Content $_ | Measure-Object -Line).Lines
+        $totalLines += $lines
+    } catch {
+        Write-Output "Skipped $_ (file not found or inaccessible)"
+    }
+}
+Write-Output "Total lines of code: $totalLines"
+//43989 - 2_11
