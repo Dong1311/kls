@@ -2,17 +2,18 @@
 .sidebar {
   background-color: #044D82;
   color: white;
-  width: 350px;
-  height: 100vh;
+  width: 370px;
+  height: 150vh;
   padding: 20px;
   font-family: Arial, sans-serif;
   overflow-y: auto;
   scrollbar-width: thin;
+  flex-direction: column;
   scrollbar-color: #044D82 #004080;
 }
 
 .sidebar::-webkit-scrollbar {
-  width: 8px;
+  width:z 8px;
   margin-right: 8px;
 }
 
@@ -33,9 +34,11 @@
 
 /* Định dạng các mục trong menu */
 .menu {
+  flex-grow: 1;
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-bottom: 60px;
 }
 
 .menu-item {
@@ -109,9 +112,10 @@
 }
 /* Vùng chứa nút cài đặt */
 .settings-container {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
+  margin-top: auto;
+  align-self: flex-start; /* Căn bên trái sidebar */
+  width: 100%; /* Đảm bảo nút cài đặt chiếm toàn bộ chiều rộng */
+  padding-left: 0; /* Không có khoảng cách padding bên trái */
 }
 
 /* Nút cài đặt */
@@ -119,45 +123,48 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+  padding: 0; /* Đảm bảo không có khoảng cách padding */
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
 }
 
+/* Icon cài đặt */
 .settings-icon {
-  width: 35px; /* Tăng kích thước icon */
+  width: 35px;
   height: 35px;
+  margin-left: 0; /* Không có khoảng cách margin bên trái */
 }
 
 /* Popup cài đặt */
 .settings-popup {
-  position: absolute;
-  bottom: 60px;
-  left: 20px;
-  background-color: #044D82; /* Màu nền giống sidebar */
+  background-color: #044D82;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px;
   z-index: 1000;
-  width: 200px; /* Tăng chiều rộng của popup */
+  width: 200px;
+  margin-top: 10px; /* Khoảng cách giữa nút cài đặt và popup */
 }
 
 /* Các tùy chọn trong popup */
 .settings-option {
   display: block;
-  background-color: #044D82; /* Màu nền giống sidebar */
+  background-color: #044D82;
   color: white;
-  padding: 15px 20px; /* Tăng đệm cho nút để to hơn */
-  margin: 0; /* Không có khoảng cách giữa các nút */
-  width: 100%; /* Nút chiếm toàn bộ chiều rộng của popup */
-  text-align: left; /* Văn bản căn trái */
-  border: 1px solid white; /* Thêm border giống submenu */
-  border-radius: 10px; /* Bo góc cho nút */
+  padding: 15px 20px;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  border: 1px solid white;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 16px; /* Tăng kích thước chữ */
-  margin-bottom: 10px; /* Thêm khoảng cách giữa các nút */
+  font-size: 16px;
+  margin-bottom: 10px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .settings-option:hover {
-  background-color: white; /* Khi hover, nền sẽ chuyển thành trắng */
-  color: #044D82; /* Màu chữ sẽ chuyển thành xanh */
-  border-color: white; /* Border màu trắng khi hover */
+  background-color: white;
+  color: #044D82;
+  border-color: white;
 }

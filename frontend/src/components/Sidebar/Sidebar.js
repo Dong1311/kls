@@ -39,10 +39,12 @@ const Sidebar = () => {
   const goToHomePage = () => {
     navigate('/'); 
   };
+  
+  const isAnyMenuExpanded = activeMenu !== null; // Kiểm tra xem có menu nào đang mở không
 
   return (
     <div className="sidebar">
-      <ul className="menu">
+      <ul className={`menu ${isAnyMenuExpanded ? 'expanded' : ''}`}>
         <MenuLink
           icon={trangchuIcon}
           title="Trang chủ"
@@ -66,6 +68,15 @@ const Sidebar = () => {
           <SubmenuItem to="/danh-sach-ke-hoach-da-duyet" text="Danh sách kế hoạch đã duyệt" />
           <SubmenuItem to="/quan-ly-ho-so" text="Quản lý hồ sơ" />
           <SubmenuItem to="/quan-ly-tai-lieu" text="Quản lý tài liệu" />
+          
+          <SubmenuItem to="/danh-sach-ho-so-da-trinh-duyet" text="Duyệt & gửi hồ sơ nộp lưu" />
+          <SubmenuItem to="/danh-sach-ho-so-da-nop-luu" text="Danh sách hồ sơ đã nộp lưu" />
+          <SubmenuItem to="/tiep-nhan-ho-so-tra-lai" text="Tiếp nhận hồ sơ trả lại" />
+          <SubmenuItem to="/quan-ly-ho-so-nop-luu-lich-su" text="Quản lý hồ sơ nộp lưu lịch sử" />
+          <SubmenuItem to="/ho-so-da-nhan-nop-luu-lich-su" text="Hồ sơ đã nhận nộp lưu lịch sử" />
+          <SubmenuItem to="/quan-ly-bien-ban-ban-giao" text="Quản lý biên bản bàn giao" />
+
+
         </MenuLink>
 
         <MenuLink

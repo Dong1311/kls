@@ -15,8 +15,20 @@ import ChiTietKeHoachThuThapDaTrinhDuyet from './pages/KeHoachThuThap/DuyetKeHoa
 
 import DanhSachKeHoachDaDuyet from './pages/KeHoachThuThap/DanhSachKeHoachDaDuyet/DanhSachKeHoachDaDuyet'
 import ChiTietKeHoachDaDuyet from './pages/KeHoachThuThap/DanhSachKeHoachDaDuyet/ChiTietKeHoachDaDuyet'
-import AddHoSo from './pages/KeHoachThuThap/DanhSachKeHoachDaDuyet/AddHoSo';
+import AddHoSoToKeHoach from './pages/KeHoachThuThap/DanhSachKeHoachDaDuyet/AddHoSoToKeHoach';
 import ChiTietHoSo from './pages/KeHoachThuThap/DanhSachKeHoachDaDuyet/ChiTietHoSo';
+import AddTaiLieuToHoSo from './pages/KeHoachThuThap/DanhSachKeHoachDaDuyet/AddTaiLieuToHoSo';
+import ChiTietTaiLieu from './pages/KeHoachThuThap/DanhSachKeHoachDaDuyet/ChiTietTaiLieu';
+
+import DanhSachHoSo from './pages/KeHoachThuThap/QuanLyHoSo/DanhSachHoSo';
+import AddHoSo from './pages/KeHoachThuThap/QuanLyHoSo/AddHoSo';
+
+import DanhSachTaiLieu from './pages/KeHoachThuThap/QuanLyTaiLieu/DanhSachTaiLieu';
+import AddTaiLieu from './pages/KeHoachThuThap/QuanLyTaiLieu/AddTaiLieu';
+
+import DanhSachHoSoDaTrinhDuyet from './pages/KeHoachThuThap/DuyetVaGuiHoSoNopLuu/DanhSachHoSoDaTrinhDuyet';
+import ChiTietHoSoDaTrinhDuyet from './pages/KeHoachThuThap/DuyetVaGuiHoSoNopLuu/ChiTietHoSoDaTrinhDuyet';
+import ChiTietTaiLieuDaTrinhDuyet from './pages/KeHoachThuThap/DuyetVaGuiHoSoNopLuu/ChiTietTaiLieuDaTrinhDuyet';
 
 function App() {
   // Kiểm tra trạng thái đăng nhập từ localStorage
@@ -49,14 +61,30 @@ function App() {
                     <Routes> 
                       <Route path="/" element={<Dashboard />} />
                       <Route path="/lap-ke-hoach-thu-thap" element={<KeHoachThuThap />} />
-                      <Route path="/duyet-ke-hoach-thu-thap" element={<DuyetKeHoachThuThap />} />
                       <Route path="/ke-hoach-thu-thap/:id/" element={<ChiTietKeHoachThuThap />} />
                       <Route path="/ke-hoach-thu-thap/add" element={<AddKeHoachThuThap />} />
+
+                      <Route path="/duyet-ke-hoach-thu-thap" element={<DuyetKeHoachThuThap />} />
                       <Route path="ke-hoach-thu-thap-da-trinh-duyet/:id" element={<ChiTietKeHoachThuThapDaTrinhDuyet/>}/>
+
                       <Route path="/danh-sach-ke-hoach-da-duyet" element={<DanhSachKeHoachDaDuyet />} />
                       <Route path="chi-tiet-danh-sach-ke-hoach-da-duyet/:id" element={<ChiTietKeHoachDaDuyet/>} />
-                      <Route path="ke-hoach-thu-thap/:id/them-moi-ho-so" element={<AddHoSo />} />
+                      <Route path="ke-hoach-thu-thap/:id/them-moi-ho-so" element={<AddHoSoToKeHoach />} />
                       <Route path="/ho-so/:id" element={<ChiTietHoSo />} />
+
+                      <Route path="/ho-so/:id/add-tai-lieu" element={<AddTaiLieuToHoSo />} />
+                      <Route path="/tai-lieu/:taiLieuId" element={<ChiTietTaiLieu />} />
+
+                      <Route path="/quan-ly-ho-so" element={<DanhSachHoSo />} />
+                      <Route path="/ho-so/add" element={<AddHoSo />} />
+
+                      <Route path="/quan-ly-tai-lieu" element={<DanhSachTaiLieu />} />
+                      <Route path="/tai-lieu/add" element={<AddTaiLieu />} />
+
+                      <Route path='danh-sach-ho-so-da-trinh-duyet' element={<DanhSachHoSoDaTrinhDuyet/>} />
+                      <Route path="/ho-so-da-trinh-duyet/:id" element={<ChiTietHoSoDaTrinhDuyet />} />
+                      <Route path="/ho-so-da-trinh-duyet/:hoSoId/tai-lieu/:taiLieuId" element={<ChiTietTaiLieuDaTrinhDuyet />} />
+
                     </Routes>
                   </div>
                 </div>

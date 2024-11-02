@@ -3,10 +3,9 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 class HoSoController {
-
     // Thêm mới hồ sơ
     createHoSo = async (req, res) => {
-        const { 
+        const {
             maHoSo,
             maDinhDanhCoQuan,
             mucLucSoNamHS,
@@ -15,21 +14,21 @@ class HoSoController {
             thoiHanBaoQuan,
             cheDoSuDung,
             ngonNgu,
-            thoiGianBatDau,
-            thoiGianKetThuc,
-            tongSoVanBanTrongHS, // Cần ép kiểu
-            tongSoTaiLieu,            // Cần ép kiểu
-            tongSoTrang,         // Cần ép kiểu
+            ngayBatDau,
+            ngayKetThuc,
+            tongSoTaiLieu,
+            tongSoTrang,
             tinhTrangVatLy,
+            tuKhoa,
             chuGiai,
             kyHieuThongTin,
             nguoiTao,
             ngayTao,
             donViNopLuu,
             trangThai,
-            keHoachThuThapId
+            keHoachThuThapId,
         } = req.body;
-    
+
         try {
             const newHoSo = await prisma.hoSo.create({
                 data: {
@@ -39,37 +38,49 @@ class HoSoController {
                     soVaKyHieuHoSo,
                     tieuDeHoSo,
                     thoiHanBaoQuan,
-                    cheDoSuDung: cheDoSuDung || null, // Kiểm tra null cho các trường có thể rỗng
+                    cheDoSuDung: cheDoSuDung || null,
                     ngonNgu,
-                    thoiGianBatDau: thoiGianBatDau ? new Date(thoiGianBatDau) : null,
-                    thoiGianKetThuc: thoiGianKetThuc ? new Date(thoiGianKetThuc) : null,
-                    tongSoVanBanTrongHS: parseInt(tongSoVanBanTrongHS, 10) || 0,  // Ép kiểu số
-                    tongSoTaiLieu: parseInt(tongSoTaiLieu, 10) || 0,                        // Ép kiểu số
-                    tongSoTrang: parseInt(tongSoTrang, 10) || 0,                  // Ép kiểu số
+                    ngayBatDau: ngayBatDau ? new Date(ngayBatDau) : null,
+                    ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null,
+                    tongSoTaiLieu: parseInt(tongSoTaiLieu, 10) || 0,
+                    tongSoTrang: parseInt(tongSoTrang, 10) || 0,
                     tinhTrangVatLy,
+                    tuKhoa,
                     chuGiai,
                     kyHieuThongTin,
                     nguoiTao,
                     ngayTao: new Date(ngayTao),
-                    donViNopLuu: donViNopLuu || null, // Kiểm tra null cho trường rỗng
+                    donViNopLuu: donViNopLuu || null,
                     trangThai,
-                    keHoachThuThapId: parseInt(keHoachThuThapId, 10) // Ép kiểu số cho ID kế hoạch thu thập
+                    keHoachThuThapId: parseInt(keHoachThuThapId, 10) || null,
                 },
             });
-    
+
             res.status(201).json({ message: 'Hồ sơ đã được tạo thành công', data: newHoSo });
-            console.log(newHoSo);   
         } catch (error) {
             console.error('Error creating HoSo:', error);
             res.status(500).json({ message: 'Lỗi tạo hồ sơ', error: error.message });
         }
     };
-    
-    
-    // Lấy danh sách hồ sơ
+
+    // Lấy danh sách hồ sơ có thể lọc theo trạng thái và tìm kiếm
     getHoSoList = async (req, res) => {
+        const { trangThai, search } = req.query;
+
         try {
-            const hoSoList = await prisma.hoSo.findMany();
+            const hoSoList = await prisma.hoSo.findMany({
+                where: {
+                    trangThai: trangThai || undefined, // Chỉ áp dụng bộ lọc trạng thái nếu có
+                    OR: search
+                        ? [
+                            { maHoSo: { contains: search, mode: 'insensitive' } },
+                            { tieuDeHoSo: { contains: search, mode: 'insensitive' } },
+                            { nguoiTao: { contains: search, mode: 'insensitive' } },
+                        ]
+                        : undefined,
+                },
+            });
+
             res.status(200).json(hoSoList);
         } catch (error) {
             console.error('Error fetching HoSo list:', error);
@@ -77,12 +88,14 @@ class HoSoController {
         }
     };
 
+
+    // Lấy chi tiết hồ sơ
     getHoSoDetail = async (req, res) => {
         const { id } = req.params;
 
         try {
             const hoSo = await prisma.hoSo.findUnique({
-                where: { id: parseInt(id, 10) }
+                where: { id: parseInt(id, 10) },  // Ép kiểu id thành Int
             });
 
             if (!hoSo) {
@@ -95,6 +108,8 @@ class HoSoController {
             res.status(500).json({ message: 'Lỗi khi lấy chi tiết hồ sơ', error: error.message });
         }
     };
+
+
 
     // Cập nhật hồ sơ
     updateHoSo = async (req, res) => {
@@ -110,13 +125,16 @@ class HoSoController {
             ngonNgu,
             ngayBatDau,
             ngayKetThuc,
+            tongSoTaiLieu,
             tongSoTrang,
             tinhTrangVatLy,
+            tuKhoa,
             chuGiai,
             kyHieuThongTin,
             nguoiTao,
             ngayTao,
-            trangThai
+            donViNopLuu,
+            trangThai,
         } = req.body;
 
         try {
@@ -133,12 +151,15 @@ class HoSoController {
                     ngonNgu,
                     ngayBatDau: ngayBatDau ? new Date(ngayBatDau) : null,
                     ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null,
-                    tongSoTrang,
+                    tongSoTaiLieu: parseInt(tongSoTaiLieu, 10) || 0,
+                    tongSoTrang: parseInt(tongSoTrang, 10) || 0,
                     tinhTrangVatLy,
+                    tuKhoa,
                     chuGiai,
                     kyHieuThongTin,
                     nguoiTao,
                     ngayTao: new Date(ngayTao),
+                    donViNopLuu,
                     trangThai,
                 },
             });

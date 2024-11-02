@@ -3,9 +3,9 @@ import { useParams, useNavigate,Link  } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import addIcon from '../../../assets/images/Function/Add.png';
-import CustomPopup from '../../../components/CustomPopUp'
+import editIcon from '../../../assets/images/Function/ChinhSua.png';
+import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 
-import InputField from '../../../components/InputField'
 const ChiTietKeHoachDaDuyet = () => {
   const { id } = useParams();
   const [keHoachDetail, setKeHoachDetail] = useState(null);
@@ -51,19 +51,19 @@ const ChiTietKeHoachDaDuyet = () => {
     navigate(`/ke-hoach-thu-thap/${id}/them-moi-ho-so`); // Điều hướng đến trang thêm mới hồ sơ
   };
 
-  const handleUpdateStatus = (newStatus) => {
-    fetch(`/api/lap-ke-hoach-thu-thap/${id}/trang-thai`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ trangThai: newStatus }),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        navigate('/duyet-ke-hoach-thu-thap'); 
-      })
-      .catch((error) => console.error('Error updating status:', error));
+  const handleEditHoSo = (hoSoId) => {
+    navigate(`/ho-so/${hoSoId}`);
+  };
+  
+  const handleDeleteHoSo = (hoSoId) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa hồ sơ này không?')) {
+      fetch(`/api/ho-so/${hoSoId}`, { method: 'DELETE' })
+        .then((response) => {
+          if (!response.ok) throw new Error('Xóa hồ sơ thất bại');
+          setHoSoList(hoSoList.filter((hoSo) => hoSo.id !== hoSoId));
+        })
+        .catch((error) => console.error('Lỗi khi xóa hồ sơ:', error));
+    }
   };
   
 
@@ -209,8 +209,15 @@ const ChiTietKeHoachDaDuyet = () => {
                     <td>{hoSo.soLuongTaiLieu}</td>
                     <td>{hoSo.trangThai}</td>
                     <td>
-                    <button className="btn btn-sm btn-primary">Chi tiết</button>
+                      <button className="btn btn-sm btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}>
+                        <img src={editIcon} alt="edit" width="20" />
+                      </button>
+                      <button className="btn btn-sm btn-light" onClick={() => handleDeleteHoSo(hoSo.id)} 
+                      disabled={!(hoSo.trangThai === 'Tạo mới' )}>
+                        <img src={deleteIcon} alt="delete" width="20" />
+                      </button>
                     </td>
+
                 </tr>
                 ))
             ) : (

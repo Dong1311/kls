@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement()) 
-  username    String   @unique                      
-  password    String                                
-  role        String   
-  name        String                              
-  createdAt   DateTime @default(now())             
-  updatedAt   DateTime @updatedAt                 
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  password    String
+  role        String
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  maCanBo     String?  @unique  // Khóa ngoại trỏ tới maCanBo của CanBo
+  canBo       CanBo?   @relation("UserToCanBo", fields: [maCanBo], references: [maCanBo])
 }
 
 model KeHoachThuThap {
@@ -43,6 +45,7 @@ model TaiLieuHuongDan {
   link             String           // Link dẫn tới tài liệu
   keHoachThuThap   KeHoachThuThap?  @relation(fields: [keHoachThuThapId], references: [id]) // Quan hệ với Kế hoạch thu thập
   keHoachThuThapId Int?              @unique // Đảm bảo mỗi kế hoạch chỉ có một tài liệu hướng dẫn
+  ghiChu           String?
 }
 
 model HoSo {
@@ -55,9 +58,8 @@ model HoSo {
   thoiHanBaoQuan       String
   cheDoSuDung          String?
   ngonNgu              String
-  thoiGianBatDau       DateTime?
-  thoiGianKetThuc      DateTime?
-  tongSoVanBanTrongHS  Int
+  ngayBatDau           DateTime?
+  ngayKetThuc          DateTime?
   chuGiai              String?
   kyHieuThongTin       String?
   tuKhoa               String?
@@ -76,6 +78,8 @@ model HoSo {
 
 model TaiLieu {
   id                 Int      @id @default(autoincrement())
+  tenTaiLieu       String           // Tên tài liệu
+  ngayTao          DateTime         @default(now())
   khungBienMuc       String
   maDinhDanhVanBan   String   @unique
   hoSoId             Int
@@ -96,6 +100,7 @@ model TaiLieu {
   mucDoTinCay        String
   butTich            String?
   tinhTrangVatLy     String
+  link               String?
 }
 
 model BienBanBanGiao {
@@ -175,16 +180,22 @@ model PhongBan {
   tenPhongBan      String
   maDonVi          String
   ghiChu           String?
+  chucNang         String?
+  nhiemVu          String
 }
 
 model CanBo {
-  id               Int      @id @default(autoincrement())
-  maCanBo          String
-  maDonVi          String
-  chucVu           String
-  ghiChu           String?
+  id           Int      @id @default(autoincrement())
+  maCanBo      String   @unique // Trường maCanBo là duy nhất, khóa ngoại tham chiếu từ bảng User
+  maDonVi      String
+  chucVu       String
+  ghiChu       String?
+  tenCanBo     String
+  email        String
+  maPhongBan   String
+  maCBQL       String?
+  user         User?    @relation("UserToCanBo")
 }
-
 model Kho {
   id               Int      @id @default(autoincrement())
   maKho            String
@@ -198,5 +209,12 @@ model PhongLuuTru {
   maPhongLuuTru    String
   tenPhongLuuTru   String
   coQuanBanHanh    String
+  ghiChu           String?
+}
+
+model DanhSachMucLuc {
+  id               Int      @id @default(autoincrement())
+  mucLucSohoacNamHS    String
+  maPhongLuuTru   String
   ghiChu           String?
 }
