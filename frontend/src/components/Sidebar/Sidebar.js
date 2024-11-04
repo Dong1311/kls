@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import MenuLink from '../MenuLink';  
-import SubmenuItem from '../SubmenuItem'; 
+import SubmenuItem from '../SidebarBtn/SubmenuItem'; 
 import trangchuIcon from '../../assets/images/Module/TrangChu.png';
 import quanlykehoachIcon from '../../assets/images/Module/QuanLyKehoach.png';
 import bienmucchinlyIcon from '../../assets/images/Module/BienMucChinhLy.png';
@@ -40,7 +40,7 @@ const Sidebar = () => {
     navigate('/'); 
   };
   
-  const isAnyMenuExpanded = activeMenu !== null; // Kiểm tra xem có menu nào đang mở không
+  const isAnyMenuExpanded = activeMenu !== null; 
 
   return (
     <div className="sidebar">
@@ -72,10 +72,10 @@ const Sidebar = () => {
           <SubmenuItem to="/danh-sach-ho-so-da-trinh-duyet" text="Duyệt & gửi hồ sơ nộp lưu" />
           <SubmenuItem to="/danh-sach-ho-so-da-trinh-nlls" text="Danh sách hồ sơ đã nộp lưu" />
           <SubmenuItem to="/danh-sach-ho-so-tu-choi-nlls" text="Tiếp nhận hồ sơ trả lại" />
-          <SubmenuItem to="/quan-ly-ho-so-nop-luu-lich-su" text="Quản lý hồ sơ nộp lưu lịch sử" />
-          <SubmenuItem to="/ho-so-da-nhan-nop-luu-lich-su" text="Hồ sơ đã nhận nộp lưu lịch sử" />
-          <SubmenuItem to="/quan-ly-bien-ban-ban-giao" text="Quản lý biên bản bàn giao" />
-
+          <SubmenuItem to="/quan-ly-danh-sach-ho-so-da-trinh-nlls" text="Quản lý hồ sơ nộp lưu lịch sử" />
+          <SubmenuItem to="/danh-sach-ho-so-da-nhan-nlls" text="Hồ sơ đã nhận nộp lưu lịch sử" />
+          <SubmenuItem to="/danh-sach-bien-ban-ban-giao" text="Quản lý biên bản bàn giao" />
+          <SubmenuItem to="/danh-sach-bien-ban-ban-giao-da-gui-duyet" text="Duyệt biên bản bàn giao" />
 
         </MenuLink>
 
@@ -85,10 +85,9 @@ const Sidebar = () => {
           toggleMenu={() => toggleMenu('bienMuc')}
           isOpen={activeMenu === 'bienMuc'}
         >
-          <SubmenuItem to="/bien-muc-ho-so-tai-lieu" text="Biên mục hồ sơ tài liệu" />
-          <SubmenuItem to="/duyet-luu-kho" text="Duyệt lưu kho" />
-          <SubmenuItem to="/yeu-cau-bmcl-bo-sung" text="Yêu cầu BMCL bổ sung" />
-          <SubmenuItem to="/duyet-bmcl-bo-sung" text="Duyệt BMCL bổ sung" />
+          <SubmenuItem to="/danh-sach-bien-muc-ho-so" text="Biên mục hồ sơ tài liệu" />
+          <SubmenuItem to="/danh-sach-ho-so-da-trinh-duyet-luu-kho" text="Duyệt lưu kho" />
+
         </MenuLink>
 
         <MenuLink

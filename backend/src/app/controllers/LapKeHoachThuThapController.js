@@ -264,26 +264,30 @@ class LapKeHoachThuThapController {
     }  
 
     // Lấy danh sách hồ sơ dựa trên ID kế hoạch thu thập
-  getHoSoByKeHoachThuThapId = async (req, res) => {
-    const { id } = req.params;  
-
+  // Lấy danh sách hồ sơ dựa trên ID kế hoạch thu thập và (nếu có) trạng thái
+getHoSoByKeHoachThuThapId = async (req, res) => {
+    const { id } = req.params;
+    const { trangThai } = req.query; // Lấy trạng thái từ query
+  
     try {
       const hoSoList = await prisma.hoSo.findMany({
         where: {
-          keHoachThuThapId: parseInt(id),  
+          keHoachThuThapId: parseInt(id),
+          ...(trangThai && { trangThai }) // Thêm điều kiện lọc nếu có tham số trangThai
         },
       });
-
-      if (!hoSoList) {
-        return res.status(404).json({ message: 'Không có hồ sơ nào được tìm thấy' });
+  
+      if (!hoSoList || hoSoList.length === 0) {
+        return res.status(404).json({ message: 'Không có hồ sơ nào được tìm thấy với điều kiện lọc' });
       }
-
+  
       res.status(200).json(hoSoList);
     } catch (error) {
       console.error('Lỗi khi lấy danh sách hồ sơ:', error);
       res.status(500).json({ message: 'Lỗi khi lấy danh sách hồ sơ' });
     }
   };
+  
     
 }
 

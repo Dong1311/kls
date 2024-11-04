@@ -6,7 +6,7 @@ import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 import { Link } from 'react-router-dom';
 
-const ChiTietHoSoTuChoiNLLS = () => {
+const ChiTietHoSoDaNhanNLLS = () => {
   const { id } = useParams();
   const [hoSo, setHoSo] = useState(null);
   const [taiLieuList, setTaiLieuList] = useState([]);
@@ -37,49 +37,6 @@ const ChiTietHoSoTuChoiNLLS = () => {
       .catch((error) => console.error('Lỗi khi lấy danh sách tài liệu:', error));
   }, [id]);
 
-  const handleYeuCauThuThapLai = () => {
-    const updatedHoSo = { ...hoSo, trangThai: 'Cần thu thập lại' };
-    fetch(`/api/ho-so/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedHoSo),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Yêu cầu thu thập lại hồ sơ thất bại');
-        return response.json();
-      })
-      .then((data) => {
-        setHoSo(data);
-        alert('Hồ sơ đã được yêu cầu thu thập lại.');
-        navigate(-1);
-      })
-      .catch((error) => {
-        console.error('Lỗi khi yêu cầu thu thập lại hồ sơ:', error);
-        setError('Lỗi khi yêu cầu thu thập lại hồ sơ');
-      });
-  };
-
-  const handleGuiDuyetLai = () => {
-    const updatedHoSo = { ...hoSo, trangThai: 'Đã trình NLLS' };
-    fetch(`/api/ho-so/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedHoSo),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Gửi duyệt lại hồ sơ thất bại');
-        return response.json();
-      })
-      .then((data) => {
-        setHoSo(data);
-        alert('Hồ sơ đã bị được gửi duyệt lại.');
-        navigate(-1);
-      })
-      .catch((error) => {
-        console.error('Lỗi khi gửi duyệt lại hồ sơ:', error);
-        setError('Lỗi khi gửi duyệt lại hồ sơ');
-      });
-  };
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
@@ -117,12 +74,6 @@ const ChiTietHoSoTuChoiNLLS = () => {
       </div>
 
       <div className="d-flex justify-content-end mb-4">
-        <button className="btn btn-warning mx-2" onClick={handleGuiDuyetLai} style={{ minWidth: '180px' }}>
-          Gửi duyệt lại
-        </button>
-        <button className="btn btn-success mx-2" onClick={handleYeuCauThuThapLai} style={{ minWidth: '180px' }}>
-          Yêu cầu thu thập lại
-        </button>
         <button className="btn btn-secondary mx-2" onClick={() => navigate(-1)} style={{ minWidth: '180px' }}>
           Đóng
         </button>
@@ -152,8 +103,8 @@ const ChiTietHoSoTuChoiNLLS = () => {
                   <td>TL000{taiLieu.id}</td>
                   <td>
                     <Link 
-                      to={`/ho-so-tu-choi-nlls/${id}/tai-lieu/${taiLieu.id}`}
-                      style={{ color: '#043371', display: 'block' }} 
+                      to={`/ho-so-da-nhan-nlls/${id}/tai-lieu/${taiLieu.id}`}
+                      style={{ color: '#043371', display: 'block' }} // Dùng `display: block` để căn chỉnh link trong ô
                     >
                       {taiLieu.tenTaiLieu}
                     </Link>
@@ -181,4 +132,4 @@ const ChiTietHoSoTuChoiNLLS = () => {
   );
 };
 
-export default ChiTietHoSoTuChoiNLLS;
+export default ChiTietHoSoDaNhanNLLS;

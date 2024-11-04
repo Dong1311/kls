@@ -103,7 +103,7 @@ const ChiTietHoSoDaTrinhNLLS = () => {
                   <td>TL000{taiLieu.id}</td>
                   <td>
                     <Link 
-                      to={`/ho-so-da-trinh-duyet/${id}/tai-lieu/${taiLieu.id}`}
+                      to={`/ho-so-da-trinh-nlls/${id}/tai-lieu/${taiLieu.id}`}
                       style={{ color: '#043371', display: 'block' }} // Dùng `display: block` để căn chỉnh link trong ô
                     >
                       {taiLieu.tenTaiLieu}

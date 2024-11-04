@@ -1,4 +1,3 @@
-// KeHoachThuThapSelectInput.js
 import React from 'react';
 
 const KeHoachThuThapSelectInput = ({ label = "Kế hoạch thu thập", value, onChange, options }) => (

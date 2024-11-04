@@ -6,5 +6,4 @@ const CanBoController = require('../app/controllers/CanBoController');
 router.get('/:maCanBo', CanBoController.getCanBoDetail);
 // Route để thêm mới hồ sơ
 
-
 module.exports = router;

@@ -6,23 +6,17 @@ import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import infoIcon from '../../../assets/images/Function/info.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const DanhSachHoSoDaTrinhNLLS = () => {
+const DanhSachHoSoDaNhanNLLS = () => {
   const [hoSoList, setHoSoList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   const fetchHoSos = (search = '') => {
-    fetch(`/api/ho-so?search=${search}`)
+    fetch(`/api/ho-so?trangThai=Đã nhận NLLS&search=${search}`)
       .then(response => response.json())
-      .then(data => {
-        const filteredData = data.filter(hoSo => 
-          hoSo.trangThai === 'Đã trình NLLS' || hoSo.trangThai === 'Từ chối NLLS'
-        );
-        setHoSoList(filteredData);
-      })
+      .then(data => setHoSoList(data))
       .catch(error => console.error('Error fetching data:', error));
   };
-  
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -33,7 +27,7 @@ const DanhSachHoSoDaTrinhNLLS = () => {
   }, [searchTerm]); 
 
   const handleEditHoSo = (hoSoId) => {
-    navigate(`/ho-so-da-trinh-nlls/${hoSoId}`);
+    navigate(`/ho-so-da-nhan-nlls/${hoSoId}`);
   };
 
   const handleDeleteHoSo = (hoSoId) => {
@@ -65,7 +59,7 @@ const DanhSachHoSoDaTrinhNLLS = () => {
             placeholder="Tìm kiếm theo tiêu đề hồ sơ..." 
             style={{ width: '300px' }}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật searchTerm mỗi khi người dùng nhập
+            onChange={(e) => setSearchTerm(e.target.value)} 
           />
         </div>
 
@@ -100,7 +94,7 @@ const DanhSachHoSoDaTrinhNLLS = () => {
               <td>{index + 1}</td>
               <td>{hoSo.maHoSo}</td>
               <td>
-                <Link to={`/ho-so-da-trinh-nlls/${hoSo.id}`} style={{ color: '#043371' }}>
+                <Link to={`/ho-so-da-nhan-nlls/${hoSo.id}`} style={{ color: '#043371' }}>
                   {hoSo.tieuDeHoSo}
                 </Link>
               </td>
@@ -140,10 +134,10 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã trình NLLS':
       backgroundColor = '#ffc107';
       break;
-    case 'Đã duyệt':
-      backgroundColor = '#28a745';
+    case 'Đã nhận NLLS':
+      backgroundColor = '#09BF1B';
       break;
-    case 'Từ chối NLLS':
+    case 'Từ chối':
       backgroundColor = '#dc3545';
       break;
     default:
@@ -164,4 +158,4 @@ const getTrangThaiStyle = (trangThai) => {
   };
 };
 
-export default DanhSachHoSoDaTrinhNLLS;
+export default DanhSachHoSoDaNhanNLLS;

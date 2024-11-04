@@ -1,0 +1,12 @@
+.submenu-link {
+    text-decoration: none;
+  }
+  
+  .submenu-link:hover,
+  .submenu-link.active {
+    color: #044D82; 
+    font-weight: bold;
+    background-color: #f0f0f0; 
+    border-radius: 5px;
+  }
+  

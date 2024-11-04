@@ -37,6 +37,29 @@ import ChiTietTaiLieuDaTrinhNLLS from './pages/KeHoachThuThap/DanhSachHoSoDaNopL
 import DanhSachHoSoTuChoiNLLS from './pages/KeHoachThuThap/TiepNhanHoSoTraLai/DanhSachHoSoTuChoiNLLS';
 import ChiTietHoSoTuChoiNLLS from './pages/KeHoachThuThap/TiepNhanHoSoTraLai/ChiTietHoSoTuChoiNLLS';
 import ChiTietTaiLieuTuChoiNLLS from './pages/KeHoachThuThap/TiepNhanHoSoTraLai/ChiTietTaiLieuTuChoiNLLS';
+
+import QuanLyDanhSachHoSoDaTrinhNLLS from './pages/KeHoachThuThap/QuanLyHoSoNopLuuLichSu/QuanLyDanhSachHoSoDaTrinhNLLS';
+import QuanLyChiTietHoSoDaTrinhNLLS from './pages/KeHoachThuThap/QuanLyHoSoNopLuuLichSu/QuanLyChiTietHoSoDaTrinhNLLS';
+import QuanLyChiTietTaiLieuDaTrinhNLLS from './pages/KeHoachThuThap/QuanLyHoSoNopLuuLichSu/QuanLyChiTietTaiLieuDaTrinhNLLS';
+
+import DanhSachHoSoDaNhanNLLS from './pages/KeHoachThuThap/HoSoDaNhanNopLuuLichSu/DanhSachHoSoDaNhanNLLS';
+import ChiTietHoSoDaNhanNLLS from './pages/KeHoachThuThap/HoSoDaNhanNopLuuLichSu/ChiTietHoSoDaNhanNLLS';
+import ChiTietTaiLieuDaNhanNLLS from './pages/KeHoachThuThap/HoSoDaNhanNopLuuLichSu/ChiTietTaiLieuDaNhanNLLS';
+
+import DanhSachBienBanBanGiao from './pages/KeHoachThuThap/QuanLyBienBanBanGiao/DanhSachBienBanBanGiao';
+import AddBienBanBanGiao from './pages/KeHoachThuThap/QuanLyBienBanBanGiao/AddBienBanBanGiao';
+import ChiTietBienBanBanGiao from './pages/KeHoachThuThap/QuanLyBienBanBanGiao/ChiTietBienBanBanGiao';
+
+import DanhSachBienBanBanGiaoDaGuiDuyet from './pages/KeHoachThuThap/DuyetBienBanBanGiao/DanhSachBienBanBanGiaoDaGuiDuyet';
+import ChiTietBienBanBanGiaoDaGuiDuyet from './pages/KeHoachThuThap/DuyetBienBanBanGiao/ChiTietBienBanBanGiaoDaGuiDuyet';
+
+import DanhSachBienMucHoSo from './pages/BienMucChinhLy/BienMucHoSoTaiLieu/DanhSachBienMucHoSo';
+import AddBienMucHoSo from './pages/BienMucChinhLy/BienMucHoSoTaiLieu/AddBienMucHoSo';
+import ChiTietBienMucHoSo from './pages/BienMucChinhLy/BienMucHoSoTaiLieu/ChiTietBienMucHoSo';
+import AddTaiLieuBienMucToHoSo from './pages/BienMucChinhLy/BienMucHoSoTaiLieu/AddTaiLieuBienMucToHoSo';
+
+import DanhSachHoSoDaTrinhDuyetLuuKho from './pages/BienMucChinhLy/DuyetLuuKho/DanhSachHoSoDaTrinhDuyetLuuKho';
+import ChiTietHoSoDaTrinhDuyetLuuKho from './pages/BienMucChinhLy/DuyetLuuKho/ChiTietHoSoDaTrinhDuyetLuuKho';
 function App() {
   // Kiểm tra trạng thái đăng nhập từ localStorage
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true'); 
@@ -100,8 +123,28 @@ function App() {
                       <Route path="/ho-so-tu-choi-nlls/:id" element={<ChiTietHoSoTuChoiNLLS />} />
                       <Route path="/ho-so-tu-choi-nlls/:hoSoId/tai-lieu/:taiLieuId" element={<ChiTietTaiLieuTuChoiNLLS />} />
 
+                      <Route path = "/quan-ly-danh-sach-ho-so-da-trinh-nlls" element={<QuanLyDanhSachHoSoDaTrinhNLLS/>} />
+                      <Route path = "/quan-ly-chi-tiet-ho-so-da-trinh-nlls/:id" element={<QuanLyChiTietHoSoDaTrinhNLLS/>} />
+                      <Route path = "/quan-ly-chi-tiet-ho-so-da-trinh-nlls/:hoSoId/tai-lieu/:taiLieuId" element={<QuanLyChiTietTaiLieuDaTrinhNLLS/>} />
 
+                      <Route path='danh-sach-ho-so-da-nhan-nlls' element={<DanhSachHoSoDaNhanNLLS/>} />
+                      <Route path="/ho-so-da-nhan-nlls/:id" element={<ChiTietHoSoDaNhanNLLS />} />
+                      <Route path="/ho-so-da-nhan-nlls/:hoSoId/tai-lieu/:taiLieuId" element={<ChiTietTaiLieuDaNhanNLLS />} />
 
+                      <Route path='/danh-sach-bien-ban-ban-giao' element={<DanhSachBienBanBanGiao/>} />
+                      <Route path='/bien-ban-ban-giao/add' element={<AddBienBanBanGiao/>} />
+                      <Route path='/bien-ban-ban-giao/:id' element={<ChiTietBienBanBanGiao/>} />
+
+                      <Route path='/danh-sach-bien-ban-ban-giao-da-gui-duyet' element={<DanhSachBienBanBanGiaoDaGuiDuyet/>} />
+                      <Route path='/bien-ban-ban-giao-da-gui-duyet/:id' element={<ChiTietBienBanBanGiaoDaGuiDuyet/>} />
+
+                      <Route path='/danh-sach-bien-muc-ho-so' element={<DanhSachBienMucHoSo/>} />
+                      <Route path="/bien-muc-ho-so/add" element={<AddBienMucHoSo />} />
+                      <Route path="/bien-muc-ho-so/:id" element={<ChiTietBienMucHoSo />} />
+                      <Route path="/bien-muc-ho-so/:id/add-tai-lieu" element={<AddTaiLieuBienMucToHoSo />} />
+
+                      <Route path='/danh-sach-ho-so-da-trinh-duyet-luu-kho' element={<DanhSachHoSoDaTrinhDuyetLuuKho/>} />
+                      <Route path="/ho-so-da-trinh-duyet-luu-kho/:id" element={<ChiTietHoSoDaTrinhDuyetLuuKho />} />
 
                     </Routes>
                   </div>

@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InputField from '../../../components/InputField';
-import editIcon from '../../../assets/images/Function/ChinhSua.png';
-import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 import { Link } from 'react-router-dom';
 
-const ChiTietHoSoTuChoiNLLS = () => {
+const QuanLyChiTietHoSoDaTrinhNLLS = () => {
   const { id } = useParams();
   const [hoSo, setHoSo] = useState(null);
   const [taiLieuList, setTaiLieuList] = useState([]);
@@ -59,25 +57,25 @@ const ChiTietHoSoTuChoiNLLS = () => {
       });
   };
 
-  const handleGuiDuyetLai = () => {
-    const updatedHoSo = { ...hoSo, trangThai: 'Đã trình NLLS' };
+  const handleDuyet = () => {
+    const updatedHoSo = { ...hoSo, trangThai: 'Đã nhận NLLS' };
     fetch(`/api/ho-so/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedHoSo),
     })
       .then((response) => {
-        if (!response.ok) throw new Error('Gửi duyệt lại hồ sơ thất bại');
+        if (!response.ok) throw new Error('Duyệt hồ sơ thất bại');
         return response.json();
       })
       .then((data) => {
         setHoSo(data);
-        alert('Hồ sơ đã bị được gửi duyệt lại.');
+        alert('Hồ sơ đã được duyệt.');
         navigate(-1);
       })
       .catch((error) => {
-        console.error('Lỗi khi gửi duyệt lại hồ sơ:', error);
-        setError('Lỗi khi gửi duyệt lại hồ sơ');
+        console.error('Lỗi khi duyệt hồ sơ:', error);
+        setError('Lỗi khi duyệt hồ sơ');
       });
   };
 
@@ -117,11 +115,11 @@ const ChiTietHoSoTuChoiNLLS = () => {
       </div>
 
       <div className="d-flex justify-content-end mb-4">
-        <button className="btn btn-warning mx-2" onClick={handleGuiDuyetLai} style={{ minWidth: '180px' }}>
-          Gửi duyệt lại
+        <button className="btn btn-success mx-2" onClick={handleDuyet} style={{ minWidth: '180px' }}>
+          Duyệt
         </button>
-        <button className="btn btn-success mx-2" onClick={handleYeuCauThuThapLai} style={{ minWidth: '180px' }}>
-          Yêu cầu thu thập lại
+        <button className="btn btn-danger mx-2" onClick={handleYeuCauThuThapLai} style={{ minWidth: '180px' }}>
+          Từ chối
         </button>
         <button className="btn btn-secondary mx-2" onClick={() => navigate(-1)} style={{ minWidth: '180px' }}>
           Đóng
@@ -152,7 +150,7 @@ const ChiTietHoSoTuChoiNLLS = () => {
                   <td>TL000{taiLieu.id}</td>
                   <td>
                     <Link 
-                      to={`/ho-so-tu-choi-nlls/${id}/tai-lieu/${taiLieu.id}`}
+                      to={`/quan-ly-chi-tiet-ho-so-da-trinh-nlls/${id}/tai-lieu/${taiLieu.id}`}
                       style={{ color: '#043371', display: 'block' }} 
                     >
                       {taiLieu.tenTaiLieu}
@@ -181,4 +179,4 @@ const ChiTietHoSoTuChoiNLLS = () => {
   );
 };
 
-export default ChiTietHoSoTuChoiNLLS;
+export default QuanLyChiTietHoSoDaTrinhNLLS;

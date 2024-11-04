@@ -13,27 +13,34 @@ const DanhSachTaiLieu = () => {
 
   const fetchTaiLieus = async () => {
     try {
-        const response = await fetch(`/api/tai-lieu?search=${searchTerm}`);
-        const data = await response.json();
-
-        // Lấy tên và trạng thái hồ sơ cho mỗi tài liệu
-        const updatedData = await Promise.all(
-            data.map(async (taiLieu) => {
-                const hoSoResponse = await fetch(`/api/ho-so/${taiLieu.hoSoId}/name-status`);
-                const hoSoData = await hoSoResponse.json();
-                return { 
-                    ...taiLieu, 
-                    tenHoSo: hoSoData.tenHoSo || 'Không tìm thấy', 
-                    trangThaiHoSo: hoSoData.trangThai || 'Không xác định' 
-                };
-            })
-        );
-
-        setTaiLieuList(updatedData);
+      const response = await fetch(`/api/tai-lieu?search=${searchTerm}`);
+      const data = await response.json();
+  
+      // Lấy tên và trạng thái hồ sơ cho mỗi tài liệu và lọc theo trạng thái hồ sơ mong muốn
+      const updatedData = await Promise.all(
+        data.map(async (taiLieu) => {
+          const hoSoResponse = await fetch(`/api/ho-so/${taiLieu.hoSoId}/name-status`);
+          const hoSoData = await hoSoResponse.json();
+          
+          // Kiểm tra nếu trạng thái của hồ sơ thuộc các trạng thái yêu cầu
+          if (["Tạo mới", "Đã trình duyệt", "Cần thu thập lại", "Từ chối NLLS"].includes(hoSoData.trangThai)) {
+            return {
+              ...taiLieu,
+              tenHoSo: hoSoData.tenHoSo || 'Không tìm thấy',
+              trangThaiHoSo: hoSoData.trangThai || 'Không xác định'
+            };
+          }
+          return null; // Loại bỏ tài liệu nếu không thỏa mãn điều kiện trạng thái hồ sơ
+        })
+      );
+  
+      // Loại bỏ các giá trị null trong mảng kết quả sau khi lọc
+      setTaiLieuList(updatedData.filter((item) => item !== null));
     } catch (error) {
-        console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error);
     }
   };
+  
 
   useEffect(() => {
     fetchTaiLieus();
@@ -143,7 +150,7 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối':
+    case 'Từ chối NLLS':
       backgroundColor = '#dc3545';
       break;
     default:

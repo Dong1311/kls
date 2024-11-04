@@ -12,11 +12,18 @@ const DanhSachHoSo = () => {
   const navigate = useNavigate();
 
   const fetchHoSos = () => {
-    fetch(`/api/ho-so?search=${searchTerm}`)
-      .then(response => response.json())
-      .then(data => setHoSoList(data))
-      .catch(error => console.error('Error fetching data:', error));
-  };
+  fetch(`/api/ho-so?search=${searchTerm}`)
+    .then(response => response.json())
+    .then(data => {
+      // Lọc các hồ sơ theo trạng thái yêu cầu
+      const filteredData = data.filter(hoSo =>
+        ["Tạo mới", "Đã trình duyệt", "Cần thu thập lại", "Từ chối NLLS"].includes(hoSo.trangThai)
+      );
+      setHoSoList(filteredData);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+};
+
 
   useEffect(() => {
     fetchHoSos();
@@ -134,7 +141,7 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối':
+    case 'Từ chối NLLS':
       backgroundColor = '#dc3545';
       break;
     default:

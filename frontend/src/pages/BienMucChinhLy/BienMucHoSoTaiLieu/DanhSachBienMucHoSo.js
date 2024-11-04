@@ -6,34 +6,34 @@ import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import infoIcon from '../../../assets/images/Function/info.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const DanhSachHoSoDaTrinhNLLS = () => {
+const DanhSachBienMucHoSo = () => {
   const [hoSoList, setHoSoList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  const fetchHoSos = (search = '') => {
-    fetch(`/api/ho-so?search=${search}`)
+  const fetchHoSos = () => {
+    fetch(`/api/ho-so?search=${searchTerm}`)
       .then(response => response.json())
       .then(data => {
-        const filteredData = data.filter(hoSo => 
-          hoSo.trangThai === 'Đã trình NLLS' || hoSo.trangThai === 'Từ chối NLLS'
+        // Lọc danh sách hồ sơ theo yêu cầu
+        const filteredHoSoList = data.filter(
+          hoSo =>
+            (hoSo.trangThai === 'Đã nhận lưu kho' || 
+            hoSo.trangThai === 'Từ chối lưu kho' ||
+            hoSo.trangThai === 'Biên mục chỉnh lý'||
+            (hoSo.trangThai === 'Đã nhận NLLS' && hoSo.bienBanBanGiaoId !== null))
         );
-        setHoSoList(filteredData);
+        setHoSoList(filteredHoSoList);
       })
       .catch(error => console.error('Error fetching data:', error));
   };
-  
 
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      fetchHoSos(searchTerm);
-    }, 300); 
-
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm]); 
+    fetchHoSos();
+  }, [searchTerm]);
 
   const handleEditHoSo = (hoSoId) => {
-    navigate(`/ho-so-da-trinh-nlls/${hoSoId}`);
+    navigate(`/bien-muc-ho-so/${hoSoId}`);
   };
 
   const handleDeleteHoSo = (hoSoId) => {
@@ -51,25 +51,25 @@ const DanhSachHoSoDaTrinhNLLS = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="info" width="30" className="me-2" />
-          Quản lý hồ sơ đã trình duyệt
+          Quản lý Biên mục Hồ sơ
         </h5>
       </div>
 
-      <h6 className="text-start mb-3">Danh sách Hồ sơ đã trình duyệt</h6>
+      <h6 className="text-start mb-3">Danh sách Biên mục Hồ sơ</h6>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">
           <input 
             type="text" 
             className="form-control me-2" 
-            placeholder="Tìm kiếm theo tiêu đề hồ sơ..." 
+            placeholder="Tìm kiếm..." 
             style={{ width: '300px' }}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật searchTerm mỗi khi người dùng nhập
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <button className="btn btn-light" onClick={() => navigate('/ho-so/add')}>
+        <button className="btn btn-light" onClick={() => navigate('/bien-muc-ho-so/add')}>
           <img src={addIcon} alt="add" width="20" />
         </button>
       </div>
@@ -77,9 +77,7 @@ const DanhSachHoSoDaTrinhNLLS = () => {
       <table className="table table-striped table-hover align-middle">
         <thead style={{ backgroundColor: '#2289E7', color: '#fff' }}>
           <tr>
-            <th scope="col">
-              <input type="checkbox" />
-            </th>
+            <th scope="col"><input type="checkbox" /></th>
             <th scope="col">STT</th>
             <th scope="col">Mã hồ sơ</th>
             <th scope="col">Tiêu đề hồ sơ</th>
@@ -94,13 +92,11 @@ const DanhSachHoSoDaTrinhNLLS = () => {
         <tbody>
           {hoSoList.map((hoSo, index) => (
             <tr key={hoSo.id}>
-              <td>
-                <input type="checkbox" />
-              </td>
+              <td><input type="checkbox" /></td>
               <td>{index + 1}</td>
               <td>{hoSo.maHoSo}</td>
               <td>
-                <Link to={`/ho-so-da-trinh-nlls/${hoSo.id}`} style={{ color: '#043371' }}>
+                <Link to={`/bien-muc-ho-so/${hoSo.id}`} style={{ color: '#043371' }}>
                   {hoSo.tieuDeHoSo}
                 </Link>
               </td>
@@ -114,11 +110,13 @@ const DanhSachHoSoDaTrinhNLLS = () => {
                 </span>
               </td>
               <td>
-                <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}>
+                <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}
+                    disabled={(hoSo.trangThai === 'Đã nhận lưu kho')}>
+
                   <img src={editIcon} alt="edit" width="20" />
                 </button>
                 <button className="btn btn-light" onClick={() => handleDeleteHoSo(hoSo.id)}
-                disabled={!(hoSo.trangThai === 'Đã trình duyệt')}>
+                  disabled={(hoSo.trangThai === 'Đã nhận lưu kho')}>
                   <img src={deleteIcon} alt="delete" width="20" />
                 </button>
               </td>
@@ -134,16 +132,16 @@ const getTrangThaiStyle = (trangThai) => {
   let backgroundColor = '';
   let color = '#fff';
   switch (trangThai) {
-    case 'Tạo mới':
+    case 'Biên mục chỉnh lý':
       backgroundColor = '#2289E7';
       break;
-    case 'Đã trình NLLS':
+    case 'Đã nhận NLLS':
       backgroundColor = '#ffc107';
       break;
-    case 'Đã duyệt':
-      backgroundColor = '#28a745';
-      break;
-    case 'Từ chối NLLS':
+    case 'Đã nhận lưu kho':
+        backgroundColor = '#28a745';
+        break;
+    case 'Từ chối lưu kho':
       backgroundColor = '#dc3545';
       break;
     default:
@@ -159,9 +157,9 @@ const getTrangThaiStyle = (trangThai) => {
     display: 'inline-block',
     fontWeight: '400',
     fontSize: '14px',
-    minWidth: '110px',
+    minWidth: '140px',
     textAlign: 'center',
   };
 };
 
-export default DanhSachHoSoDaTrinhNLLS;
+export default DanhSachBienMucHoSo;
