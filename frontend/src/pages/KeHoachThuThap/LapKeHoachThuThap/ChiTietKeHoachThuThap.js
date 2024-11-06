@@ -9,7 +9,9 @@ import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 
 import InputField from './InputField'; 
+import SelectInput2 from './SelectInput2';
 import ButtonGroup from './ButtonGroup';  
+
 const ChiTietKeHoachThuThap = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
@@ -18,16 +20,17 @@ const ChiTietKeHoachThuThap = () => {
   const [keHoachDetail, setKeHoachDetail] = useState(null);
   const [taiLieuList, setTaiLieuList] = useState([]); 
   const navigate = useNavigate();
+  const [phongBanOptions, setPhongBanOptions] = useState([]); // Lưu danh sách phòng ban
+
   const fileInputRef = useRef(null); 
 
   useEffect(() => {
-    // Lấy chi tiết kế hoạch thu thập từ backend
+    // Lấy chi tiết kế hoạch thu thập
     fetch(`/api/lap-ke-hoach-thu-thap/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setKeHoachDetail(data);
         setFilePath(data.taiLieuHD);
-  
         // Gọi API để lấy danh sách tài liệu hướng dẫn
         return fetch(`/api/lap-ke-hoach-thu-thap/${id}/tai-lieu-huong-dan`);
       })
@@ -36,7 +39,27 @@ const ChiTietKeHoachThuThap = () => {
         setTaiLieuList(data);  // Lưu danh sách tài liệu vào state
       })
       .catch((error) => console.error('Error fetching data:', error));
+
+    // Fetch danh sách phòng ban để tạo options cho SelectInput
+    fetch('/api/phong-ban')
+      .then(response => response.json())
+      .then(data => {
+        const options = data.map(phongBan => ({
+          value: phongBan.id,
+          label: phongBan.tenPhongBan,
+        }));
+        setPhongBanOptions(options);
+      })
+      .catch(error => console.error('Error fetching phong ban:', error));
   }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setKeHoachDetail(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   
 
   const handleUpdateKeHoach = (status) => {
@@ -216,7 +239,17 @@ const ChiTietKeHoachThuThap = () => {
 
         <InputField label="Người tạo" value={keHoachDetail.nguoiTao || 'N/A'} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
 
-        <InputField label="Trạng thái" value={keHoachDetail.trangThai} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
+        <InputField label="Trạng thái" value={keHoachDetail.trangThai} disabled />
+
+        <SelectInput2 
+          label="Đơn vị thu thập"
+          name="donViNopLuuId"
+          value={keHoachDetail.donViNopLuuId || ''} 
+          onChange={handleChange}
+          options={phongBanOptions}
+          disabled={keHoachDetail.trangThai !== 'Tạo mới'} 
+        />
+
 
         {/* Nội dung */}
         <div className="col-md-12 d-flex mb-3">

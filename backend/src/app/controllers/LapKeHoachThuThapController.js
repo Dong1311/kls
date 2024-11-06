@@ -5,14 +5,14 @@ class LapKeHoachThuThapController {
 
     postLapKeHoach = async (req, res) => {
         console.log('Received request body:', req.body);
-
-        const { soKeHoach, tieuDe, nguoiTao, nguoiDuyet, noiDung, donViNopLuu, ngayBatDau, ngayKetThuc, trangThai } = req.body;
-
+    
+        const { soKeHoach, tieuDe, nguoiTao, nguoiDuyet, noiDung, donViNopLuuId, ngayBatDau, ngayKetThuc, trangThai } = req.body;
+    
         if (!soKeHoach || !tieuDe || !nguoiTao || !trangThai) {
             console.log("Missing required fields");
             return res.status(400).json({ message: 'Các trường bắt buộc không được để trống' });
         }
-
+    
         try {
             const keHoachExists = await prisma.keHoachThuThap.findUnique({ where: { soKeHoach } });
             if (keHoachExists) {
@@ -24,51 +24,50 @@ class LapKeHoachThuThapController {
                     soKeHoach,
                     tieuDe,
                     nguoiTao,
-                    nguoiDuyet : null,
+                    nguoiDuyet: nguoiDuyet || null,
                     noiDung,
-                    donViNopLuu: null,
+                    donViNopLuuId: donViNopLuuId ? parseInt(donViNopLuuId) : null, // Sử dụng donViNopLuuId thay vì donViNopLuu
                     ngayBatDau: ngayBatDau ? new Date(ngayBatDau) : null,
                     ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null,
                     trangThai,
                 },
             });
-
+    
             res.status(201).json({ message: 'Lập kế hoạch thu thập thành công', keHoach: newKeHoach });
         } catch (error) {
             console.error('Error during planning creation:', error);
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
-
+    
     getAllKeHoachThuThap = async (req, res) => {
         try {
-            const { tieuDe, nguoiDuyet, tuNgay, trangThai } = req.query; // Lấy thêm tham số trạng thái
-        
+            const { tieuDe, nguoiDuyet, tuNgay, trangThai } = req.query;
+    
             const filter = {
                 where: {}
             };
-        
+    
             if (tieuDe) {
                 filter.where.tieuDe = {
-                    contains: tieuDe, 
+                    contains: tieuDe,
                     mode: 'insensitive'
                 };
             }
-        
+    
             if (nguoiDuyet) {
                 filter.where.nguoiDuyet = {
                     contains: nguoiDuyet,
                     mode: 'insensitive'
                 };
             }
-        
+    
             if (tuNgay) {
                 filter.where.ngayBatDau = {
-                    gte: new Date(tuNgay) 
+                    gte: new Date(tuNgay)
                 };
             }
     
-            // Kiểm tra nếu có tham số trạng thái (trangThai), thì thêm điều kiện lọc trạng thái
             if (trangThai) {
                 filter.where.trangThai = trangThai;
             }
@@ -80,32 +79,30 @@ class LapKeHoachThuThapController {
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
-
-    // Read: Lấy chi tiết một kế hoạch thu thập dựa trên ID
+    
     getKeHoachThuThapById = async (req, res) => {
         const { id } = req.params;
-
+    
         try {
             const keHoach = await prisma.keHoachThuThap.findUnique({
                 where: { id: parseInt(id) },
             });
-
+    
             if (!keHoach) {
                 return res.status(404).json({ message: 'Không tìm thấy kế hoạch thu thập' });
             }
-
+    
             res.status(200).json(keHoach);
         } catch (error) {
             console.error('Error retrieving ke hoach thu thap:', error);
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
-
-    // Update: Cập nhật thông tin kế hoạch thu thập dựa trên ID
+    
     updateKeHoachThuThap = async (req, res) => {
         const { id } = req.params;
-        const { soKeHoach, tieuDe, nguoiTao, nguoiDuyet, noiDung, donViNopLuu, ngayBatDau, ngayKetThuc, trangThai } = req.body;
-
+        const { soKeHoach, tieuDe, nguoiTao, nguoiDuyet, noiDung, donViNopLuuId, ngayBatDau, ngayKetThuc, trangThai } = req.body;
+    
         try {
             const updatedKeHoach = await prisma.keHoachThuThap.update({
                 where: { id: parseInt(id) },
@@ -115,35 +112,35 @@ class LapKeHoachThuThapController {
                     nguoiTao,
                     nguoiDuyet,
                     noiDung,
-                    donViNopLuu,
+                    donViNopLuuId: donViNopLuuId ? parseInt(donViNopLuuId) : null, 
                     ngayBatDau: ngayBatDau ? new Date(ngayBatDau) : null,
                     ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null,
                     trangThai,
                 },
             });
-
+    
             res.status(200).json({ message: 'Cập nhật kế hoạch thu thập thành công', keHoach: updatedKeHoach });
         } catch (error) {
             console.error('Error updating ke hoach thu thap:', error);
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
-
-    // Delete: Xóa một kế hoạch thu thập dựa trên ID
+    
     deleteKeHoachThuThap = async (req, res) => {
         const { id } = req.params;
-
+    
         try {
             await prisma.keHoachThuThap.delete({
                 where: { id: parseInt(id) },
             });
-
+    
             res.status(200).json({ message: 'Xóa kế hoạch thu thập thành công' });
         } catch (error) {
             console.error('Error deleting ke hoach thu thap:', error);
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
+    
 
     updateTaiLieuHD = async (req, res) => {
         const { id } = req.params;  // ID của kế hoạch thu thập

@@ -1,13 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import addIcon from '../../../assets/images/Function/Add.png';
 import uploadIcon from '../../../assets/images/Function/TaiFileLen.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { UserContext } from '../../../context/UserContext';
-import CustomPopup from '../../../components/CustomPopUp'
+import CustomPopup from '../../../components/CustomPopUp';
+import InputField from './InputField2'; // Import InputField component
+import SelectInput2 from './SelectInput2'; // Import SelectInput2 component
+
 const AddKeHoachThuThap = () => {
   const { name } = useContext(UserContext);
-  console.log("name: " + name);
   const [keHoach, setKeHoach] = useState({
     soKeHoach: '',
     tieuDe: '',
@@ -15,10 +17,29 @@ const AddKeHoachThuThap = () => {
     ngayKetThuc: '',
     trangThai: 'Tạo mới',
     noiDung: '',
-    nguoiTao: name 
+    nguoiTao: name,
+    donViNopLuuId: '' // Thay đổi thành donViNopLuuId
   });
+  const [phongBanOptions, setPhongBanOptions] = useState([]); // State để lưu options của phòng ban
   const [error, setError] = useState(null); 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch dữ liệu từ API /api/phong-ban để lấy danh sách phòng ban
+    fetch('/api/phong-ban')
+      .then(response => response.json())
+      .then(data => {
+        const options = data.map((phongBan) => ({
+          value: phongBan.id,
+          label: phongBan.tenPhongBan,
+        }));
+        setPhongBanOptions(options); // Cập nhật danh sách options
+      })
+      .catch(error => {
+        console.error('Error fetching phong ban:', error);
+        setError('Không thể tải danh sách phòng ban');
+      });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +47,7 @@ const AddKeHoachThuThap = () => {
   };
 
   const handleSubmit = (status) => {
-    if (!keHoach.soKeHoach || !keHoach.tieuDe || !keHoach.ngayBatDau || !keHoach.ngayKetThuc || !keHoach.noiDung) {
+    if (!keHoach.soKeHoach || !keHoach.tieuDe || !keHoach.ngayBatDau || !keHoach.ngayKetThuc || !keHoach.noiDung || !keHoach.donViNopLuuId) {
       setError('Vui lòng nhập đầy đủ thông tin các trường bắt buộc');
       return;
     }
@@ -50,19 +71,11 @@ const AddKeHoachThuThap = () => {
       return response.json();
     })
     .then(data => {
-      console.log('Success:', data);
       navigate('/lap-ke-hoach-thu-thap');
     })
     .catch((error) => {
-      console.error('Error:', error.message);
       setError(error.message); 
     });
-  };
-
-  const handleCancel = () => {
-    if (window.confirm('Đồng chí có chắc muốn hủy thêm mới?')) {
-      navigate('/lap-ke-hoach-thu-thap');
-    }
   };
 
   return (
@@ -74,67 +87,21 @@ const AddKeHoachThuThap = () => {
       {error && <div className="alert alert-danger">{error}</div>} 
 
       <div className="row g-3 mb-4">
-        {/* Số kế hoạch */}
-        <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Số kế hoạch:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="soKeHoach"
-            value={keHoach.soKeHoach}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Tên kế hoạch */}
-        <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Tên kế hoạch:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="tieuDe"
-            value={keHoach.tieuDe}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Từ ngày */}
-        <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Từ ngày:</label>
-          <input
-            type="date"
-            className="form-control"
-            name="ngayBatDau"
-            value={keHoach.ngayBatDau}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Đến ngày */}
-        <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Đến ngày:</label>
-          <input
-            type="date"
-            className="form-control"
-            name="ngayKetThuc"
-            value={keHoach.ngayKetThuc}
-            onChange={handleChange}
-          />
-        </div>
+        <InputField label="Số kế hoạch:" name="soKeHoach" value={keHoach.soKeHoach} onChange={handleChange} />
+        <InputField label="Tên kế hoạch:" name="tieuDe" value={keHoach.tieuDe} onChange={handleChange} />
+        <InputField label="Từ ngày:" type="date" name="ngayBatDau" value={keHoach.ngayBatDau} onChange={handleChange} />
+        <InputField label="Đến ngày:" type="date" name="ngayKetThuc" value={keHoach.ngayKetThuc} onChange={handleChange} />
+        <InputField label="Trạng thái:" name="trangThai" value={keHoach.trangThai} onChange={handleChange} disabled />
         
-        {/* Trạng thái */}
-        <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Trạng thái:</label>
-          <input
-            type="text" disabled
-            className="form-control"
-            name="trangThai"
-            value={keHoach.trangThai}
-            onChange={handleChange}
-          />
-        </div>
+        {/* Đơn vị nộp lưu */}
+        <SelectInput2 
+          label="Đơn vị nộp lưu"
+          name="donViNopLuuId"
+          value={keHoach.donViNopLuuId}
+          onChange={handleChange}
+          options={phongBanOptions}
+        />
 
-        {/* Nội dung */}
         <div className="col-md-12 d-flex mb-3">
           <label className="form-label me-2" style={{ minWidth: '120px' }}>Nội dung:</label>
           <textarea
@@ -149,57 +116,21 @@ const AddKeHoachThuThap = () => {
 
       {/* Buttons */}
       <div className="d-flex justify-content-end mb-4">
-        {/* Trình duyệt button */}
-
         <CustomPopup className="btn btn-warning mx-2 flex-grow-1" style={{ maxWidth: '150px' }}
           title="Trình duyệt"
           text="Đồng chí có chắc muốn lưu và trình duyệt kế hoạch này?"
           onConfirm={() => handleSubmit('Đã trình duyệt')}
         />
-
-        {/* Lưu button */}
-
         <CustomPopup className="btn btn-primary mx-2 flex-grow-1" style={{ maxWidth: '150px' }}
           title="Lưu"
           text="Đồng chí có chắc muốn lưu kế hoạch này?"
           onConfirm={() => handleSubmit('Tạo mới')} 
         />
-        {/* Đóng button */}
         <CustomPopup className="btn btn-secondary mx-2 flex-grow-1" style={{ maxWidth: '150px' }}
           title="Đóng"
           text="Đồng chí có chắc muốn hủy thêm mới?"
           onConfirm={() => navigate('/lap-ke-hoach-thu-thap')} 
         />
-      </div>
-
-      {/* Danh sách tài liệu */}
-      <div style={{ background: '#D9D9D947', borderRadius: '10px', padding: '15px' }}>
-        <div className="d-flex justify-content-between align-items-center">
-          <h6 className="text-start">Danh sách tài liệu</h6>
-          <div style={{ display: 'flex', padding: '8px' }}>
-            <button style={{ background: 'transparent', border: 'none', marginRight: '10px' }}>
-              <img src={addIcon} alt="Thêm" style={{ width: '20px', height: '20px' }} />
-            </button>
-            <button style={{ background: 'transparent', border: 'none' }}>
-              <img src={uploadIcon} alt="Tải lên" style={{ width: '20px', height: '20px' }} />
-            </button>
-          </div>
-        </div>
-
-        <table className="table table-striped mt-2" style={{ background: '#D9D9D947' }}>
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Tên tài liệu</th>
-              <th>Nội dung</th>
-              <th>Ngày tạo</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Hiển thị tài liệu ở đây */}
-          </tbody>
-        </table>
       </div>
     </div>
   );

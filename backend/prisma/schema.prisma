@@ -28,7 +28,7 @@ model KeHoachThuThap {
   nguoiDuyet  String?
   ngayTao     DateTime @default(now())
   noiDung     String?
-  donViNopLuu String?
+  donViNopLuuId Int?
   ngayBatDau  DateTime?
   ngayKetThuc DateTime?
   taiLieuHD   String?
