@@ -10,24 +10,31 @@ const DanhSachHoSo = () => {
   const [hoSoList, setHoSoList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const [nguoiTao, setNguoiTao] = useState('');
+  const [ngayTao, setNgayTao] = useState('');
 
   const fetchHoSos = () => {
-  fetch(`/api/ho-so?search=${searchTerm}`)
-    .then(response => response.json())
-    .then(data => {
-      // Lọc các hồ sơ theo trạng thái yêu cầu
-      const filteredData = data.filter(hoSo =>
-        ["Tạo mới", "Đã trình duyệt", "Cần thu thập lại", "Từ chối NLLS"].includes(hoSo.trangThai)
-      );
-      setHoSoList(filteredData);
-    })
-    .catch(error => console.error('Error fetching data:', error));
-};
+    const query = new URLSearchParams({
+      search: searchTerm,
+      nguoiTao,
+      ngayTao,
+    }).toString();
+
+    fetch(`/api/ho-so?${query}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const filteredData = data.filter((hoSo) =>
+          ["Tạo mới", "Đã trình duyệt", "Cần thu thập lại", "Từ chối nộp lưu"].includes(hoSo.trangThai)
+        );
+        setHoSoList(filteredData);
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  };
 
 
   useEffect(() => {
     fetchHoSos();
-  }, [searchTerm]);
+  }, [searchTerm, nguoiTao, ngayTao]);
 
   // Hàm xử lý khi nhấn vào nút chỉnh sửa
   const handleEditHoSo = (hoSoId) => {
@@ -64,6 +71,21 @@ const DanhSachHoSo = () => {
             style={{ width: '300px' }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <input 
+            type="text" 
+            className="form-control me-2" 
+            placeholder="Tìm theo người tạo..." 
+            style={{ width: '200px' }}
+            value={nguoiTao}
+            onChange={(e) => setNguoiTao(e.target.value)}
+          />
+          <input
+            type="date"
+            className="form-control me-2"
+            style={{ width: '200px' }}
+            value={ngayTao}
+            onChange={(e) => setNgayTao(e.target.value)}
           />
         </div>
 
@@ -112,7 +134,8 @@ const DanhSachHoSo = () => {
                 </span>
               </td>
               <td>
-                <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}>
+                <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}
+                  disabled={!(hoSo.trangThai === 'Tạo mới' )}>
                   <img src={editIcon} alt="edit" width="20" />
                 </button>
                 <button className="btn btn-light" onClick={() => handleDeleteHoSo(hoSo.id)}
@@ -141,7 +164,7 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối NLLS':
+    case 'Từ chối nộp lưu':
       backgroundColor = '#dc3545';
       break;
     default:

@@ -65,29 +65,32 @@ class HoSoController {
 
     // Lấy danh sách hồ sơ có thể lọc theo trạng thái và tìm kiếm
     getHoSoList = async (req, res) => {
-        const { trangThai, search } = req.query;
-
+        const { trangThai, search, nguoiTao, ngayTao } = req.query;
+      
         try {
-            const hoSoList = await prisma.hoSo.findMany({
-                where: {
-                    trangThai: trangThai || undefined, // Chỉ áp dụng bộ lọc trạng thái nếu có
-                    OR: search
-                        ? [
-                            { maHoSo: { contains: search, mode: 'insensitive' } },
-                            { tieuDeHoSo: { contains: search, mode: 'insensitive' } },
-                            { nguoiTao: { contains: search, mode: 'insensitive' } },
-                        ]
-                        : undefined,
+          const hoSoList = await prisma.hoSo.findMany({
+            where: {
+              trangThai: trangThai || undefined,
+              AND: [
+                ngayTao ? { ngayTao: { equals: new Date(ngayTao) } } : {},
+                {
+                  OR: [
+                    search ? { maHoSo: { contains: search, mode: 'insensitive' } } : {},
+                    search ? { tieuDeHoSo: { contains: search, mode: 'insensitive' } } : {},
+                    nguoiTao ? { nguoiTao: { contains: nguoiTao, mode: 'insensitive' } } : {},
+                  ],
                 },
-            });
-
-            res.status(200).json(hoSoList);
+              ],
+            },
+          });
+      
+          res.status(200).json(hoSoList);
         } catch (error) {
-            console.error('Error fetching HoSo list:', error);
-            res.status(500).json({ message: 'Lỗi khi lấy danh sách hồ sơ' });
+          console.error('Error fetching HoSo list:', error);
+          res.status(500).json({ message: 'Lỗi khi lấy danh sách hồ sơ' });
         }
-    };
-
+   };
+   
 
     // Lấy chi tiết hồ sơ
     getHoSoDetail = async (req, res) => {

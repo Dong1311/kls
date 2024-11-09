@@ -16,17 +16,24 @@ const LapKeHoachThuThap = () => {
   const navigate = useNavigate(); 
 
   const fetchKeHoachs = () => {
-    const query = new URLSearchParams({
-      tieuDe,
-      nguoiDuyet,
-      tuNgay,
-    }).toString();
-  
-    fetch(`/api/lap-ke-hoach-thu-thap?${query}`)
-      .then(response => response.json())
-      .then(data => setKeHoachList(data)) 
-      .catch(error => console.error('Error fetching data:', error));
-  };
+  const query = new URLSearchParams({
+    tieuDe,
+    nguoiDuyet,
+    tuNgay,
+  }).toString();
+
+  fetch(`/api/lap-ke-hoach-thu-thap?${query}`)
+    .then((response) => response.json())
+    .then((data) => {
+      // Lọc kế hoạch chỉ với các trạng thái mong muốn
+      const filteredData = data.filter((keHoach) =>
+        ["Tạo mới", "Đã trình duyệt", "Từ chối"].includes(keHoach.trangThai)
+      );
+      setKeHoachList(filteredData);
+    })
+    .catch((error) => console.error('Error fetching data:', error));
+};
+
 
   useEffect(() => {
     fetchKeHoachs();
@@ -126,10 +133,11 @@ const LapKeHoachThuThap = () => {
                 </span>
               </td>
               <td>
-                <button className="btn btn-light me-2">
+                <button className="btn btn-light me-2"  disabled={!(keHoach.trangThai === 'Tạo mới' )}
+                 onClick={() => navigate(`/ke-hoach-thu-thap/${keHoach.id}`)}>
                   <img src={editIcon} alt="edit" width="20" />
                 </button>
-                <button className="btn btn-light">
+                <button className="btn btn-light" disabled={!(keHoach.trangThai === 'Tạo mới' )}>
                   <img src={deleteIcon} alt="delete" width="20" />
                 </button>
               </td>

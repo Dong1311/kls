@@ -9,35 +9,30 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const DanhSachHoSoDaNhanNLLS = () => {
   const [hoSoList, setHoSoList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [nguoiTao, setNguoiTao] = useState('');
+  const [ngayTao, setNgayTao] = useState('');
   const navigate = useNavigate();
 
-  const fetchHoSos = (search = '') => {
-    fetch(`/api/ho-so?trangThai=Đã nhận NLLS&search=${search}`)
+  const fetchHoSos = () => {
+    const query = new URLSearchParams({
+      trangThai: 'Đã nhận NLLS',
+      search: searchTerm,
+      nguoiTao,
+      ngayTao,
+    }).toString();
+
+    fetch(`/api/ho-so?${query}`)
       .then(response => response.json())
       .then(data => setHoSoList(data))
       .catch(error => console.error('Error fetching data:', error));
   };
 
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      fetchHoSos(searchTerm);
-    }, 300); 
-
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm]); 
+    fetchHoSos();
+  }, [searchTerm, nguoiTao, ngayTao]);
 
   const handleEditHoSo = (hoSoId) => {
     navigate(`/ho-so-da-nhan-nlls/${hoSoId}`);
-  };
-
-  const handleDeleteHoSo = (hoSoId) => {
-    if (window.confirm('Bạn có chắc muốn xóa hồ sơ này không?')) {
-      fetch(`/api/ho-so/${hoSoId}`, { method: 'DELETE' })
-        .then(() => {
-          setHoSoList(hoSoList.filter(hoSo => hoSo.id !== hoSoId));
-        })
-        .catch(error => console.error('Lỗi khi xóa hồ sơ:', error));
-    }
   };
 
   return (
@@ -45,11 +40,11 @@ const DanhSachHoSoDaNhanNLLS = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="info" width="30" className="me-2" />
-          Quản lý hồ sơ đã trình duyệt
+          Quản lý hồ sơ đã nhận
         </h5>
       </div>
 
-      <h6 className="text-start mb-3">Danh sách Hồ sơ đã trình duyệt</h6>
+      <h6 className="text-start mb-3">Danh sách Hồ sơ đã nhận</h6>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">
@@ -60,6 +55,21 @@ const DanhSachHoSoDaNhanNLLS = () => {
             style={{ width: '300px' }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)} 
+          />
+          <input 
+            type="text" 
+            className="form-control me-2" 
+            placeholder="Tìm theo người tạo..." 
+            style={{ width: '200px' }}
+            value={nguoiTao}
+            onChange={(e) => setNguoiTao(e.target.value)}
+          />
+          <input 
+            type="date" 
+            className="form-control me-2" 
+            style={{ width: '200px' }}
+            value={ngayTao}
+            onChange={(e) => setNgayTao(e.target.value)}
           />
         </div>
 

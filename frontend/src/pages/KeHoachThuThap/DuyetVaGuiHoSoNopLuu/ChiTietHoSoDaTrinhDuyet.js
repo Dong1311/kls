@@ -60,7 +60,7 @@ const ChiTietHoSoDaTrinhDuyet = () => {
   };
 
   const handleTuChoi = () => {
-    const updatedHoSo = { ...hoSo, trangThai: 'Từ chối NLLS' };
+    const updatedHoSo = { ...hoSo, trangThai: 'Từ chối nộp lưu' };
     fetch(`/api/ho-so/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

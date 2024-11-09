@@ -9,22 +9,28 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const DanhSachHoSoTuChoiNLLS = () => {
   const [hoSoList, setHoSoList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [nguoiTao, setNguoiTao] = useState('');
+  const [ngayTao, setNgayTao] = useState('');
   const navigate = useNavigate();
 
-  const fetchHoSos = (search = '') => {
-    fetch(`/api/ho-so?trangThai=Từ chối NLLS&search=${search}`)
+  const fetchHoSos = () => {
+    const query = new URLSearchParams({
+      trangThai: 'Từ chối nộp lưu',
+      search: searchTerm,
+      nguoiTao,
+      ngayTao,
+    }).toString();
+
+    fetch(`/api/ho-so?${query}`)
       .then(response => response.json())
       .then(data => setHoSoList(data))
       .catch(error => console.error('Error fetching data:', error));
   };
 
+  // Gọi lại `fetchHoSos` khi `searchTerm`, `nguoiTao`, hoặc `ngayTao` thay đổi
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      fetchHoSos(searchTerm);
-    }, 300); 
-
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm]); 
+    fetchHoSos();
+  }, [searchTerm, nguoiTao, ngayTao]);
 
   const handleEditHoSo = (hoSoId) => {
     navigate(`/ho-so-tu-choi-nlls/${hoSoId}`);
@@ -45,11 +51,11 @@ const DanhSachHoSoTuChoiNLLS = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="info" width="30" className="me-2" />
-          Quản lý hồ sơ đã trình duyệt
+          Quản lý hồ sơ từ chối nộp lưu
         </h5>
       </div>
 
-      <h6 className="text-start mb-3">Danh sách Hồ sơ đã trình duyệt</h6>
+      <h6 className="text-start mb-3">Danh sách Hồ sơ từ chối nộp lưu</h6>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">
@@ -59,7 +65,22 @@ const DanhSachHoSoTuChoiNLLS = () => {
             placeholder="Tìm kiếm theo tiêu đề hồ sơ..." 
             style={{ width: '300px' }}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật searchTerm mỗi khi người dùng nhập
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <input 
+            type="text" 
+            className="form-control me-2" 
+            placeholder="Tìm theo người tạo..." 
+            style={{ width: '200px' }}
+            value={nguoiTao}
+            onChange={(e) => setNguoiTao(e.target.value)}
+          />
+          <input 
+            type="date" 
+            className="form-control me-2" 
+            style={{ width: '200px' }}
+            value={ngayTao}
+            onChange={(e) => setNgayTao(e.target.value)}
           />
         </div>
 
@@ -111,8 +132,7 @@ const DanhSachHoSoTuChoiNLLS = () => {
                 <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}>
                   <img src={editIcon} alt="edit" width="20" />
                 </button>
-                <button className="btn btn-light" onClick={() => handleDeleteHoSo(hoSo.id)}
-                disabled={!(hoSo.trangThai === 'Đã trình duyệt')}>
+                <button className="btn btn-light" onClick={() => handleDeleteHoSo(hoSo.id)}>
                   <img src={deleteIcon} alt="delete" width="20" />
                 </button>
               </td>
@@ -137,7 +157,7 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối NLLS':
+    case 'Từ chối nộp lưu':
       backgroundColor = '#dc3545';
       break;
     default:

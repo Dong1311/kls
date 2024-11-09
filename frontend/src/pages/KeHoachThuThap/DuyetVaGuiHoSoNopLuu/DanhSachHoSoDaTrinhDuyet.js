@@ -9,22 +9,28 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const DanhSachHoSoTrinhDuyet = () => {
   const [hoSoList, setHoSoList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [nguoiTao, setNguoiTao] = useState('');
+  const [ngayTao, setNgayTao] = useState('');
   const navigate = useNavigate();
 
-  const fetchHoSos = (search = '') => {
-    fetch(`/api/ho-so?trangThai=Đã trình duyệt&search=${search}`)
+  const fetchHoSos = () => {
+    const query = new URLSearchParams({
+      trangThai: 'Đã trình duyệt',
+      search: searchTerm,
+      nguoiTao,
+      ngayTao,
+    }).toString();
+  
+    fetch(`/api/ho-so?${query}`)
       .then(response => response.json())
       .then(data => setHoSoList(data))
       .catch(error => console.error('Error fetching data:', error));
   };
 
+  // Gọi fetchHoSos khi searchTerm, nguoiTao hoặc ngayTao thay đổi
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      fetchHoSos(searchTerm);
-    }, 300); 
-
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm]); 
+    fetchHoSos();
+  }, [searchTerm, nguoiTao, ngayTao]);
 
   const handleEditHoSo = (hoSoId) => {
     navigate(`/ho-so-da-trinh-duyet/${hoSoId}`);
@@ -45,7 +51,7 @@ const DanhSachHoSoTrinhDuyet = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="info" width="30" className="me-2" />
-          Quản lý hồ sơ đã trình duyệt
+          Duyệt và gửi hồ sơ nộp lưu
         </h5>
       </div>
 
@@ -59,7 +65,22 @@ const DanhSachHoSoTrinhDuyet = () => {
             placeholder="Tìm kiếm theo tiêu đề hồ sơ..." 
             style={{ width: '300px' }}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật searchTerm mỗi khi người dùng nhập
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <input 
+            type="text" 
+            className="form-control me-2" 
+            placeholder="Tìm theo người tạo..." 
+            style={{ width: '200px' }}
+            value={nguoiTao}
+            onChange={(e) => setNguoiTao(e.target.value)}
+          />
+          <input 
+            type="date" 
+            className="form-control me-2" 
+            style={{ width: '200px' }}
+            value={ngayTao}
+            onChange={(e) => setNgayTao(e.target.value)}
           />
         </div>
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../firebaseConfig'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CustomPopup from '../../../components/CustomPopUp';
 
 import addIcon from '../../../assets/images/Function/Add.png';
 import editIcon from '../../../assets/images/Function/ChinhSua.png';
@@ -259,12 +260,34 @@ const ChiTietKeHoachThuThap = () => {
       </div>
 
       {/* Buttons */}
-      <ButtonGroup
-        onSave={() => handleUpdateKeHoach('Tạo mới')}
-        onSubmit={() => handleUpdateKeHoach('Đã trình duyệt')}
-        onClose={() => navigate('/lap-ke-hoach-thu-thap')}
-        disabled={keHoachDetail.trangThai !== 'Tạo mới'}
-      />
+      <div className="d-flex justify-content-end mb-4">
+        {keHoachDetail.trangThai === 'Tạo mới' && (
+          <CustomPopup 
+            className="btn btn-warning mx-2 flex-grow-1" 
+            style={{ maxWidth: '150px' }} 
+            title="Trình duyệt"
+            text="Đồng chí có chắc muốn trình duyệt kế hoạch này không?"
+            onConfirm={() => handleUpdateKeHoach('Đã trình duyệt')}
+          />
+        )}
+        {keHoachDetail.trangThai === 'Tạo mới' && (
+        <CustomPopup 
+          disabled={keHoachDetail.trangThai !== 'Tạo mới'}
+          className="btn btn-primary mx-2 flex-grow-1" 
+          style={{ maxWidth: '150px', backgroundColor: '#2289E7' }} 
+          title="Lưu"
+          text="Đồng chí có chắc muốn lưu kế hoạch này không?"
+          onConfirm={() => handleUpdateKeHoach('Tạo mới')}
+        />
+        )}
+        <CustomPopup 
+          className="btn btn-secondary mx-2 flex-grow-1" 
+          style={{ maxWidth: '150px' }} 
+          title="Đóng"
+          text="Đồng chí có chắc muốn hủy thao tác và đóng không?"
+          onConfirm={() => navigate('/lap-ke-hoach-thu-thap')}
+        />
+      </div>
 
       {uploadStatus && <div className="alert alert-info">{uploadStatus}</div>}
 

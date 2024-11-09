@@ -9,35 +9,30 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const QuanLyDanhSachHoSoDaTrinhNLLS = () => {
   const [hoSoList, setHoSoList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [nguoiTao, setNguoiTao] = useState('');
+  const [ngayTao, setNgayTao] = useState('');
   const navigate = useNavigate();
 
-  const fetchHoSos = (search = '') => {
-    fetch(`/api/ho-so?trangThai=Đã trình NLLS&search=${search}`)
+  const fetchHoSos = () => {
+    const query = new URLSearchParams({
+      trangThai: 'Đã trình NLLS',
+      search: searchTerm,
+      nguoiTao,
+      ngayTao,
+    }).toString();
+
+    fetch(`/api/ho-so?${query}`)
       .then(response => response.json())
       .then(data => setHoSoList(data))
       .catch(error => console.error('Error fetching data:', error));
   };
 
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      fetchHoSos(searchTerm);
-    }, 300); 
-
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm]); 
+    fetchHoSos();
+  }, [searchTerm, nguoiTao, ngayTao]);
 
   const handleEditHoSo = (hoSoId) => {
     navigate(`/quan-ly-chi-tiet-ho-so-da-trinh-nlls/${hoSoId}`);
-  };
-
-  const handleDeleteHoSo = (hoSoId) => {
-    if (window.confirm('Bạn có chắc muốn xóa hồ sơ này không?')) {
-      fetch(`/api/ho-so/${hoSoId}`, { method: 'DELETE' })
-        .then(() => {
-          setHoSoList(hoSoList.filter(hoSo => hoSo.id !== hoSoId));
-        })
-        .catch(error => console.error('Lỗi khi xóa hồ sơ:', error));
-    }
   };
 
   return (
@@ -59,7 +54,22 @@ const QuanLyDanhSachHoSoDaTrinhNLLS = () => {
             placeholder="Tìm kiếm theo tiêu đề hồ sơ..." 
             style={{ width: '300px' }}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} 
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <input 
+            type="text" 
+            className="form-control me-2" 
+            placeholder="Tìm theo người tạo..." 
+            style={{ width: '200px' }}
+            value={nguoiTao}
+            onChange={(e) => setNguoiTao(e.target.value)}
+          />
+          <input 
+            type="date" 
+            className="form-control me-2" 
+            style={{ width: '200px' }}
+            value={ngayTao}
+            onChange={(e) => setNgayTao(e.target.value)}
           />
         </div>
 
@@ -111,7 +121,6 @@ const QuanLyDanhSachHoSoDaTrinhNLLS = () => {
                 <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)} disabled>
                   <img src={editIcon} alt="edit" width="20" />
                 </button>
-
               </td>
             </tr>
           ))}

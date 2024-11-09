@@ -110,6 +110,12 @@ const ChiTietKeHoachDaDuyet = () => {
           <input type="text" className="form-control" value={keHoachDetail.nguoiTao || 'N/A'} disabled />
         </div>
 
+        {/* Ngày tạo */}
+        <div className="col-md-6 d-flex align-items-center mb-3">
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>Ngày tạo:</label>
+          <input type="date" className="form-control" value={formatDate(keHoachDetail.ngayTao)} disabled />
+        </div>
+
         {/* Trạng thái */}
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label me-2" style={{ minWidth: '120px' }}>Trạng thái:</label>

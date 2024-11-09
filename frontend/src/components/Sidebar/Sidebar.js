@@ -87,6 +87,8 @@ const Sidebar = () => {
         >
           <SubmenuItem to="/danh-sach-bien-muc-ho-so" text="Biên mục hồ sơ tài liệu" />
           <SubmenuItem to="/danh-sach-ho-so-da-trinh-duyet-luu-kho" text="Duyệt lưu kho" />
+          <SubmenuItem to="/bien-muc-chinh-ly-bo-sung" text="Biên mục chỉnh lý bổ sung" />
+          <SubmenuItem to="/duyet-bien-muc-chinh-ly-bo-sung" text="Duyệt biên mục chỉnh lý bổ sung" />
 
         </MenuLink>
 
@@ -147,6 +149,7 @@ const Sidebar = () => {
           isOpen={activeMenu === 'baoCao'}
         >
           <SubmenuItem to="/hien-trang-so-hoa-kho-du-lieu" text="Hiện trạng số hóa kho dữ liệu" />
+          <SubmenuItem to="/thong-ke-hop-cap" text="Thống kê hộp cặp" />
           <SubmenuItem to="/thong-ke-khai-thac" text="Thống kê khai thác" />
           <SubmenuItem to="/tra-cuu-ho-so" text="Tra cứu hồ sơ" />
           <SubmenuItem to="/tra-cuu-tai-lieu" text="Tra cứu tài liệu" />

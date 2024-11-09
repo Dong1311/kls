@@ -18,8 +18,7 @@ const DanhSachBienMucHoSo = () => {
         // Lọc danh sách hồ sơ theo yêu cầu
         const filteredHoSoList = data.filter(
           hoSo =>
-            (hoSo.trangThai === 'Đã nhận lưu kho' || 
-            hoSo.trangThai === 'Từ chối lưu kho' ||
+            (hoSo.trangThai === 'Từ chối lưu kho' ||
             hoSo.trangThai === 'Biên mục chỉnh lý'||
             (hoSo.trangThai === 'Đã nhận NLLS' && hoSo.bienBanBanGiaoId !== null))
         );

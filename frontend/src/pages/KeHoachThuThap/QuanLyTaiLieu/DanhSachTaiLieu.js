@@ -9,42 +9,47 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const DanhSachTaiLieu = () => {
   const [taiLieuList, setTaiLieuList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [ngayThangNamVB, setNgayThangNamVB] = useState('');
   const navigate = useNavigate();
 
   const fetchTaiLieus = async () => {
     try {
-      const response = await fetch(`/api/tai-lieu?search=${searchTerm}`);
+      // Thêm query tìm kiếm và ngày tháng
+      const query = new URLSearchParams({
+        search: searchTerm,
+        ngayThangNamVB: ngayThangNamVB ? new Date(ngayThangNamVB).toISOString() : '', // chuyển đổi thành chuỗi ISO cho đúng định dạng
+      }).toString();
+  
+      const response = await fetch(`/api/tai-lieu?${query}`);
       const data = await response.json();
   
-      // Lấy tên và trạng thái hồ sơ cho mỗi tài liệu và lọc theo trạng thái hồ sơ mong muốn
       const updatedData = await Promise.all(
         data.map(async (taiLieu) => {
           const hoSoResponse = await fetch(`/api/ho-so/${taiLieu.hoSoId}/name-status`);
           const hoSoData = await hoSoResponse.json();
-          
-          // Kiểm tra nếu trạng thái của hồ sơ thuộc các trạng thái yêu cầu
-          if (["Tạo mới", "Đã trình duyệt", "Cần thu thập lại", "Từ chối NLLS"].includes(hoSoData.trangThai)) {
+  
+          if (["Tạo mới", "Đã trình duyệt", "Cần thu thập lại", "Từ chối nộp lưu"].includes(hoSoData.trangThai)) {
             return {
               ...taiLieu,
               tenHoSo: hoSoData.tenHoSo || 'Không tìm thấy',
-              trangThaiHoSo: hoSoData.trangThai || 'Không xác định'
+              trangThaiHoSo: hoSoData.trangThai || 'Không xác định',
             };
           }
-          return null; // Loại bỏ tài liệu nếu không thỏa mãn điều kiện trạng thái hồ sơ
+          return null;
         })
       );
   
-      // Loại bỏ các giá trị null trong mảng kết quả sau khi lọc
-      setTaiLieuList(updatedData.filter((item) => item !== null));
+      const filteredData = updatedData.filter((item) => item !== null);
+      setTaiLieuList(filteredData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
   
-
   useEffect(() => {
     fetchTaiLieus();
-  }, [searchTerm]);
+  }, [searchTerm, ngayThangNamVB]);
+  
 
   const handleEditTaiLieu = (taiLieuId) => {
     navigate(`/tai-lieu/${taiLieuId}`);
@@ -80,6 +85,14 @@ const DanhSachTaiLieu = () => {
             style={{ width: '300px' }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <input
+            type="date"
+            className="form-control me-2"
+            placeholder="Tìm theo ngày văn bản"
+            style={{ width: '200px' }}
+            value={ngayThangNamVB}
+            onChange={(e) => setNgayThangNamVB(e.target.value)}
           />
         </div>
 
@@ -150,7 +163,7 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối NLLS':
+    case 'Từ chối nộp lưu':
       backgroundColor = '#dc3545';
       break;
     default:

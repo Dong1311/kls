@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext  } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { UserContext } from '../../../context/UserContext';
 import CustomPopup from '../../../components/CustomPopUp'
 
 const ChiTietKeHoachThuThap = () => {
@@ -9,6 +9,8 @@ const ChiTietKeHoachThuThap = () => {
   const [keHoachDetail, setKeHoachDetail] = useState(null);
   const navigate = useNavigate();
   const [taiLieuList, setTaiLieuList] = useState([]); 
+  const { name } = useContext(UserContext);
+  console.log('name:', name);
   useEffect(() => {
     fetch(`/api/lap-ke-hoach-thu-thap/${id}`)
       .then((response) => response.json())
@@ -35,12 +37,15 @@ const ChiTietKeHoachThuThap = () => {
   };
 
   const handleUpdateStatus = (newStatus) => {
+    const dataToSend = { trangThai: newStatus, nguoiDuyet: name };
+  
+  console.log("Data being sent:", dataToSend);
     fetch(`/api/lap-ke-hoach-thu-thap/${id}/trang-thai`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ trangThai: newStatus }),
+      body: JSON.stringify({ trangThai: newStatus, nguoiDuyet: name  }),
     })
       .then((response) => response.json())
       .then(() => {

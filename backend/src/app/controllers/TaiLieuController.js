@@ -66,15 +66,50 @@ class TaiLieuController {
 
 
     // Lấy danh sách tài liệu
+    // async getTaiLieuList(req, res) {
+    //     const { search, ngayThangNamVB } = req.query;
+      
+    //     try {
+    //       const taiLieuList = await prisma.taiLieu.findMany({
+    //         where: {
+    //           trichYeuNoiDung: search ? { contains: search, mode: 'insensitive' } : undefined,
+    //           ngayThangNamVB: ngayThangNamVB ? new Date(ngayThangNamVB) : undefined,
+    //         },
+    //       });
+      
+    //       res.status(200).json(taiLieuList);
+    //     } catch (error) {
+    //       console.error('Error fetching TaiLieu list:', error);
+    //       res.status(500).json({ message: 'Lỗi khi lấy danh sách tài liệu', error: error.message });
+    //     }
+    //   }
+
     async getTaiLieuList(req, res) {
+        const { search, ngayThangNamVB } = req.query;
+      
         try {
-            const taiLieuList = await prisma.taiLieu.findMany();
-            res.status(200).json(taiLieuList);
+          const whereCondition = {
+            AND: [
+              search ? { hoSo: { tieuDeHoSo: { contains: search, mode: 'insensitive' } } } : {},
+              ngayThangNamVB ? { ngayThangNamVB: new Date(ngayThangNamVB) } : {},
+            ],
+          };
+      
+          const taiLieuList = await prisma.taiLieu.findMany({
+            where: whereCondition,
+            include: {
+              hoSo: { select: { tieuDeHoSo: true, trangThai: true } }, // Lấy tên và trạng thái của hồ sơ
+            },
+          });
+      
+          res.status(200).json(taiLieuList);
         } catch (error) {
-            console.error('Error fetching TaiLieu list:', error);
-            res.status(500).json({ message: 'Lỗi khi lấy danh sách tài liệu', error: error.message });
+          console.error('Error fetching TaiLieu list:', error);
+          res.status(500).json({ message: 'Lỗi khi lấy danh sách tài liệu', error: error.message });
         }
-    }
+      }
+      
+      
 
     // Lấy chi tiết tài liệu
     async getTaiLieuDetail(req, res) {

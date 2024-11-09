@@ -38,7 +38,7 @@ const DanhSachKeHoachDaDuyet = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="add" width="30" className="me-2" />
-          Duyệt kế hoạch thu thập
+          Danh sách kế hoạch đã duyệt
         </h5>
       </div>
 
@@ -103,7 +103,11 @@ const DanhSachKeHoachDaDuyet = () => {
               <td>{keHoach.nguoiDuyet}</td>
               <td>{new Date(keHoach.ngayBatDau).toLocaleDateString()}</td>
               <td>{new Date(keHoach.ngayKetThuc).toLocaleDateString()}</td>
-              <td>{keHoach.trangThai}</td>
+              <td>
+                <span style={getTrangThaiStyle(keHoach.trangThai)}>
+                  {keHoach.trangThai}
+                </span>
+              </td>
 
             </tr>
           ))}
@@ -111,6 +115,40 @@ const DanhSachKeHoachDaDuyet = () => {
       </table>
     </div>
   );
+};
+
+const getTrangThaiStyle = (trangThai) => {
+  let backgroundColor = '';
+  let color = '#fff'; 
+  switch (trangThai) {
+    case 'Tạo mới':
+      backgroundColor = '#2289E7'; 
+      break;
+    case 'Đã trình duyệt':
+      backgroundColor = '#ffc107';
+      break;
+    case 'Đã duyệt':
+      backgroundColor = '#28a745'; 
+      break;
+    case 'Từ chối':
+      backgroundColor = '#dc3545'; 
+      break;
+    default:
+      backgroundColor = '#6c757d'; 
+      break;
+  }
+
+  return {
+    backgroundColor,
+    color,
+    padding: '5px 10px',
+    borderRadius: '8px',
+    display: 'inline-block',
+    fontWeight: '400', 
+    fontSize: '14px', 
+    minWidth: '110px', 
+    textAlign: 'center', 
+  };
 };
 
 export default DanhSachKeHoachDaDuyet;

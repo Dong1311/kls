@@ -9,28 +9,32 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const DanhSachHoSoDaTrinhNLLS = () => {
   const [hoSoList, setHoSoList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [nguoiTao, setNguoiTao] = useState('');
+  const [ngayTao, setNgayTao] = useState('');
   const navigate = useNavigate();
 
-  const fetchHoSos = (search = '') => {
-    fetch(`/api/ho-so?search=${search}`)
+  const fetchHoSos = () => {
+    const query = new URLSearchParams({
+      search: searchTerm,
+      nguoiTao,
+      ngayTao,
+    }).toString();
+  
+    fetch(`/api/ho-so?${query}`)
       .then(response => response.json())
       .then(data => {
         const filteredData = data.filter(hoSo => 
-          hoSo.trangThai === 'Đã trình NLLS' || hoSo.trangThai === 'Từ chối NLLS'
+          hoSo.trangThai === 'Đã trình NLLS' || hoSo.trangThai === 'Từ chối nộp lưu'
         );
         setHoSoList(filteredData);
       })
       .catch(error => console.error('Error fetching data:', error));
   };
-  
 
+  // Gọi hàm fetchHoSos khi bất kỳ giá trị tìm kiếm nào thay đổi
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      fetchHoSos(searchTerm);
-    }, 300); 
-
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm]); 
+    fetchHoSos();
+  }, [searchTerm, nguoiTao, ngayTao]);
 
   const handleEditHoSo = (hoSoId) => {
     navigate(`/ho-so-da-trinh-nlls/${hoSoId}`);
@@ -65,7 +69,22 @@ const DanhSachHoSoDaTrinhNLLS = () => {
             placeholder="Tìm kiếm theo tiêu đề hồ sơ..." 
             style={{ width: '300px' }}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật searchTerm mỗi khi người dùng nhập
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <input 
+            type="text" 
+            className="form-control me-2" 
+            placeholder="Tìm theo người tạo..." 
+            style={{ width: '200px' }}
+            value={nguoiTao}
+            onChange={(e) => setNguoiTao(e.target.value)}
+          />
+          <input 
+            type="date" 
+            className="form-control me-2" 
+            style={{ width: '200px' }}
+            value={ngayTao}
+            onChange={(e) => setNgayTao(e.target.value)}
           />
         </div>
 
@@ -143,7 +162,7 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối NLLS':
+    case 'Từ chối nộp lưu':
       backgroundColor = '#dc3545';
       break;
     default:

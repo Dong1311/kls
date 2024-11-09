@@ -52,13 +52,35 @@ class BienBanBanGiaoController {
  
     // Lấy danh sách tất cả các biên bản bàn giao
     async getBienBanBanGiaoList(req, res) {
+        const { tieuDe, ngayLap } = req.query; // Lấy từ khóa tìm kiếm từ query string
+    
         try {
+            const filter = {}; // Tạo bộ lọc
+    
+            // Nếu `tieuDe` có giá trị, thêm điều kiện tìm kiếm theo `tieuDe`
+            if (tieuDe) {
+                filter.tieuDe = {
+                    contains: tieuDe,
+                    mode: 'insensitive', // Không phân biệt chữ hoa/thường
+                };
+            }
+    
+            // Kiểm tra `ngayLap` có giá trị hợp lệ trước khi thêm vào bộ lọc
+            if (ngayLap && !isNaN(new Date(ngayLap))) {
+                filter.ngayLap = {
+                    equals: new Date(ngayLap),
+                };
+            }
+    
+            // Thực hiện tìm kiếm với bộ lọc (nếu có)
             const bienBanList = await prisma.bienBanBanGiao.findMany({
+                where: filter,
                 include: {
-                    canCu: true,         // Bao gồm thông tin từ bảng KeHoachThuThap thông qua canCuId
-                    donViNopLuu: true    // Bao gồm thông tin từ bảng PhongBan thông qua donViNopLuuId
-                }
+                    canCu: true, // Bao gồm thông tin từ bảng KeHoachThuThap thông qua canCuId
+                    donViNopLuu: true, // Bao gồm thông tin từ bảng PhongBan thông qua donViNopLuuId
+                },
             });
+    
             res.status(200).json(bienBanList);
         } catch (error) {
             console.error('Error fetching BienBanBanGiao list:', error);
@@ -68,7 +90,6 @@ class BienBanBanGiaoController {
             });
         }
     }
-    
 
     // Lấy chi tiết một biên bản bàn giao
     async getBienBanBanGiaoDetail(req, res) {

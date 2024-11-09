@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import addIcon from '../../../assets/images/Function/Add.png';
-// import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
-// import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import infoIcon from '../../../assets/images/Function/info.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const DanhSachBienBanBanGiaoDaGuiDuyet = () => {
   const [bienBanList, setBienBanList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [ngayLap, setNgayLap] = useState('');
   const navigate = useNavigate();
 
   const fetchBienBans = () => {
-    fetch(`/api/bien-ban-ban-giao?search=${searchTerm}`)
+    const query = new URLSearchParams({
+      tieuDe: searchTerm,
+      ngayLap: ngayLap ? ngayLap : ''
+    }).toString();
+
+    fetch(`/api/bien-ban-ban-giao?${query}`)
       .then(response => response.json())
       .then(data => {
         const filteredBienBans = data.filter(bienBan => bienBan.trangThaiBienBan === 'Đã gửi duyệt');
@@ -23,21 +27,8 @@ const DanhSachBienBanBanGiaoDaGuiDuyet = () => {
 
   useEffect(() => {
     fetchBienBans();
-  }, [searchTerm]);
+  }, [searchTerm, ngayLap]);
 
-  const handleEditBienBan = (bienBanId) => {
-    navigate(`/bien-ban-ban-giao/${bienBanId}`);
-  };
-
-  const handleDeleteBienBan = (bienBanId) => {
-    if (window.confirm('Bạn có chắc muốn xóa biên bản này không?')) {
-      fetch(`/api/bien-ban-ban-giao/${bienBanId}`, { method: 'DELETE' })
-        .then(() => {
-          setBienBanList(bienBanList.filter(bienBan => bienBan.id !== bienBanId));
-        })
-        .catch(error => console.error('Lỗi khi xóa biên bản:', error));
-    }
-  };
 
   return (
     <div className="container mt-4">
@@ -48,21 +39,26 @@ const DanhSachBienBanBanGiaoDaGuiDuyet = () => {
         </h5>
       </div>
 
-      <h6 className="text-start mb-3">Danh sách biên bản bàn giao </h6>
+      <h6 className="text-start mb-3">Danh sách biên bản bàn giao</h6>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">
           <input 
             type="text" 
             className="form-control me-2" 
-            placeholder="Tìm kiếm..." 
-            style={{ width: '300px' }}
+            placeholder="Tìm kiếm theo tên..." 
+            style={{ width: '200px' }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="btn btn-outline-secondary">
-            <i className="bi bi-search"></i>
-          </button>
+          <input
+            type="date"
+            className="form-control me-2"
+            placeholder="Tìm kiếm theo ngày..."
+            style={{ width: '200px' }}
+            value={ngayLap}
+            onChange={(e) => setNgayLap(e.target.value)}
+          />
         </div>
 
         <button className="btn btn-light" onClick={() => navigate('/bien-ban-ban-giao/add')}>
@@ -81,7 +77,6 @@ const DanhSachBienBanBanGiaoDaGuiDuyet = () => {
             <th scope="col">Căn cứ</th>
             <th scope="col">Đơn vị nộp lưu</th>
             <th scope="col">Trạng thái</th>
-            {/* <th scope="col">Hành động</th> */}
           </tr>
         </thead>
         <tbody>
@@ -103,14 +98,6 @@ const DanhSachBienBanBanGiaoDaGuiDuyet = () => {
                   {bienBan.trangThaiBienBan}
                 </span>
               </td>
-              {/* <td>
-                <button className="btn btn-light me-2" onClick={() => handleEditBienBan(bienBan.id)} disabled={!(bienBan.trangThaiBienBan === 'Tạo mới' )}>
-                  <img src={editIcon} alt="Chỉnh sửa" width="20" />
-                </button>
-                <button className="btn btn-light" onClick={() => handleDeleteBienBan(bienBan.id)}>
-                  <img src={deleteIcon} alt="Xóa" width="20" />
-                </button>
-              </td> */}
             </tr>
           ))}
         </tbody>
@@ -129,9 +116,6 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã gửi duyệt':
       backgroundColor = '#ffc107';
       break;
-    // case 'Đã gửi duyệt':
-    //   backgroundColor = '#28a745';
-    //   break;
     case 'Từ chối':
       backgroundColor = '#dc3545';
       break;

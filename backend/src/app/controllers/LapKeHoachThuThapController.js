@@ -64,7 +64,7 @@ class LapKeHoachThuThapController {
     
             if (tuNgay) {
                 filter.where.ngayBatDau = {
-                    gte: new Date(tuNgay)
+                    equals: new Date(tuNgay)
                 };
             }
     
@@ -166,25 +166,29 @@ class LapKeHoachThuThapController {
 
     updateTrangThaiKeHoach = async (req, res) => {
         const { id } = req.params;
-        const { trangThai } = req.body;  // Lấy trạng thái mới từ request body
+        const { trangThai, nguoiDuyet } = req.body;  // Lấy trạng thái và người duyệt mới từ request body
     
         if (!trangThai) {
             return res.status(400).json({ message: 'Trạng thái không được để trống' });
         }
     
         try {
-            // Cập nhật trạng thái của kế hoạch thu thập
+            // Cập nhật trạng thái và người duyệt của kế hoạch thu thập
             const updatedKeHoach = await prisma.keHoachThuThap.update({
                 where: { id: parseInt(id) },
-                data: { trangThai },
+                data: { 
+                    trangThai,
+                    nguoiDuyet: nguoiDuyet || null,  // Cập nhật người duyệt nếu có, nếu không thì giữ nguyên
+                },
             });
     
-            res.status(200).json({ message: 'Cập nhật trạng thái thành công', keHoach: updatedKeHoach });
+            res.status(200).json({ message: 'Cập nhật trạng thái và người duyệt thành công', keHoach: updatedKeHoach });
         } catch (error) {
             console.error('Error updating ke hoach thu thap:', error);
             res.status(500).json({ message: 'Lỗi hệ thống' });
         }
     };
+    
 
     createTaiLieuHuongDan = async (req, res) => {
         const { tenTaiLieu, link, keHoachThuThapId } = req.body;
