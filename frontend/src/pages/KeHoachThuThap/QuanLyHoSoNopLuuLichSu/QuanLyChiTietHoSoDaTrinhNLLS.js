@@ -36,14 +36,14 @@ const QuanLyChiTietHoSoDaTrinhNLLS = () => {
   }, [id]);
 
   const handleYeuCauThuThapLai = () => {
-    const updatedHoSo = { ...hoSo, trangThai: 'Cần thu thập lại' };
+    const updatedHoSo = { ...hoSo, trangThai: 'Từ chối NLLS' };
     fetch(`/api/ho-so/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedHoSo),
     })
       .then((response) => {
-        if (!response.ok) throw new Error('Yêu cầu thu thập lại hồ sơ thất bại');
+        if (!response.ok) throw new Error('Từ chối NLLS hồ sơ thất bại');
         return response.json();
       })
       .then((data) => {

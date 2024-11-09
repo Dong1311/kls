@@ -15,7 +15,7 @@ const DanhSachHoSoTuChoiNLLS = () => {
 
   const fetchHoSos = () => {
     const query = new URLSearchParams({
-      trangThai: 'Từ chối nộp lưu',
+      trangThai: 'Từ chối NLLS',
       search: searchTerm,
       nguoiTao,
       ngayTao,
@@ -51,11 +51,11 @@ const DanhSachHoSoTuChoiNLLS = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="info" width="30" className="me-2" />
-          Quản lý hồ sơ từ chối nộp lưu
+          Quản lý hồ sơ từ chối NLLS
         </h5>
       </div>
 
-      <h6 className="text-start mb-3">Danh sách Hồ sơ từ chối nộp lưu</h6>
+      <h6 className="text-start mb-3">Danh sách Hồ sơ từ chối NLLS</h6>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">
@@ -157,7 +157,7 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối nộp lưu':
+    case 'Từ chối NLLS':
       backgroundColor = '#dc3545';
       break;
     default:

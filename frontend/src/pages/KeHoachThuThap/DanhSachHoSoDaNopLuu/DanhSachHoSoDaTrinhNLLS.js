@@ -24,7 +24,7 @@ const DanhSachHoSoDaTrinhNLLS = () => {
       .then(response => response.json())
       .then(data => {
         const filteredData = data.filter(hoSo => 
-          hoSo.trangThai === 'Đã trình NLLS' || hoSo.trangThai === 'Từ chối nộp lưu'
+          hoSo.trangThai === 'Đã trình NLLS' || hoSo.trangThai === 'Từ chối NLLS'
         );
         setHoSoList(filteredData);
       })
@@ -162,7 +162,7 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối nộp lưu':
+    case 'Từ chối NLLS':
       backgroundColor = '#dc3545';
       break;
     default:
