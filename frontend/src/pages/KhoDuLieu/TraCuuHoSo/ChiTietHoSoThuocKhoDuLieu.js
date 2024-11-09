@@ -7,7 +7,7 @@ import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 import { Link } from 'react-router-dom';
 
-const ChiTietHoSo = () => {
+const ChiTietHoSoThuocKhoDuLieu = () => {
   const { id } = useParams(); 
   const [hoSo, setHoSo] = useState(null);
   const [taiLieuList, setTaiLieuList] = useState([]); 
@@ -168,32 +168,13 @@ const ChiTietHoSo = () => {
         <InputField label="Trạng thái" value={hoSo.trangThai} disabled />
       </div>
 
-      <div className="d-flex justify-content-end mb-4">
-        <button className="btn btn-primary mx-2" onClick={handleSave} style={{ minWidth: '180px' }}
-        disabled={hoSo.trangThai !== 'Tạo mới'}>
-          Lưu
-        </button>
-        <button className="btn btn-warning mx-2" onClick={handleSubmitForReview} style={{ minWidth: '180px' }}
-        disabled={hoSo.trangThai !== 'Tạo mới'}>
-          Trình duyệt
-        </button>
-        <button className="btn btn-secondary mx-2" onClick={() => navigate(-1)} style={{ minWidth: '180px' }}
-        >
-          Đóng
-        </button>
-      </div>
 
 
       {/* Danh sách tài liệu */}
       <div style={{ background: '#D9D9D947', borderRadius: '10px', padding: '15px' }}>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h6 className="mb-0">Danh sách tài liệu</h6>
-          <button
-            style={{ background: 'transparent', border: 'none' }}
-            onClick={navigateToAddTaiLieu} disabled={hoSo.trangThai !== 'Tạo mới'}
-          >
-            <img src={addIcon} alt="Thêm" style={{ width: '20px', height: '20px' }} />
-          </button>
+
 
         </div>
 
@@ -205,7 +186,6 @@ const ChiTietHoSo = () => {
               <th scope="col">Tên tài liệu</th>
               <th scope="col">Nội dung tài liệu</th>
               <th scope="col">Ngày tạo</th>
-              <th scope="col">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -215,7 +195,7 @@ const ChiTietHoSo = () => {
                   <td>{index + 1}</td>
                   <td>TL000{taiLieu.id}</td>
                   <td>
-                    <Link to={`/tai-lieu/${taiLieu.id}`}>
+                    <Link to={`/chi-tiet-tai-lieu-thuoc-kho-du-lieu/${taiLieu.id}`}>
                       TL000{taiLieu.id}
                     </Link>
                   </td>
@@ -225,19 +205,6 @@ const ChiTietHoSo = () => {
                     </a>
                   </td>
                   <td>{formatDate(taiLieu.ngayTao)}</td>
-                  <td>
-                  <button 
-                    className="btn btn-sm me-2" disabled={hoSo.trangThai !== 'Tạo mới'}
-                    onClick={() => navigateToChiTietTaiLieu(taiLieu.id)}
-                  >
-                    <img src={editIcon} alt="edit" width="20" />
-                  </button>
-
-                    <button className="btn btn-sm" onClick={() => handleDeleteTaiLieu(taiLieu.id)}
-                    disabled={hoSo.trangThai !== 'Tạo mới'}>
-                      <img src={deleteIcon} alt="delete" width="20" />
-                    </button>
-                  </td>
                 </tr>
               ))
             ) : (
@@ -252,4 +219,4 @@ const ChiTietHoSo = () => {
   );
 };
 
-export default ChiTietHoSo;
+export default ChiTietHoSoThuocKhoDuLieu;

@@ -82,6 +82,13 @@ class HoSoController {
                 },
               ],
             },
+            include: {
+              keHoachThuThap: {  // Kết nối với bảng KeHoachThuThap
+                select: {
+                  tieuDe: true,  // Lấy tên kế hoạch (tieuDe)
+                },
+              },
+            },
           });
       
           res.status(200).json(hoSoList);
@@ -89,7 +96,8 @@ class HoSoController {
           console.error('Error fetching HoSo list:', error);
           res.status(500).json({ message: 'Lỗi khi lấy danh sách hồ sơ' });
         }
-   };
+      };
+      
    
 
     // Lấy chi tiết hồ sơ

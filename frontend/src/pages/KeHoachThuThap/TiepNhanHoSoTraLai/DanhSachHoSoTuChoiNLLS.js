@@ -119,8 +119,7 @@ const DanhSachHoSoTuChoiNLLS = () => {
                   {hoSo.tieuDeHoSo}
                 </Link>
               </td>
-              <td>{hoSo.tenKeHoach}</td>
-              <td>{hoSo.nguoiTao}</td>
+              <td>{hoSo.keHoachThuThap ? hoSo.keHoachThuThap.tieuDe : 'N/A'}</td>              <td>{hoSo.nguoiTao}</td>
               <td>{new Date(hoSo.ngayTao).toLocaleDateString()}</td>
               <td>{hoSo.tongSoTaiLieu}</td>
               <td>

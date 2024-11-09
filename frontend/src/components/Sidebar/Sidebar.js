@@ -111,8 +111,8 @@ const Sidebar = () => {
           toggleMenu={() => toggleMenu('kho')}
           isOpen={activeMenu === 'kho'}
         >
-          <SubmenuItem to="/tra-cuu-ho-so" text="Tra cứu hồ sơ" />
-          <SubmenuItem to="/tra-cuu-tai-lieu" text="Tra cứu tài liệu" />
+          <SubmenuItem to="/danh-sach-ho-so-thuoc-kho-du-lieu" text="Tra cứu hồ sơ" />
+          <SubmenuItem to="/danh-sach-tai-lieu-thuoc-kho-du-lieu" text="Tra cứu tài liệu" />
           <SubmenuItem to="/di-chuyen-ho-so" text="Di chuyển hồ sơ" />
           <SubmenuItem to="/sap-xep-hop-cap" text="Sắp xếp hộp cặp" />
           <SubmenuItem to="/dong-bang-ho-so" text="Đóng băng hồ sơ" />
