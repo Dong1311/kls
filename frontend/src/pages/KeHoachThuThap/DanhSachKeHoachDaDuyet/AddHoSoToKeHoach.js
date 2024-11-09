@@ -120,7 +120,7 @@ const AddHoSoToKeHoach = () => {
         <TextInput label="Từ khóa" name="tuKhoa" value={hoSo.tuKhoa} onChange={handleChange} />
         <TextInput label="Đơn vị nộp lưu" name="donViNopLuu" value={hoSo.donViNopLuu} onChange={handleChange} />
         <TextInput label="Chú giải" name="chuGiai" value={hoSo.chuGiai} onChange={handleChange} />
-        <TextInput label="Ngôn ngữ" name="ngonNgu" value={hoSo.ngonNgu} onChange={handleChange} />
+        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} onChange={handleChange} options={['VN', 'EN']} />
         <TextInput label="Trạng thái" name="trangThai" value={hoSo.trangThai} onChange={handleChange} disabled />
       </div>
 

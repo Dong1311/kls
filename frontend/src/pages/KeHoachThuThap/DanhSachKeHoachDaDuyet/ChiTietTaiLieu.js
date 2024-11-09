@@ -138,7 +138,7 @@ const ChiTietTaiLieu = () => {
         <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} disabled={!isEditable} />
         <TextInput label="Tên hồ sơ" name="hoSoTen" value={taiLieu.hoSoTen} disabled />
 
-        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} options={['Tiếng Việt', 'Tiếng Anh']} disabled={!isEditable} />
+        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} options={['VN', 'EN']} disabled={!isEditable} />
         <TextInput label="STT trong hồ sơ" name="sttTrongHoSo" value={taiLieu.sttTrongHoSo} disabled={!isEditable} />
         <TextInput label="Số lượng trang" name="soLuongTrang" value={taiLieu.soLuongTrang} disabled={!isEditable} />
         <TextInput label="Tên loại văn bản" name="tenLoaiVanBan" value={taiLieu.tenLoaiVanBan} disabled={!isEditable} />

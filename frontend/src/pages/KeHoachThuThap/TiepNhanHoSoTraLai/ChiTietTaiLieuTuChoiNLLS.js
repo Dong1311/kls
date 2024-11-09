@@ -62,7 +62,7 @@ const ChiTietTaiLieuTuChoiNLLS = () => {
         <TextInput label="Mã định danh văn bản" name="maDinhDanhVanBan" value={taiLieu.maDinhDanhVanBan} disabled />
         <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} disabled />
         <TextInput label="Tên hồ sơ" name="hoSoTen" value={taiLieu.hoSoTen} disabled />
-        <TextInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} options={['Tiếng Việt', 'Tiếng Anh']} disabled={true} />
+        <TextInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} options={['VN', 'EN']} disabled={true} />
         <TextInput label="STT trong hồ sơ" name="sttTrongHoSo" value={taiLieu.sttTrongHoSo} disabled />
         <TextInput label="Số lượng trang" name="soLuongTrang" value={taiLieu.soLuongTrang} disabled />
         <TextInput label="Tên loại văn bản" name="tenLoaiVanBan" value={taiLieu.tenLoaiVanBan} disabled />

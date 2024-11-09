@@ -132,7 +132,7 @@ const AddTaiLieu = () => {
         <SelectInput label="Tên cơ quan ban hành" name="tenCoQuanBanHanh" value={taiLieu.tenCoQuanBanHanh} onChange={handleChange} options={['Bộ Nội vụ', 'Bộ Quốc phòng']} />
         <TextInput label="Mã định danh văn bản" name="maDinhDanhVanBan" value={taiLieu.maDinhDanhVanBan} onChange={handleChange} />
         <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} onChange={handleChange} />
-        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} onChange={handleChange} options={['Tiếng Việt', 'Tiếng Anh']} />
+        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} onChange={handleChange} options={['VN', 'EN']} />
         <TextInput label="STT trong hồ sơ" name="sttTrongHoSo" value={taiLieu.sttTrongHoSo} onChange={handleChange} />
         <TextInput label="Số lượng trang" name="soLuongTrang" value={taiLieu.soLuongTrang} onChange={handleChange} />
         <TextInput label="Tên loại văn bản" name="tenLoaiVanBan" value={taiLieu.tenLoaiVanBan} onChange={handleChange} />

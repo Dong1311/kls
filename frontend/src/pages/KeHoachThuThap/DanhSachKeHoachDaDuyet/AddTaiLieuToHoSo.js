@@ -130,7 +130,7 @@ const AddTaiLieuToHoSo = () => {
         <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} onChange={handleChange} />
 
         <TextInput label="Mã hồ sơ" name="maHoSo" value={taiLieu.hoSoId} onChange={handleChange} disabled />
-        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} onChange={handleChange} options={['Tiếng Việt', 'Tiếng Anh']} />
+        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} onChange={handleChange} options={['VN', 'EN']} />
 
         <TextInput label="STT trong hồ sơ" name="sttTrongHoSo" value={taiLieu.sttTrongHoSo} onChange={handleChange} />
         <TextInput label="Số lượng trang" name="soLuongTrang" value={taiLieu.soLuongTrang} onChange={handleChange} />

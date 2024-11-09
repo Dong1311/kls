@@ -68,6 +68,7 @@ const AddBienMucHoSo = () => {
   const thoiHanOptions = ["1 năm", "2 năm", "5 năm", "10 năm", "20 năm", "50 năm", "Vĩnh viễn"];
   const cheDoSuDungOptions = ["Hạn chế", "Không hạn chế"];
   const tinhTrangOptions = ["Bình thường", "Bị hư hỏng", "Bị mốc nhẹ"];
+  const ngonNguOptions = ["VN", "EN"];
 
   return (
     <div className="container mt-4">
@@ -114,7 +115,7 @@ const AddBienMucHoSo = () => {
         <TextInput label="Từ khóa" name="tuKhoa" value={hoSo.tuKhoa} onChange={handleChange} />
         <TextInput label="Đơn vị nộp lưu" name="donViNopLuu" value={hoSo.donViNopLuu} onChange={handleChange} />
         <TextInput label="Chú giải" name="chuGiai" value={hoSo.chuGiai} onChange={handleChange} />
-        <TextInput label="Ngôn ngữ" name="ngonNgu" value={hoSo.ngonNgu} onChange={handleChange} />
+        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={hoSo.ngonNgu} onChange={handleChange} options={ngonNguOptions} />
 
         <TextInput label="Trạng thái" name="trangThai" value={hoSo.trangThai} onChange={handleChange} disabled />
       </div>
