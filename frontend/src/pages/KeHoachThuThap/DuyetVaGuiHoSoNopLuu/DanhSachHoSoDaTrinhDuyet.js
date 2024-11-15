@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import addIcon from '../../../assets/images/Function/Add.png';
 import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import infoIcon from '../../../assets/images/Function/info.png';
@@ -84,9 +83,6 @@ const DanhSachHoSoTrinhDuyet = () => {
           />
         </div>
 
-        <button className="btn btn-light" onClick={() => navigate('/ho-so/add')}>
-          <img src={addIcon} alt="add" width="20" />
-        </button>
       </div>
 
       <table className="table table-striped table-hover align-middle">
@@ -103,7 +99,6 @@ const DanhSachHoSoTrinhDuyet = () => {
             <th scope="col">Ngày tạo</th>
             <th scope="col">Số lượng tài liệu</th>
             <th scope="col">Trạng thái</th>
-            <th scope="col">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -119,7 +114,8 @@ const DanhSachHoSoTrinhDuyet = () => {
                   {hoSo.tieuDeHoSo}
                 </Link>
               </td>
-              <td>{hoSo.keHoachThuThap ? hoSo.keHoachThuThap.tieuDe : 'N/A'}</td>              <td>{hoSo.nguoiTao}</td>
+              <td>{hoSo.keHoachThuThap ? hoSo.keHoachThuThap.tieuDe : 'N/A'}</td>              
+              <td>{hoSo.nguoiTao}</td>
               <td>{new Date(hoSo.ngayTao).toLocaleDateString()}</td>
               <td>{hoSo.tongSoTaiLieu}</td>
               <td>
@@ -128,13 +124,7 @@ const DanhSachHoSoTrinhDuyet = () => {
                 </span>
               </td>
               <td>
-                <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}>
-                  <img src={editIcon} alt="edit" width="20" />
-                </button>
-                <button className="btn btn-light" onClick={() => handleDeleteHoSo(hoSo.id)}
-                disabled={!(hoSo.trangThai === 'Đã trình duyệt')}>
-                  <img src={deleteIcon} alt="delete" width="20" />
-                </button>
+
               </td>
             </tr>
           ))}

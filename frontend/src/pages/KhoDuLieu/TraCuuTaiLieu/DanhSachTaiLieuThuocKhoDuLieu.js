@@ -70,7 +70,7 @@ const DanhSachTaiLieuThuocKhoDuLieu = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="info" width="30" className="me-2" />
-          Quản lý tài liệu
+          Tra cứu tài liệu thuộc kho dữ liệu
         </h5>
       </div>
 

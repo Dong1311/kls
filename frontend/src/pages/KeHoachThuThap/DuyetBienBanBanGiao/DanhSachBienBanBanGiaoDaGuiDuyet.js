@@ -61,9 +61,6 @@ const DanhSachBienBanBanGiaoDaGuiDuyet = () => {
           />
         </div>
 
-        <button className="btn btn-light" onClick={() => navigate('/bien-ban-ban-giao/add')}>
-          <img src={addIcon} alt="Thêm" width="20" />
-        </button>
       </div>
 
       <table className="table table-striped table-hover align-middle">

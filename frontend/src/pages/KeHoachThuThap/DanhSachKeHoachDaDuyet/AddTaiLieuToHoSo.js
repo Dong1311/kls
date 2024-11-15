@@ -22,7 +22,7 @@ const AddTaiLieuToHoSo = () => {
         ngayThangNamVB: '',
         tenCoQuanBanHanh: 'Bộ Nội vụ', 
         trichYeuNoiDung: '',
-        ngonNgu: 'Tiếng Việt',           
+        ngonNgu: 'VN',           
         soLuongTrang: '',
         ghiChu: '',
         kyHieuThongTin: '',
@@ -120,7 +120,7 @@ const AddTaiLieuToHoSo = () => {
       <h5 className="mb-4">Thêm mới tài liệu</h5>
       <div className="row g-3">
         <TextInput label="Tên tài liệu" name="tenTaiLieu" value={taiLieu.tenTaiLieu} onChange={handleChange} />
-        <TextInput label="Khung biên mục" name="khungBienMuc" value={taiLieu.khungBienMuc} onChange={handleChange} />
+        <SelectInput label="Khung biên mục" name="khungBienMuc" value={taiLieu.khungBienMuc} onChange={handleChange} options={['Văn bản', 'Tài liệu phim ảnh', 'Tài liệu phim âm thanh']}/>
 
         <SelectInput label="Tên cơ quan ban hành" name="tenCoQuanBanHanh" value={taiLieu.tenCoQuanBanHanh} onChange={handleChange} options={['Bộ Nội vụ', 'Bộ Quốc phòng']} />
         
@@ -135,8 +135,11 @@ const AddTaiLieuToHoSo = () => {
         <TextInput label="STT trong hồ sơ" name="sttTrongHoSo" value={taiLieu.sttTrongHoSo} onChange={handleChange} />
         <TextInput label="Số lượng trang" name="soLuongTrang" value={taiLieu.soLuongTrang} onChange={handleChange} />
 
-        <TextInput label="Tên loại văn bản" name="tenLoaiVanBan" value={taiLieu.tenLoaiVanBan} onChange={handleChange} />
-        <TextInput label="Ghi chú" name="ghiChu" value={taiLieu.ghiChu} onChange={handleChange} />
+        <SelectInput label="Tên loại văn bản" name="tenLoaiVanBan" value={taiLieu.tenLoaiVanBan} onChange={handleChange} options={ [ 'Nghị quyết', 'Quyết định', 'Chỉ thị', 'Quy chế', 'Quy định', 'Thông cáo', 
+    'Thông báo', 'Hướng dẫn', 'Chương trình', 'Kế hoạch', 'Phương án', 'Đề án', 
+    'Dự án', 'Báo cáo', 'Biên bản', 'Tờ trình', 'Hợp đồng', 'Công văn', 'Công điện', 
+    'Bản ghi nhớ', 'Bản thỏa thuận', 'Giấy ủy quyền', 'Giấy mời', 'Giấy giới thiệu', 
+    'Giấy nghỉ phép', 'Phiếu gửi', 'Phiếu chuyển', 'Phiếu báo', 'Thư công', 'Khác' ]} />        <TextInput label="Ghi chú" name="ghiChu" value={taiLieu.ghiChu} onChange={handleChange} />
 
         <TextInput label="Số văn bản" name="soVanBan" value={taiLieu.soVanBan} onChange={handleChange} />
         <TextInput label="Ký hiệu thông tin" name="kyHieuThongTin" value={taiLieu.kyHieuThongTin} onChange={handleChange} />
@@ -157,10 +160,10 @@ const AddTaiLieuToHoSo = () => {
         </div>
         <TextInput label="Bút tích" name="butTich" value={taiLieu.butTich} onChange={handleChange} />
 
-        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} onChange={handleChange} options={['Mật', 'Không mật']} />
-        <SelectInput label="Tình trạng vật lý" name="tinhTrangVatLy" value={taiLieu.tinhTrangVatLy} onChange={handleChange} options={['Bị mốc nhẹ', 'Nguyên vẹn']} />
+        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} onChange={handleChange} options={['Hạn chế', 'Không hạn chế']} />
+        <SelectInput label="Tình trạng vật lý" name="tinhTrangVatLy" value={taiLieu.tinhTrangVatLy} onChange={handleChange} options={['Bình thường','Bị mốc nhẹ', 'Bị hư hỏng']} />
 
-        <SelectInput label="Mức độ tin cậy" name="mucDoTinCay" value={taiLieu.mucDoTinCay} onChange={handleChange} options={['Cao', 'Thấp']} />
+        <SelectInput label="Mức độ tin cậy" name="mucDoTinCay" value={taiLieu.mucDoTinCay} onChange={handleChange} options={['Bản chính', 'Bản sao']} />
       </div>
 
       {/* Hiển thị trạng thái tải lên */}

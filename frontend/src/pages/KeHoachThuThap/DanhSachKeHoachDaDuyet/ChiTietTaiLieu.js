@@ -22,7 +22,7 @@ const ChiTietTaiLieu = () => {
     ngayThangNamVB: '',
     tenCoQuanBanHanh: 'Bộ Nội vụ',
     trichYeuNoiDung: '',
-    ngonNgu: 'Tiếng Việt',
+    ngonNgu: 'VN',
     soLuongTrang: '',
     ghiChu: '',
     kyHieuThongTin: '',
@@ -132,7 +132,7 @@ const ChiTietTaiLieu = () => {
       <h5 className="mb-4">Chi tiết tài liệu</h5>
       <div className="row g-3">
         <TextInput label="Tên tài liệu" name="tenTaiLieu" value={taiLieu.tenTaiLieu} disabled={!isEditable} />
-        <TextInput label="Khung biên mục" name="khungBienMuc" value={taiLieu.khungBienMuc} disabled={!isEditable} />
+        <SelectInput label="Khung biên mục" name="khungBienMuc" value={taiLieu.khungBienMuc} onChange={handleChange} options={['Văn bản', 'Tài liệu phim ảnh', 'Tài liệu phim âm thanh']} disabled={!isEditable} />
         <SelectInput label="Tên cơ quan ban hành" name="tenCoQuanBanHanh" value={taiLieu.tenCoQuanBanHanh} options={['Bộ Nội vụ', 'Bộ Quốc phòng']} disabled={!isEditable} />
         <TextInput label="Mã định danh văn bản" name="maDinhDanhVanBan" value={taiLieu.maDinhDanhVanBan} disabled={!isEditable} />
         <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} disabled={!isEditable} />
@@ -152,7 +152,7 @@ const ChiTietTaiLieu = () => {
           <input type="date" className="form-control" name="ngayThangNamVB" value={taiLieu.ngayThangNamVB ? new Date(taiLieu.ngayThangNamVB).toISOString().split('T')[0] : ''} disabled={!isEditable} />
         </div>
         <TextInput label="Bút tích" name="butTich" value={taiLieu.butTich} disabled={!isEditable} />
-        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} options={['Mật', 'Không mật']} disabled={!isEditable} />
+        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} onChange={handleChange} options={['Hạn chế', 'Không hạn chế']} disabled={!isEditable}/>
         <SelectInput label="Tình trạng vật lý" name="tinhTrangVatLy" value={taiLieu.tinhTrangVatLy} options={['Bị mốc nhẹ', 'Nguyên vẹn']} disabled={!isEditable} />
         <SelectInput label="Mức độ tin cậy" name="mucDoTinCay" value={taiLieu.mucDoTinCay} options={['Cao', 'Thấp']} disabled={!isEditable} />
       </div>

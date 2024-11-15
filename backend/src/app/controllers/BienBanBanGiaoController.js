@@ -145,14 +145,22 @@ class BienBanBanGiaoController {
                     soBienBan,
                     tieuDe,
                     ngayLap: new Date(ngayLap),
-                    canCu: { connect: { id: canCuId } }, // Chỉ dùng canCuId
+                    canCu: { 
+                        connect: { 
+                            id: parseInt(canCuId, 10) // Chuyển đổi ID căn cứ sang số nguyên
+                        } 
+                    },
                     tenCoQuanThuThap,
-                    donViNopLuu: { connect: { id: donViNopLuuId } }, // Chỉ dùng donViNopLuuId
+                    donViNopLuu: { 
+                        connect: { 
+                            id: parseInt(donViNopLuuId, 10) // Chuyển đổi ID đơn vị nộp lưu sang số nguyên
+                        } 
+                    },
                     daiDienBenGiaoId,
                     daiDienBenNhanId,
                     trangThaiBienBan,
                     hoSos: {
-                        set: hoSos.map(id => ({ id })) // Thiết lập các hồ sơ
+                        set: hoSos.map(id => ({ id: parseInt(id, 10) })) // Chuyển đổi từng ID hồ sơ sang số nguyên
                     }
                 }
             });

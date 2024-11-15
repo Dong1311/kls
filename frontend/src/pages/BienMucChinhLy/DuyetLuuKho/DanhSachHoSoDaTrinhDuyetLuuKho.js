@@ -48,11 +48,11 @@ const DanhSachHoSoDaTrinhDuyetLuuKho = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="info" width="30" className="me-2" />
-          Quản lý Biên mục Hồ sơ
+          Danh sách hồ sơ biên mục chỉnh lý
         </h5>
       </div>
 
-      <h6 className="text-start mb-3">Danh sách Biên mục Hồ sơ</h6>
+      <h6 className="text-start mb-3">Danh sách hồ sơ</h6>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">

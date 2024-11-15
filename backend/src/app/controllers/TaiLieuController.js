@@ -276,7 +276,11 @@ class TaiLieuController {
             });
             res.status(201).json({ message: 'Tài liệu đã được thêm vào hồ sơ', data: newTaiLieu });
         } catch (error) {
+            if (error.code === 'P2002' && error.meta?.target.includes('maDinhDanhVanBan')) {
+                return res.status(400).json({ message: 'Mã định danh văn bản đã tồn tại. Vui lòng chọn giá trị khác.' });
+            }
             res.status(500).json({ message: 'Lỗi khi thêm tài liệu vào hồ sơ', error: error.message });
+            console.log(error);
         }
     }
 

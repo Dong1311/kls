@@ -9,6 +9,8 @@ import addIcon from '../../../assets/images/Function/Add.png';
 const AddTaiLieuBienMucToHoSo = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [taiLieu, setTaiLieu] = useState({
         tenTaiLieu: '',
         khungBienMuc: '',
@@ -22,7 +24,7 @@ const AddTaiLieuBienMucToHoSo = () => {
         ngayThangNamVB: '',
         tenCoQuanBanHanh: 'Bộ Nội vụ', 
         trichYeuNoiDung: '',
-        ngonNgu: 'Tiếng Việt',           
+        ngonNgu: 'VN',           
         soLuongTrang: '',
         ghiChu: '',
         kyHieuThongTin: '',
@@ -82,29 +84,35 @@ const AddTaiLieuBienMucToHoSo = () => {
     );
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!taiLieu.link) {
-      setUploadStatus('Chưa có link tài liệu. Vui lòng tải lên tệp.');
-      return;
+        setErrorMessage('Chưa có link tài liệu. Vui lòng tải lên tệp.');
+        return;
     }
 
-    fetch(`/api/ho-so/${id}/tai-lieu`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(taiLieu),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setUploadStatus('Tài liệu đã được lưu thành công');
+    try {
+        const response = await fetch(`/api/ho-so/${id}/tai-lieu`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taiLieu),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Lỗi không xác định');
+        }
+
+        const data = await response.json();
         console.log('Lưu tài liệu thành công:', data);
-      })
-      .catch((error) => {
+        setErrorMessage('');
+        setUploadStatus('Tài liệu đã được lưu thành công');
+    } catch (error) {
         console.error('Lỗi khi lưu tài liệu:', error);
-        setUploadStatus('Lỗi khi lưu tài liệu');
-      });
-};
+        setErrorMessage(error.message);
+    }
+  };
 
 
   const triggerFileInput = () => {
@@ -117,10 +125,11 @@ const AddTaiLieuBienMucToHoSo = () => {
 
   return (
     <div className="container mt-4">
+      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       <h5 className="mb-4">Thêm mới tài liệu</h5>
       <div className="row g-3">
         <TextInput label="Tên tài liệu" name="tenTaiLieu" value={taiLieu.tenTaiLieu} onChange={handleChange} />
-        <TextInput label="Khung biên mục" name="khungBienMuc" value={taiLieu.khungBienMuc} onChange={handleChange} />
+        <SelectInput label="Khung biên mục" name="khungBienMuc" value={taiLieu.khungBienMuc} onChange={handleChange} options={['Văn bản', 'Tài liệu phim ảnh', 'Tài liệu phim âm thanh']}/>
 
         <SelectInput label="Tên cơ quan ban hành" name="tenCoQuanBanHanh" value={taiLieu.tenCoQuanBanHanh} onChange={handleChange} options={['Bộ Nội vụ', 'Bộ Quốc phòng']} />
         
@@ -135,8 +144,12 @@ const AddTaiLieuBienMucToHoSo = () => {
         <TextInput label="STT trong hồ sơ" name="sttTrongHoSo" value={taiLieu.sttTrongHoSo} onChange={handleChange} />
         <TextInput label="Số lượng trang" name="soLuongTrang" value={taiLieu.soLuongTrang} onChange={handleChange} />
 
-        <TextInput label="Tên loại văn bản" name="tenLoaiVanBan" value={taiLieu.tenLoaiVanBan} onChange={handleChange} />
-        <TextInput label="Ghi chú" name="ghiChu" value={taiLieu.ghiChu} onChange={handleChange} />
+        <SelectInput label="Tên loại văn bản" name="tenLoaiVanBan" value={taiLieu.tenLoaiVanBan} onChange={handleChange} options={ [ 'Nghị quyết', 'Quyết định', 'Chỉ thị', 'Quy chế', 'Quy định', 'Thông cáo', 
+    'Thông báo', 'Hướng dẫn', 'Chương trình', 'Kế hoạch', 'Phương án', 'Đề án', 
+    'Dự án', 'Báo cáo', 'Biên bản', 'Tờ trình', 'Hợp đồng', 'Công văn', 'Công điện', 
+    'Bản ghi nhớ', 'Bản thỏa thuận', 'Giấy ủy quyền', 'Giấy mời', 'Giấy giới thiệu', 
+    'Giấy nghỉ phép', 'Phiếu gửi', 'Phiếu chuyển', 'Phiếu báo', 'Thư công', 'Khác' ]} />
+            <TextInput label="Ghi chú" name="ghiChu" value={taiLieu.ghiChu} onChange={handleChange} />
 
         <TextInput label="Số văn bản" name="soVanBan" value={taiLieu.soVanBan} onChange={handleChange} />
         <TextInput label="Ký hiệu thông tin" name="kyHieuThongTin" value={taiLieu.kyHieuThongTin} onChange={handleChange} />
@@ -157,10 +170,10 @@ const AddTaiLieuBienMucToHoSo = () => {
         </div>
         <TextInput label="Bút tích" name="butTich" value={taiLieu.butTich} onChange={handleChange} />
 
-        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} onChange={handleChange} options={['Mật', 'Không mật']} />
-        <SelectInput label="Tình trạng vật lý" name="tinhTrangVatLy" value={taiLieu.tinhTrangVatLy} onChange={handleChange} options={['Bị mốc nhẹ', 'Nguyên vẹn']} />
+        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} onChange={handleChange} options={['Hạn chế', 'Không hạn chế']} />
+        <SelectInput label="Tình trạng vật lý" name="tinhTrangVatLy" value={taiLieu.tinhTrangVatLy} onChange={handleChange} options={['Bình thường','Bị mốc nhẹ', 'Bị hư hỏng']} />
 
-        <SelectInput label="Mức độ tin cậy" name="mucDoTinCay" value={taiLieu.mucDoTinCay} onChange={handleChange} options={['Cao', 'Thấp']} />
+        <SelectInput label="Mức độ tin cậy" name="mucDoTinCay" value={taiLieu.mucDoTinCay} onChange={handleChange} options={['Bản chính', 'Bản sao']} />
       </div>
 
       {/* Hiển thị trạng thái tải lên */}

@@ -111,18 +111,12 @@ const LapKeHoachThuThap = () => {
               </td>
               <td>{index + 1}</td>
               <td>
-              <td>
-              <td>
                 <Link 
                   to={`/ke-hoach-thu-thap/${keHoach.id}`} 
                   style={{ color: '#043371' }}
                 >
                   {keHoach.tieuDe}
                 </Link>
-              </td>
-
-              </td>
-
               </td>
               <td>{keHoach.nguoiDuyet}</td>
               <td>{new Date(keHoach.ngayBatDau).toLocaleDateString()}</td>

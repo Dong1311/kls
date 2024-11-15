@@ -22,7 +22,7 @@ const ChiTietTaiLieu = () => {
     ngayThangNamVB: '',
     tenCoQuanBanHanh: 'Bộ Nội vụ',
     trichYeuNoiDung: '',
-    ngonNgu: 'Tiếng Việt',
+    ngonNgu: 'VN',
     soLuongTrang: '',
     ghiChu: '',
     kyHieuThongTin: '',
@@ -76,6 +76,7 @@ const ChiTietTaiLieu = () => {
         <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} options={['VN', 'EN']} disabled={!isEditable} />
         <TextInput label="STT trong hồ sơ" name="sttTrongHoSo" value={taiLieu.sttTrongHoSo} disabled={!isEditable} />
         <TextInput label="Số lượng trang" name="soLuongTrang" value={taiLieu.soLuongTrang} disabled={!isEditable} />
+        
         <TextInput label="Tên loại văn bản" name="tenLoaiVanBan" value={taiLieu.tenLoaiVanBan} disabled={!isEditable} />
         <TextInput label="Ghi chú" name="ghiChu" value={taiLieu.ghiChu} disabled={!isEditable} />
         <TextInput label="Số văn bản" name="soVanBan" value={taiLieu.soVanBan} disabled={!isEditable} />
@@ -87,7 +88,7 @@ const ChiTietTaiLieu = () => {
           <input type="date" className="form-control" name="ngayThangNamVB" value={taiLieu.ngayThangNamVB ? new Date(taiLieu.ngayThangNamVB).toISOString().split('T')[0] : ''} disabled={!isEditable} />
         </div>
         <TextInput label="Bút tích" name="butTich" value={taiLieu.butTich} disabled={!isEditable} />
-        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} options={['Mật', 'Không mật']} disabled={!isEditable} />
+        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} options={['Hạn chế', 'Không hạn chế']} disabled={!isEditable} />
         <SelectInput label="Tình trạng vật lý" name="tinhTrangVatLy" value={taiLieu.tinhTrangVatLy} options={['Bị mốc nhẹ', 'Nguyên vẹn']} disabled={!isEditable} />
         <SelectInput label="Mức độ tin cậy" name="mucDoTinCay" value={taiLieu.mucDoTinCay} options={['Cao', 'Thấp']} disabled={!isEditable} />
       </div>

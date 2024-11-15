@@ -88,9 +88,6 @@ const DanhSachHoSoDaTrinhNLLS = () => {
           />
         </div>
 
-        <button className="btn btn-light" onClick={() => navigate('/ho-so/add')}>
-          <img src={addIcon} alt="add" width="20" />
-        </button>
       </div>
 
       <table className="table table-striped table-hover align-middle">
@@ -107,7 +104,6 @@ const DanhSachHoSoDaTrinhNLLS = () => {
             <th scope="col">Ngày tạo</th>
             <th scope="col">Số lượng tài liệu</th>
             <th scope="col">Trạng thái</th>
-            <th scope="col">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -123,22 +119,14 @@ const DanhSachHoSoDaTrinhNLLS = () => {
                   {hoSo.tieuDeHoSo}
                 </Link>
               </td>
-              <td>{hoSo.keHoachThuThap ? hoSo.keHoachThuThap.tieuDe : 'N/A'}</td>              <td>{hoSo.nguoiTao}</td>
+              <td>{hoSo.keHoachThuThap ? hoSo.keHoachThuThap.tieuDe : 'N/A'}</td>              
+              <td>{hoSo.nguoiTao}</td>
               <td>{new Date(hoSo.ngayTao).toLocaleDateString()}</td>
               <td>{hoSo.tongSoTaiLieu}</td>
               <td>
                 <span style={getTrangThaiStyle(hoSo.trangThai)}>
                   {hoSo.trangThai}
                 </span>
-              </td>
-              <td>
-                <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}>
-                  <img src={editIcon} alt="edit" width="20" />
-                </button>
-                <button className="btn btn-light" onClick={() => handleDeleteHoSo(hoSo.id)}
-                disabled={!(hoSo.trangThai === 'Đã trình duyệt')}>
-                  <img src={deleteIcon} alt="delete" width="20" />
-                </button>
               </td>
             </tr>
           ))}

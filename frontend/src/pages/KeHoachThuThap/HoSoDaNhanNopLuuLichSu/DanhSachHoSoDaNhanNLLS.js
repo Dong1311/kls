@@ -73,9 +73,6 @@ const DanhSachHoSoDaNhanNLLS = () => {
           />
         </div>
 
-        <button className="btn btn-light" onClick={() => navigate('/ho-so/add')}>
-          <img src={addIcon} alt="add" width="20" />
-        </button>
       </div>
 
       <table className="table table-striped table-hover align-middle">

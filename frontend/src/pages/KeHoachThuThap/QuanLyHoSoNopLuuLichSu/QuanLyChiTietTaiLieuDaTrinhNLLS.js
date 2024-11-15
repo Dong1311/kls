@@ -20,7 +20,7 @@ const QuanLyChiTietTaiLieuDaTrinhNLLS = () => {
     ngayThangNamVB: '',
     tenCoQuanBanHanh: 'Bộ Nội vụ',
     trichYeuNoiDung: '',
-    ngonNgu: 'Tiếng Việt',
+    ngonNgu: 'VN',
     soLuongTrang: '',
     ghiChu: '',
     kyHieuThongTin: '',

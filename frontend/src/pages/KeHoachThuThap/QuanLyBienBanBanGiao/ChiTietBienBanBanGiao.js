@@ -8,6 +8,8 @@ import addIcon from '../../../assets/images/Function/Add.png';
 import { Link } from 'react-router-dom';
 
 const ChiTietBienBanBanGiao = () => {
+  const [error, setError] = useState(null);
+
   const { id } = useParams(); // Lấy ID từ URL
   const { name } = useContext(UserContext);
   const [hoSoList, setHoSoList] = useState([]);
@@ -102,19 +104,30 @@ const ChiTietBienBanBanGiao = () => {
 
 
   const handleSubmit = async (status) => {
-    // Tạo bản sao `bienBan` với `hoSos` từ `selectedHoSoList`
+    // Kiểm tra các trường bắt buộc
+    if (!bienBan.soBienBan || !bienBan.tieuDe) {
+      setError('Vui lòng nhập đầy đủ thông tin các trường bắt buộc');
+      return;
+    }
+    if (selectedHoSoList.length === 0 || selectedHoSoList.some(hoSo => !hoSo.id)) {
+      setError('Vui lòng chọn ít nhất một hồ sơ hợp lệ');
+      return;
+    }
+  
     const updatedBienBan = {
       ...bienBan,
       soBienBan: bienBan.soBienBan.toString(),
       tieuDe: bienBan.tieuDe.toString(),
-      trangThaiBienBan: status, 
-      hoSos: selectedHoSoList.map(hoSo => hoSo.id) 
+      trangThaiBienBan: status,
+      hoSos: selectedHoSoList.map(hoSo => parseInt(hoSo.id, 10)), // Chuyển sang số nguyên
+      canCu: parseInt(bienBan.canCu, 10), // Chuyển sang số nguyên
+      daiDienBenGiaoId: parseInt(bienBan.daiDienBenGiaoId, 10), // Chuyển sang số nguyên
+      daiDienBenNhanId: parseInt(bienBan.daiDienBenNhanId, 10), // Chuyển sang số nguyên
     };
   
-    console.log('Data to be sent:', updatedBienBan); // Log dữ liệu để kiểm tra
-  
+    console.log('Data to be sent:', updatedBienBan);
     try {
-      const response = await fetch(`/api/bien-ban-ban-giao/${id}`, {
+      const response = await fetch(`/api/bien-ban-ban-giao/${bienBan.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedBienBan),
@@ -128,9 +141,10 @@ const ChiTietBienBanBanGiao = () => {
       }
     } catch (error) {
       console.error('Lỗi khi cập nhật biên bản:', error);
-      alert('Lỗi khi cập nhật biên bản');
+      setError('Lỗi khi cập nhật biên bản');
     }
   };
+  
   
   const formatDate = (dateString) => {
     return dateString ? new Date(dateString).toISOString().split('T')[0] : '';
@@ -138,6 +152,8 @@ const ChiTietBienBanBanGiao = () => {
 
   return (
     <div className="container mt-4">
+      {error && <div className="alert alert-danger">{error}</div>}
+
       <h5 className="mb-4">Chi tiết Biên bản bàn giao</h5>
 
       <div className="row g-3">
@@ -246,11 +262,13 @@ const ChiTietBienBanBanGiao = () => {
                               disabled={!isEditable}
                           >
                               <option value="">Chọn mã hồ sơ</option>
-                              {hoSoOptions.map(hoSoOption => (
-                                  <option key={hoSoOption.id} value={hoSoOption.id}>
+                              {hoSoOptions && Array.isArray(hoSoOptions) && hoSoOptions.length > 0
+                                ? hoSoOptions.map(hoSoOption => (
+                                    <option key={hoSoOption.id} value={hoSoOption.id}>
                                       {hoSoOption.maHoSo}
-                                  </option>
-                              ))}
+                                    </option>
+                                  ))
+                                : <option disabled>Không có hồ sơ khả dụng</option>}
                           </select>
                       </td>
                       <td>{hoSo.details.tieuDeHoSo || ''}</td>
