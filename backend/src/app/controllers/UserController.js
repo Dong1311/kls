@@ -4,8 +4,13 @@ const prisma = new PrismaClient();
 const UserController = {
   // Lấy danh sách tất cả người dùng
   async getAllUsers(req, res) {
+    const { role } = req.query; // Lấy role từ query parameters (nếu có)
+    
     try {
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        where: role ? { role } : {}, // Nếu có role, thêm điều kiện lọc theo role
+      });
+      
       res.json(users);
     } catch (error) {
       console.error('Lỗi khi lấy danh sách người dùng:', error);

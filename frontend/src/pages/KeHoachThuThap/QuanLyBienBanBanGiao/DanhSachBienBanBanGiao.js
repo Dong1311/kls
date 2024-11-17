@@ -69,7 +69,7 @@ const DanhSachBienBanBanGiao = () => {
             className="form-control me-2"
             placeholder="Tìm theo ngày..."
             value={ngayLap}
-            onChange={(e) => setNgayLap(e.target.value)} // Cập nhật `ngayLap`
+            onChange={(e) => setNgayLap(e.target.value)} 
           />
         </div>
 

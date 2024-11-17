@@ -7,7 +7,7 @@ import { UserContext } from '../../../context/UserContext';
 import CustomPopup from '../../../components/CustomPopUp';
 import InputField from './InputField2'; // Import InputField component
 import SelectInput2 from './SelectInput2'; // Import SelectInput2 component
-
+import SelectInputNguoiDuyet from './SelectInputNguoiDuyet';
 const AddKeHoachThuThap = () => {
   const { name } = useContext(UserContext);
   const [keHoach, setKeHoach] = useState({
@@ -18,11 +18,13 @@ const AddKeHoachThuThap = () => {
     trangThai: 'Tạo mới',
     noiDung: '',
     nguoiTao: name,
+    nguoiDuyet:'',
     donViNopLuuId: '' // Thay đổi thành donViNopLuuId
   });
   const [phongBanOptions, setPhongBanOptions] = useState([]); // State để lưu options của phòng ban
   const [error, setError] = useState(null); 
   const navigate = useNavigate();
+  const [nguoiDuyetOptions, setNguoiDuyetOptions] = useState([]); // State để lưu danh sách người duyệt
 
   useEffect(() => {
     // Fetch dữ liệu từ API /api/phong-ban để lấy danh sách phòng ban
@@ -41,12 +43,33 @@ const AddKeHoachThuThap = () => {
       });
   }, []);
 
+  useEffect(() => {
+    // Fetch danh sách người duyệt
+    fetch('/api/users?role=Lanh dao CQ bao quan')
+      .then(response => response.json())
+      .then(data => {
+        const options = data.map((user) => ({
+          value: user.name, // Sử dụng tên người duyệt
+          label: user.name, // Hiển thị tên người duyệt
+        }));
+        setNguoiDuyetOptions(options); // Cập nhật danh sách tùy chọn
+      })
+      .catch(error => {
+        console.error('Error fetching nguoi duyet:', error);
+        setError('Không thể tải danh sách người duyệt');
+      });
+  }, []);
+  
+  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Field changed: ${name}, Value: ${value}`);
     setKeHoach({ ...keHoach, [name]: value });
   };
 
   const handleSubmit = (status) => {
+    console.log('Ke Hoach:', keHoach);
     if (!keHoach.soKeHoach || !keHoach.tieuDe || !keHoach.ngayBatDau || !keHoach.ngayKetThuc || !keHoach.noiDung || !keHoach.donViNopLuuId) {
       setError('Vui lòng nhập đầy đủ thông tin các trường bắt buộc');
       return;
@@ -92,6 +115,8 @@ const AddKeHoachThuThap = () => {
         <InputField label="Từ ngày:" type="date" name="ngayBatDau" value={keHoach.ngayBatDau} onChange={handleChange} />
         <InputField label="Đến ngày:" type="date" name="ngayKetThuc" value={keHoach.ngayKetThuc} onChange={handleChange} />
         <InputField label="Trạng thái:" name="trangThai" value={keHoach.trangThai} onChange={handleChange} disabled />
+        <InputField label="Người tạo:" name="nguoiTao" value={keHoach.nguoiTao} onChange={handleChange} disabled />
+
         
         {/* Đơn vị nộp lưu */}
         <SelectInput2 
@@ -101,6 +126,16 @@ const AddKeHoachThuThap = () => {
           onChange={handleChange}
           options={phongBanOptions}
         />
+
+        <SelectInputNguoiDuyet
+          label="Người duyệt"
+          name="nguoiDuyet"
+          value={keHoach.nguoiDuyet} // Binding với `nguoiDuyet` (string)
+          onChange={handleChange} // Sử dụng logic handleChange đã có
+          options={nguoiDuyetOptions} // Danh sách tên người duyệt
+          required
+        />
+
 
         <div className="col-md-12 d-flex mb-3">
           <label className="form-label me-2" style={{ minWidth: '120px' }}>Nội dung:</label>

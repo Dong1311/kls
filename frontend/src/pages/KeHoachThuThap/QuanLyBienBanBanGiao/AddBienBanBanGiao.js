@@ -66,7 +66,7 @@ const AddBienBanBanGiao = () => {
   // Cập nhật danh sách hồ sơ khi kế hoạch thu thập thay đổi
   useEffect(() => {
     if (bienBan.canCu) {
-      fetch(`/api/lap-ke-hoach-thu-thap/${bienBan.canCu}/ho-so?trangThai=Đã trình NLLS`)
+      fetch(`/api/lap-ke-hoach-thu-thap/${bienBan.canCu}/ho-so?trangThai=Đã nhận NLLS`)
         .then(response => {
           if (!response.ok) throw new Error('Không lấy được danh sách hồ sơ');
           return response.json();
