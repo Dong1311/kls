@@ -1,0 +1,14 @@
+{
+  "statusCode": 200,
+  "message": "Success",
+  "data": {
+    "results": [],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "count": 0,
+      "totalCount": 0,
+      "totalPage": 0
+    }
+  }
+}

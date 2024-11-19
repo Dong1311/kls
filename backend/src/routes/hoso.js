@@ -3,6 +3,9 @@ const router = express.Router();
 const HoSoController = require('../app/controllers/HoSoController');
 const TaiLieuController = require('../app/controllers/TaiLieuController');
 
+// Route: Lấy thông tin tổng quan
+router.get('/summary', HoSoController.getHoSoSummary);
+
 // Route để thêm mới hồ sơ
 router.post('/', HoSoController.createHoSo);
 
@@ -29,5 +32,11 @@ router.delete('/tai-lieu/:taiLieuId', TaiLieuController.deleteTaiLieu);
 
 // Route để lấy tên hồ sơ dựa trên hoSoId
 router.get('/:hoSoId/name-status', TaiLieuController.getHoSoNameAndTrangThai);
+
+// Route: Lấy danh sách hồ sơ đã số hóa
+router.get('/da-so-hoa', HoSoController.getHoSoDaSoHoa);
+
+// Route: Lấy danh sách hồ sơ chưa số hóa
+router.get('/chua-so-hoa', HoSoController.getHoSoChuaSoHoa);
 
 module.exports = router;

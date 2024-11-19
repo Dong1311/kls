@@ -307,6 +307,30 @@ class TaiLieuController {
         }
     }
     
+    getTaiLieuSummary = async (req, res) => {
+        try {
+            // Tổng số tài liệu
+            const tongSoTaiLieu = await prisma.taiLieu.count();
+
+            // Tổng số trang
+            const tongSoTrang = await prisma.taiLieu.aggregate({
+                _sum: {
+                    soLuongTrang: true,
+                },
+            });
+
+            res.status(200).json({
+                tongSoTaiLieu,
+                tongSoTrang: tongSoTrang._sum.soLuongTrang || 0, // Trả về 0 nếu không có tài liệu
+            });
+        } catch (error) {
+            console.error('Error fetching TaiLieu summary:', error);
+            res.status(500).json({
+                message: 'Lỗi khi lấy thông tin tổng quan tài liệu',
+                error: error.message,
+            });
+        }
+    };
 
 }
 

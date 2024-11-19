@@ -195,6 +195,56 @@ class HoSoController {
             res.status(500).json({ message: 'Lỗi khi xóa hồ sơ', error: error.message });
         }
     };
+    // Lấy thông tin tổng quan về hồ sơ
+    getHoSoSummary = async (req, res) => {
+        try {
+            const tongSoHoSo = await prisma.hoSo.count();
+            const soHoSoDaSoHoa = await prisma.hoSo.count({
+                where: { trangThai: "Đã nhận lưu kho" },
+            });
+            const soHoSoChuaSoHoa = tongSoHoSo - soHoSoDaSoHoa;
+    
+            res.status(200).json({
+                tongSoHoSo,
+                soHoSoDaSoHoa,
+                soHoSoChuaSoHoa,
+            });
+        } catch (error) {
+            console.error('Error fetching HoSo summary:', error);
+            res.status(500).json({ message: 'Lỗi khi lấy thông tin tổng quan hồ sơ', error: error.message });
+        }
+    };
+
+    // Lấy danh sách hồ sơ đã số hóa
+    getHoSoDaSoHoa = async (req, res) => {
+        try {
+            const soHoSoDaSoHoa = await prisma.hoSo.count({
+                where: { trangThai: "Đã nhận lưu kho" },
+            });
+    
+            res.status(200).json({ soHoSoDaSoHoa });
+        } catch (error) {
+            console.error('Error fetching soHoSoDaSoHoa:', error);
+            res.status(500).json({ message: 'Lỗi khi lấy số lượng hồ sơ đã số hóa', error: error.message });
+        }
+    };
+    
+    
+    getHoSoChuaSoHoa = async (req, res) => {
+        try {
+            const tongSoHoSo = await prisma.hoSo.count();
+            const soHoSoDaSoHoa = await prisma.hoSo.count({
+                where: { trangThai: "Đã nhận lưu kho" },
+            });
+            const soHoSoChuaSoHoa = tongSoHoSo - soHoSoDaSoHoa;
+    
+            res.status(200).json({ soHoSoChuaSoHoa });
+        } catch (error) {
+            console.error('Error fetching soHoSoChuaSoHoa:', error);
+            res.status(500).json({ message: 'Lỗi khi lấy số lượng hồ sơ chưa số hóa', error: error.message });
+        }
+    };
+
 }
 
 module.exports = new HoSoController();

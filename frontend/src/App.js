@@ -66,6 +66,11 @@ import ChiTietHoSoThuocKhoDuLieu from './pages/KhoDuLieu/TraCuuHoSo/ChiTietHoSoT
 
 import DanhSachTaiLieuThuocKhoDuLieu from './pages/KhoDuLieu/TraCuuTaiLieu/DanhSachTaiLieuThuocKhoDuLieu';
 import ChiTietTaiLieuThuocKhoDuLieu from './pages/KhoDuLieu/TraCuuTaiLieu/ChiTietTaiLieuThuocKhoDuLieu';
+
+import HienTrangSoHoaKhoDuLieu from './pages/BaoCaoThongKe/HienTrangSoHoaKhoDuLieu';
+import ThongKeHopCap from './pages/BaoCaoThongKe/ThongKeHopCap';
+import ThongKeHSTL from './pages/BaoCaoThongKe/ThongKeHSTL';
+import ThongKePhieuYCKTSD from './pages/BaoCaoThongKe/ThongKePhieuYCKTSD';
 function App() {
   // Kiểm tra trạng thái đăng nhập từ localStorage
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true'); 
@@ -157,6 +162,11 @@ function App() {
 
                       <Route path='/danh-sach-tai-lieu-thuoc-kho-du-lieu' element={<DanhSachTaiLieuThuocKhoDuLieu/>} />
                       <Route path='/chi-tiet-tai-lieu-thuoc-kho-du-lieu/:taiLieuId' element={<ChiTietTaiLieuThuocKhoDuLieu/>} />
+
+                      <Route path = 'hien-trang-so-hoa-kho-du-lieu' element={<HienTrangSoHoaKhoDuLieu/>}/>
+                      <Route path = 'thong-ke-hop-cap' element={<ThongKeHopCap/>}/>
+                      <Route path = 'thong-ke-hstl' element={<ThongKeHSTL/>}/>
+                      <Route path = 'thong-ke-phieu-ycktsd' element={<ThongKePhieuYCKTSD/>}/>
 
                     </Routes>
                   </div>

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const taiLieuController = require('../app/controllers/TaiLieuController');
 
+router.get('/summary', taiLieuController.getTaiLieuSummary);
+
 // Tạo tài liệu mới
 router.post('/', taiLieuController.createTaiLieu);
 
@@ -16,5 +18,6 @@ router.put('/:id', taiLieuController.updateTaiLieu);
 
 // Xóa tài liệu theo ID
 router.delete('/:id', taiLieuController.deleteTaiLieu);
+
 
 module.exports = router;
