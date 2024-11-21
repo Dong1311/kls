@@ -3,6 +3,8 @@ import { Doughnut } from "react-chartjs-2";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import infoIcon from "../../assets/images/Function/info.png";
+import domtoimage from "dom-to-image";
+import RobotoFont from "../../assets/fonts/font-times-new-roman-base64"; 
 import {
   Chart as ChartJS,
   ArcElement,
@@ -67,20 +69,52 @@ const HienTrangSoHoaKhoDuLieu = () => {
     ],
   };
 
+  const chartOptions = {
+    maintainAspectRatio: false, // Tắt tỷ lệ mặc định
+    plugins: {
+      legend: {
+        position: "top",
+      },
+    },
+  };
+
   const handleExportPDF = async () => {
     const content = contentRef.current;
-
+  
     if (content) {
-      const canvas = await html2canvas(content, { scale: 2 }); // Chụp ảnh màn hình
-      const imgData = canvas.toDataURL("image/png"); // Lấy ảnh dưới dạng base64
-      const pdf = new jsPDF("p", "mm", "a4"); // Tạo tài liệu PDF
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight); // Thêm ảnh vào PDF
-      pdf.save("HienTrangSoHoaKhoDuLieu.pdf"); // Lưu file
+      try {
+        // Chụp nội dung bằng domtoimage
+        const canvas = await domtoimage.toPng(content);
+  
+        // Khởi tạo file PDF
+        const pdf = new jsPDF("p", "mm", "a4");
+  
+        // Kích thước PDF
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const contentHeight = (pdfWidth * content.offsetHeight) / content.offsetWidth;
+  
+        pdf.addFileToVFS("Roboto-Regular-normal.ttf", RobotoFont);
+        pdf.addFont("Roboto-Regular-normal.ttf", "Roboto", "normal");
+        pdf.setFont("Roboto");
+        // Thêm tiêu đề "Hiện trạng số hóa" căn giữa
+        const title = "Hiện trạng số hóa";
+        pdf.setFontSize(20);
+        pdf.text(title, pdfWidth / 2, 20, { align: "center" });
+  
+        // Khoảng cách từ tiêu đề đến bảng
+        const topMargin = 30;
+  
+        // Thêm hình ảnh bảng vào PDF
+        pdf.addImage(canvas, "PNG", 0, topMargin, pdfWidth, contentHeight);
+  
+        // Lưu file PDF
+        pdf.save("HienTrangSoHoaKhoDuLieu.pdf");
+      } catch (error) {
+        console.error("Error generating PDF with domtoimage:", error);
+      }
     }
   };
+  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -159,7 +193,12 @@ const HienTrangSoHoaKhoDuLieu = () => {
                 flexGrow: 1,
               }}
             >
-              <Doughnut data={chartData} />
+              <Doughnut 
+                data={chartData} 
+                options={chartOptions} 
+                width={400} // Đặt chiều rộng biểu đồ
+                height={400} // Đặt chiều cao biểu đồ
+              />
             </div>
           </div>
 

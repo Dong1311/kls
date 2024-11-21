@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import infoIcon from "../../assets/images/Function/info.png";
 import jsPDF from "jspdf";
 import domtoimage from "dom-to-image";
+import RobotoFont from "../../assets/fonts/font-times-new-roman-base64"; 
 
 const ThongKePhieuYCKTSD = () => {
   const [data, setData] = useState([]);
@@ -11,7 +12,7 @@ const ThongKePhieuYCKTSD = () => {
   const [endDate, setEndDate] = useState("");
   const [trangThaiFilter, setTrangThaiFilter] = useState("");
   const [availableTrangThai, setAvailableTrangThai] = useState([]);
-  const tableRef = useRef(null); // Tham chiếu tới bảng
+  const tableRef = useRef(null); 
   const navigate = useNavigate();
 
   const [summary, setSummary] = useState({
@@ -70,20 +71,41 @@ const ThongKePhieuYCKTSD = () => {
 
   const handleExportPDF = async () => {
     const table = tableRef.current;
+  
     if (table) {
       try {
+        // Chuyển bảng thành ảnh PNG
         const imgData = await domtoimage.toPng(table);
+  
+        // Khởi tạo file PDF
         const pdf = new jsPDF("p", "mm", "a4");
+  
+        // Nhúng font chữ hỗ trợ tiếng Việt
+        pdf.addFileToVFS("Roboto-Regular-normal.ttf", RobotoFont);
+        pdf.addFont("Roboto-Regular-normal.ttf", "Roboto", "normal");
+        pdf.setFont("Roboto");
+  
+        // Kích thước PDF
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (pdfWidth * table.offsetHeight) / table.offsetWidth;
-
-        pdf.addImage(imgData, "PNG", 0, 10, pdfWidth, pdfHeight);
+  
+        // Thêm tiêu đề "Thống kê Phiếu YCKTSD"
+        pdf.setFontSize(20); // Đặt kích thước chữ
+        pdf.text("Thống kê Phiếu YCKTSD", pdfWidth / 2, 20, { align: "center" }); // Căn giữa tiêu đề
+  
+        // Thêm khoảng cách lề
+        const topMargin = 30; // Khoảng cách từ tiêu đề đến bảng
+  
+        // Thêm hình ảnh bảng vào PDF
+        pdf.addImage(imgData, "PNG", 0, topMargin, pdfWidth, pdfHeight);
+  
+        // Lưu file PDF
         pdf.save("ThongKePhieuYCKTSD.pdf");
       } catch (error) {
         console.error("Error generating PDF:", error);
       }
     }
-  };
+  };  
 
   const handlePicklistChange = (event) => {
     const value = event.target.value;

@@ -100,7 +100,7 @@ function App() {
                   <Header />
                   <div className="content">
                     <Routes> 
-                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/" element={<HienTrangSoHoaKhoDuLieu />} />
                       <Route path="/trang-chu" element={<HienTrangSoHoaKhoDuLieu />} />
                       <Route path="/lap-ke-hoach-thu-thap" element={<KeHoachThuThap />} />
                       <Route path="/ke-hoach-thu-thap/:id/" element={<ChiTietKeHoachThuThap />} />
