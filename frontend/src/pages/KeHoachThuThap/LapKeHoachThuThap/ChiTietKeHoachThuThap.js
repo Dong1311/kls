@@ -173,33 +173,41 @@ const ChiTietKeHoachThuThap = () => {
       },
       body: JSON.stringify({ taiLieuHD: filePath }), 
     })
-    .then((response) => response.json())
-    .then((data) => {
-      setUploadStatus('Đường dẫn tài liệu đã được lưu vào Postgres');
-      console.log('Cập nhật tài liệu thành công:', data);
+      .then((response) => response.json())
+      .then((data) => {
+        setUploadStatus('Đường dẫn tài liệu đã được lưu vào Postgres');
+        console.log('Cập nhật tài liệu thành công:', data);
   
-      return fetch('/api/lap-ke-hoach-thu-thap/tai-lieu-huong-dan', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tenTaiLieu: selectedFile.name, 
-          link: filePath, 
-          keHoachThuThapId: parseInt(id, 10),  
-        }),
+        return fetch('/api/lap-ke-hoach-thu-thap/tai-lieu-huong-dan', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tenTaiLieu: selectedFile.name,
+            link: filePath,
+            keHoachThuThapId: parseInt(id, 10),
+          }),
+        });
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Tạo tài liệu hướng dẫn thành công:', data);
+  
+        // Gọi lại API để cập nhật danh sách tài liệu
+        fetch(`/api/lap-ke-hoach-thu-thap/${id}/tai-lieu-huong-dan`)
+          .then((response) => response.json())
+          .then((updatedList) => {
+            setTaiLieuList(updatedList); // Cập nhật danh sách tài liệu
+            setUploadStatus('Danh sách tài liệu đã được cập nhật');
+          });
+      })
+      .catch((error) => {
+        console.error('Lỗi khi lưu tài liệu:', error);
+        setUploadStatus('Lỗi khi lưu tài liệu');
       });
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setUploadStatus('Tài liệu hướng dẫn đã được lưu thành công');
-      console.log('Tạo tài liệu hướng dẫn thành công:', data);
-    })
-    .catch((error) => {
-      console.error('Lỗi khi lưu tài liệu:', error);
-      setUploadStatus('Lỗi khi lưu tài liệu');
-    });
   };
+  
   
   
 
@@ -347,11 +355,11 @@ const ChiTietKeHoachThuThap = () => {
         </table>
 
         {/* Dòng thứ ba: Thẻ "Xem tài liệu" */}
-        {filePath && (
+        {/* {filePath && taiLieuList.length === 0 && (
           <a href={filePath} target="_blank" rel="noopener noreferrer" className="btn btn-link" style={{ color: '#043371' }}>
             Xem tài liệu 
           </a>
-        )}
+        )} */}
 
         {/* Dòng cuối cùng: Nút Upload File và Lưu */}
         <div className="d-flex justify-content-end mt-3">
