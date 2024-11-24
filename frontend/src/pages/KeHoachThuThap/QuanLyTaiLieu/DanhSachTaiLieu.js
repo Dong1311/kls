@@ -5,6 +5,7 @@ import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import infoIcon from '../../../assets/images/Function/info.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom';
 
 const DanhSachTaiLieu = () => {
   const [taiLieuList, setTaiLieuList] = useState([]);
@@ -124,8 +125,23 @@ const DanhSachTaiLieu = () => {
                 <input type="checkbox" />
               </td>
               <td>{index + 1}</td>
-              <td>{taiLieu.maDinhDanhVanBan}</td>
-              <td>{taiLieu.tenHoSo}</td> {/* Hiển thị tên hồ sơ */}
+              <td>
+                <Link 
+                  to={`/tai-lieu/${taiLieu.id}`} 
+                  style={{ color: '#007bff', textDecoration: 'underline' }}
+                >
+                  {taiLieu.maDinhDanhTL || `TL000${taiLieu.id}`}
+                </Link>
+              </td>
+              <td>
+                <Link 
+                  to={`/ho-so/${taiLieu.hoSoId}`} 
+                  style={{ color: '#007bff', textDecoration: 'underline' }}
+                >
+                  {taiLieu.tenHoSo }
+                </Link>
+              </td>
+              {/* <td>{taiLieu.tenHoSo}</td> Hiển thị tên hồ sơ */}
               <td>{taiLieu.trichYeuNoiDung}</td>
               <td>{new Date(taiLieu.ngayThangNamVB).toLocaleDateString()}</td>
               <td>{taiLieu.tenCoQuanBanHanh}</td>
