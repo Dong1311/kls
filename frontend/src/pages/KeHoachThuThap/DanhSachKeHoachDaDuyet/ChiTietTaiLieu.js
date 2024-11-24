@@ -64,6 +64,15 @@ const ChiTietTaiLieu = () => {
     setUploadStatus(`Đã chọn tệp: ${file.name}`);
   };
 
+  const handleChange = (event) => {
+    const { name, value } = event.target; // Lấy tên và giá trị từ trường input
+    setTaiLieu((prevTaiLieu) => ({
+      ...prevTaiLieu,
+      [name]: value, // Cập nhật trường tương ứng trong state
+    }));
+  };
+  
+
   const handleUpload = () => {
     if (!selectedFile) {
       setUploadStatus('Vui lòng chọn tệp trước');
