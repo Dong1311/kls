@@ -148,7 +148,7 @@ const Sidebar = () => {
           isOpen={activeMenu === 'baoCao'}
         >
           <SubmenuItem to="/hien-trang-so-hoa-kho-du-lieu" text="Hiện trạng số hóa kho dữ liệu" />
-          <SubmenuItem to="/thong-ke-hop-cap" text="Thống kê hộp cặp" />
+          {/* <SubmenuItem to="/thong-ke-hop-cap" text="Thống kê hộp cặp" /> */}
           <SubmenuItem to="/thong-ke-hstl" text="Thống kê khai thác" />
         </MenuLink>
       </ul>
