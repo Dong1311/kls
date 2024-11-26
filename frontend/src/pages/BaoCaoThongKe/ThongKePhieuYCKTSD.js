@@ -49,7 +49,11 @@ const ThongKePhieuYCKTSD = () => {
 
   // Dữ liệu cho biểu đồ Doughnut
   const doughnutData = {
-    labels: ["Đúng hạn", "Quá hạn", "Chưa trả"],
+    labels: [
+      `Đúng hạn (${summary.tongSoPhieuTraDungHan})`,
+      `Quá hạn (${summary.tongSoPhieuTraQuaHan})`,
+      `Chưa trả (${summary.tongSoPhieuTraChuaTra})`,
+    ],
     datasets: [
       {
         data: [
