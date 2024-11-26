@@ -1,50 +1,191 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Doughnut } from "react-chartjs-2";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { Bar } from "react-chartjs-2";
 import infoIcon from "../../assets/images/Function/info.png";
 import domtoimage from "dom-to-image";
 import RobotoFont from "../../assets/fonts/font-times-new-roman-base64"; 
+
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
   Legend,
+  LinearScale, // Đăng ký LinearScale
+  CategoryScale, // Đăng ký CategoryScale cho trục danh mục
+  BarElement, // Đăng ký BarElement cho biểu đồ cột
 } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend, LinearScale, CategoryScale, BarElement);
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 import StatisticItem from "./StatisticItem";
 
 const HienTrangSoHoaKhoDuLieu = () => {
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [data, setData] = useState({
     tongSoHoSo: 0,
     soHoSoDaSoHoa: 0,
     soHoSoChuaSoHoa: 0,
     tongSoTaiLieu: 0,
     tongSoTrang: 0,
+    trangThaiHoSo: [], // Giá trị mặc định là mảng rỗng
   });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [hoSoChuaSoHoaData, setHoSoChuaSoHoaData] = useState([]);
+  const [hoSoDaSoHoaData, setHoSoDaSoHoaData] = useState([]);
 
-  // Ref để truy cập phần tử HTML
+  const trangThaiChuaSoHoa = [
+    "Đã trình duyệt lưu kho",
+    "BMCL",
+    "Đã nhận NLLS",
+    "Cần thu thập lại",
+    "Từ chối NLLS",
+    "Đã trình duyệt NLLS",
+    "Từ chối nộp lưu",
+    "Đã trình duyệt",
+    "Tạo mới",
+  ];
+  
+  const trangThaiDaSoHoa = [
+    "Đã duyệt QĐTH",
+    "Từ chối QĐTH",
+    "Chờ duyệt QĐTH",
+    "Đóng băng",
+    "Chờ QĐTH",
+    "Đã nhận lưu kho",
+  ];
+  
+  
   const contentRef = useRef();
+
+  const barChartChuaSoHoa = {
+    labels: trangThaiChuaSoHoa, 
+    datasets: [
+      {
+        label: "Hồ sơ chưa số hóa",
+        data: hoSoChuaSoHoaData, 
+        backgroundColor: "#0063ba", 
+        barThickness: 30,
+      },
+    ],
+  };
+  
+  const barChartOptionsChuaSoHoa = {
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: "Hồ sơ chưa số hóa", // Tiêu đề biểu đồ
+        font: {
+          size: 18,
+        },
+      },
+    },
+    maintainAspectRatio: false, 
+    indexAxis: "y", // Xoay ngang biểu đồ
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1, // Chỉ hiển thị giá trị nguyên
+        },
+        title: {
+          display: true,
+          text: "Số lượng hồ sơ", // Thêm chú thích cho trục OX
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Trạng thái hồ sơ", 
+        },
+      },
+    },
+    
+  };
+  
+  const barChartDaSoHoa = {
+    labels: trangThaiDaSoHoa, 
+    datasets: [
+      {
+        label: "Hồ sơ đã số hóa",
+        data: hoSoDaSoHoaData, 
+        backgroundColor: "#4CAF50", 
+        barThickness: 30,
+        categoryPercentage: 0.8, // Tăng khoảng cách giữa các nhóm
+        barPercentage: 0.9,
+      },
+    ],
+  };
+  
+  const barChartOptionsDaSoHoa = {
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: "Hồ sơ đã số hóa" },
+    },
+    maintainAspectRatio: false, 
+    indexAxis: "y", 
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1, // Chỉ hiển thị giá trị nguyên
+        },
+        title: {
+          display: true,
+          text: "Số lượng hồ sơ", // Thêm chú thích cho trục OX
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Trạng thái hồ sơ", // Thêm chú thích cho trục OY
+        },
+      },
+    },
+    
+  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const hoSoResponse = await fetch("/api/ho-so/summary");
         const hoSoData = await hoSoResponse.json();
-
+  
+        const trangThaiResponse = await fetch("/api/ho-so/trang-thai");
+        const trangThaiData = await trangThaiResponse.json();
+  
         const taiLieuResponse = await fetch("/api/tai-lieu/summary");
         const taiLieuData = await taiLieuResponse.json();
-
-        setData({
+  
+        // Tính toán dữ liệu cho hồ sơ chưa số hóa
+        const hoSoChuaSoHoa = trangThaiChuaSoHoa.map(trangThai => {
+          const matched = trangThaiData.find(item => item.trangThai === trangThai);
+          return matched ? matched.soLuong : 0; // Giá trị là 0 nếu không có dữ liệu
+        });
+  
+        // Tính toán dữ liệu cho hồ sơ đã số hóa
+        const hoSoDaSoHoa = trangThaiDaSoHoa.map(trangThai => {
+          const matched = trangThaiData.find(item => item.trangThai === trangThai);
+          return matched ? matched.soLuong : 0; // Giá trị là 0 nếu không có dữ liệu
+        });
+  
+        // Cập nhật state
+        setHoSoChuaSoHoaData(hoSoChuaSoHoa);
+        setHoSoDaSoHoaData(hoSoDaSoHoa);
+  
+        setData(prevData => ({
+          ...prevData,
           tongSoHoSo: hoSoData.tongSoHoSo,
           soHoSoDaSoHoa: hoSoData.soHoSoDaSoHoa,
           soHoSoChuaSoHoa: hoSoData.soHoSoChuaSoHoa,
+          trangThaiHoSo: trangThaiData,
           tongSoTaiLieu: taiLieuData.tongSoTaiLieu,
           tongSoTrang: taiLieuData.tongSoTrang,
-        });
+        }));
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error.message);
@@ -52,9 +193,10 @@ const HienTrangSoHoaKhoDuLieu = () => {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   const chartData = {
     labels: [
@@ -70,7 +212,7 @@ const HienTrangSoHoaKhoDuLieu = () => {
   };
 
   const chartOptions = {
-    maintainAspectRatio: false, // Tắt tỷ lệ mặc định
+    maintainAspectRatio: false, 
     plugins: {
       legend: {
         position: "top",
@@ -153,109 +295,131 @@ const HienTrangSoHoaKhoDuLieu = () => {
 
       {/* Nội dung */}
       <div ref={contentRef}>
-        <div
-          style={{
-            display: "flex",
-            gap: "20px",
-            justifyContent: "space-between",
-            alignItems: "stretch",
-          }}
-        >
-          {/* Hình chữ nhật bên trái */}
+        <div >
           <div
             style={{
-              flex: 1,
-              maxWidth: "50%",
-              backgroundColor: "#fff",
-              borderRadius: "10px",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
               display: "flex",
-              flexDirection: "column",
+              gap: "20px",
+              justifyContent: "space-between",
+              alignItems: "stretch",
             }}
           >
+            {/* Hình chữ nhật bên trái */}
             <div
               style={{
-                backgroundColor: "#044D82",
-                padding: "10px",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                color: "#fff",
-                fontWeight: "bold",
-                textAlign: "center",
+                flex: 1,
+                maxWidth: "50%",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              Hiện trạng số hóa hồ sơ tài liệu
+              <div
+                style={{
+                  backgroundColor: "#044D82",
+                  padding: "10px",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                Hiện trạng số hóa hồ sơ tài liệu
+              </div>
+              <div
+                style={{
+                  padding: "20px",
+                  textAlign: "center",
+                  flexGrow: 1,
+                }}
+              >
+                <Doughnut 
+                  data={chartData} 
+                  options={chartOptions} 
+                  width={400} // Đặt chiều rộng biểu đồ
+                  height={400} // Đặt chiều cao biểu đồ
+                />
+              </div>
             </div>
+  
+            {/* Hình chữ nhật bên phải */}
             <div
               style={{
-                padding: "20px",
-                textAlign: "center",
-                flexGrow: 1,
+                flex: 1,
+                maxWidth: "48%",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              <Doughnut 
-                data={chartData} 
-                options={chartOptions} 
-                width={400} // Đặt chiều rộng biểu đồ
-                height={400} // Đặt chiều cao biểu đồ
-              />
+              <div
+                style={{
+                  backgroundColor: "#044D82",
+                  padding: "10px",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                Thống kê số hóa hồ sơ tài liệu
+              </div>
+              <div
+                style={{
+                  padding: "20px",
+                  flexGrow: 1,
+                }}
+              >
+                <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
+                  <StatisticItem label="Tổng số hồ sơ:" value={data.tongSoHoSo} />
+                  <StatisticItem
+                    label="Tổng số tài liệu:"
+                    value={data.tongSoTaiLieu}
+                  />
+                  <StatisticItem
+                    label="Số hồ sơ đã số hóa:"
+                    value={data.soHoSoDaSoHoa}
+                  />
+                  <StatisticItem
+                    label="Số hồ sơ chưa số hóa:"
+                    value={data.soHoSoChuaSoHoa}
+                  />
+                  <StatisticItem
+                    label="Tổng số trang:"
+                    value={data.tongSoTrang}
+                  />
+                </ul>
+              </div>
             </div>
           </div>
-
-          {/* Hình chữ nhật bên phải */}
-          <div
-            style={{
-              flex: 1,
-              maxWidth: "48%",
-              backgroundColor: "#fff",
-              borderRadius: "10px",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "#044D82",
-                padding: "10px",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                color: "#fff",
-                fontWeight: "bold",
-                textAlign: "center",
-              }}
-            >
-              Thống kê số hóa hồ sơ tài liệu
+        </div>
+  
+        <div style={{ display: "flex", gap: "20px", marginTop: "20px" }}>
+          {/* Biểu đồ cho hồ sơ chưa số hóa */}
+          <div style={{ flex: 1, height: "400px" }}>
+            <Bar data={barChartChuaSoHoa} options={barChartOptionsChuaSoHoa} />
+            <div style={{ textAlign: "center",marginLeft:"120px", marginTop: "10px", fontSize: "16px", fontWeight: "bold" }}>
+              Hồ sơ chưa số hóa
             </div>
-            <div
-              style={{
-                padding: "20px",
-                flexGrow: 1,
-              }}
-            >
-              <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
-                <StatisticItem label="Tổng số hồ sơ:" value={data.tongSoHoSo} />
-                <StatisticItem
-                  label="Tổng số tài liệu:"
-                  value={data.tongSoTaiLieu}
-                />
-                <StatisticItem
-                  label="Số hồ sơ đã số hóa:"
-                  value={data.soHoSoDaSoHoa}
-                />
-                <StatisticItem
-                  label="Số hồ sơ chưa số hóa:"
-                  value={data.soHoSoChuaSoHoa}
-                />
-                <StatisticItem
-                  label="Tổng số trang:"
-                  value={data.tongSoTrang}
-                />
-              </ul>
+          </div>
+  
+          {/* Biểu đồ cho hồ sơ đã số hóa */}
+          <div style={{ flex: 1, height: "400px" }}>
+            <Bar data={barChartDaSoHoa} options={barChartOptionsDaSoHoa} />
+            <div style={{ textAlign: "center",marginLeft:"120px", marginTop: "10px", fontSize: "16px", fontWeight: "bold" }}>
+              Hồ sơ đã số hóa
             </div>
           </div>
         </div>
       </div>
+
+
     </div>
   );
 };

@@ -1,124 +1,107 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Doughnut } from "react-chartjs-2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import infoIcon from "../../assets/images/Function/info.png";
 import jsPDF from "jspdf";
 import domtoimage from "dom-to-image";
-import RobotoFont from "../../assets/fonts/font-times-new-roman-base64"; 
+import RobotoFont from "../../assets/fonts/font-times-new-roman-base64";
 
 const ThongKePhieuYCKTSD = () => {
-  const [data, setData] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [trangThaiFilter, setTrangThaiFilter] = useState("");
-  const [availableTrangThai, setAvailableTrangThai] = useState([]);
-  const tableRef = useRef(null); 
-  const navigate = useNavigate();
-
   const [summary, setSummary] = useState({
-    tongSoPhieu: 0,
+    tongSoPhieuYCKTSD: 0,
     tongSoHoSo: 0,
     tongSoTaiLieu: 0,
-    tongSoMaPhieu: 0,
-    tongSoNguoiKhaiThac: 0,
+    tongSoPhieuTraDungHan: 0,
+    tongSoPhieuTraQuaHan: 0,
+    tongSoPhieuTraChuaTra: 0,
   });
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const contentRef = useRef(null);
 
+  // Lấy dữ liệu từ API
   useEffect(() => {
     const fetchData = async () => {
       try {
         const query = new URLSearchParams({
           startDate: startDate || "",
           endDate: endDate || "",
-          trangThai: trangThaiFilter || "",
         }).toString();
 
-        const response = await fetch(`/api/phieu-tra/thong-ke?${query}`);
+        const response = await fetch(`/api/ctphieuyc/thong-ke?${query}`);
         const result = await response.json();
-
-        setData(result.data || []);
-        calculateSummary(result.data || []);
-
-        const uniqueTrangThai = [
-          ...new Set(result.data.map((item) => item.trangThai)),
-        ];
-        setAvailableTrangThai(uniqueTrangThai);
+        setSummary(result || {});
       } catch (error) {
         console.error("Error fetching data:", error);
-        setData([]);
-        calculateSummary([]);
-        setAvailableTrangThai([]);
+        setSummary({
+          tongSoPhieuYCKTSD: 0,
+          tongSoHoSo: 0,
+          tongSoTaiLieu: 0,
+          tongSoPhieuTraDungHan: 0,
+          tongSoPhieuTraQuaHan: 0,
+          tongSoPhieuTraChuaTra: 0,
+        });
       }
     };
 
     fetchData();
-  }, [startDate, endDate, trangThaiFilter]);
+  }, [startDate, endDate]);
 
-  const calculateSummary = (data) => {
-    const tongSoPhieu = data.length;
-    const tongSoHoSo = data.reduce((acc, item) => acc + (item.soLuongHoSo || 0), 0);
-    const tongSoTaiLieu = data.reduce((acc, item) => acc + (item.soLuongTaiLieu || 0), 0);
-    const tongSoMaPhieu = new Set(data.map((item) => item.maPhieuYC)).size;
-    const tongSoNguoiKhaiThac = new Set(data.map((item) => item.nguoiKhaiThac)).size;
+  // Dữ liệu cho biểu đồ Doughnut
+  const doughnutData = {
+    labels: ["Đúng hạn", "Quá hạn", "Chưa trả"],
+    datasets: [
+      {
+        data: [
+          summary.tongSoPhieuTraDungHan,
+          summary.tongSoPhieuTraQuaHan,
+          summary.tongSoPhieuTraChuaTra,
+        ],
+        backgroundColor: ["#A4CF82", "#DA7073", "#B8B8B8"],
+      },
+    ],
+  };
 
-    setSummary({
-      tongSoPhieu,
-      tongSoHoSo,
-      tongSoTaiLieu,
-      tongSoMaPhieu,
-      tongSoNguoiKhaiThac,
-    });
+  const doughnutOptions = {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: "top" },
+    },
   };
 
   const handleExportPDF = async () => {
-    const table = tableRef.current;
-  
-    if (table) {
+    const content = contentRef.current;
+
+    if (content) {
       try {
-        // Chuyển bảng thành ảnh PNG
-        const imgData = await domtoimage.toPng(table);
-  
-        // Khởi tạo file PDF
+        const imgData = await domtoimage.toPng(content);
+
         const pdf = new jsPDF("p", "mm", "a4");
-  
-        // Nhúng font chữ hỗ trợ tiếng Việt
         pdf.addFileToVFS("Roboto-Regular-normal.ttf", RobotoFont);
         pdf.addFont("Roboto-Regular-normal.ttf", "Roboto", "normal");
         pdf.setFont("Roboto");
-  
-        // Kích thước PDF
+
         const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (pdfWidth * table.offsetHeight) / table.offsetWidth;
-  
-        // Thêm tiêu đề "Thống kê Phiếu YCKTSD"
-        pdf.setFontSize(20); // Đặt kích thước chữ
-        pdf.text("Thống kê Phiếu YCKTSD", pdfWidth / 2, 20, { align: "center" }); // Căn giữa tiêu đề
-  
-        // Thêm khoảng cách lề
-        const topMargin = 30; // Khoảng cách từ tiêu đề đến bảng
-  
-        // Thêm hình ảnh bảng vào PDF
-        pdf.addImage(imgData, "PNG", 0, topMargin, pdfWidth, pdfHeight);
-  
-        // Lưu file PDF
+        const contentHeight =
+          (pdfWidth * content.offsetHeight) / content.offsetWidth;
+
+        pdf.setFontSize(20);
+        pdf.text("Thống kê Phiếu YCKTSD", pdfWidth / 2, 20, { align: "center" });
+
+        const topMargin = 30;
+
+        pdf.addImage(imgData, "PNG", 0, topMargin, pdfWidth, contentHeight);
+
         pdf.save("ThongKePhieuYCKTSD.pdf");
       } catch (error) {
         console.error("Error generating PDF:", error);
       }
     }
-  };  
-
-  const handlePicklistChange = (event) => {
-    const value = event.target.value;
-    if (value === "ThongKeHSTL") {
-      navigate("/thong-ke-hstl");
-    } else if (value === "ThongKePhieuYCKTSD") {
-      navigate("/thong-ke-phieu-ycktsd");
-    }
   };
 
   return (
-    <div className="container mt-4">
-      {/* Tiêu đề */}
+    <div className="container mt-4" >
+      {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="d-flex align-items-center">
           <img src={infoIcon} alt="info" width="30" className="me-2" />
@@ -127,22 +110,6 @@ const ThongKePhieuYCKTSD = () => {
         <button className="btn btn-primary" onClick={handleExportPDF}>
           Xuất biểu mẫu
         </button>
-      </div>
-
-      <div>
-        <select
-          className="form-select mt-4 mb-4"
-          style={{
-            width: "400px",
-            fontSize: "18px",
-            fontWeight: "600",
-            color: "#043371",
-          }}
-          onChange={handlePicklistChange}
-        >
-          <option value="ThongKePhieuYCKTSD">Thống kê Phiếu YCKTSD</option>
-          <option value="ThongKeHSTL">Thống kê HSTL đưa vào Phiếu YCKTSD</option>
-        </select>
       </div>
 
       {/* Bộ lọc */}
@@ -159,7 +126,7 @@ const ThongKePhieuYCKTSD = () => {
             onChange={(e) => setStartDate(e.target.value)}
           />
         </div>
-        <div className="me-3">
+        <div>
           <label htmlFor="endDate" className="form-label">
             Đến ngày:
           </label>
@@ -171,72 +138,107 @@ const ThongKePhieuYCKTSD = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <div>
-          <label htmlFor="trangThaiFilter" className="form-label">
-            Trạng thái:
-          </label>
-          <select
-            id="trangThaiFilter"
-            className="form-select"
-            value={trangThaiFilter}
-            onChange={(e) => setTrangThaiFilter(e.target.value)}
-          >
-            <option value="">--Tất cả--</option>
-            {availableTrangThai.map((trangThai, index) => (
-              <option key={index} value={trangThai}>
-                {trangThai}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
 
-      {/* Bảng */}
-      <table className="table table-striped table-hover align-middle" ref={tableRef}>
-        <thead style={{ backgroundColor: "#2289E7", color: "#fff" }}>
-          <tr>
-            <th>STT</th>
-            <th>Mã phiếu YCKTSD</th>
-            <th>Người khai thác</th>
-            <th>Số lượng hồ sơ</th>
-            <th>Số lượng tài liệu</th>
-            <th>Trạng thái</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data && data.length > 0 ? (
-            data.map((item, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{item.maPhieuYC}</td>
-                <td>{item.nguoiKhaiThac}</td>
-                <td>{item.soLuongHoSo}</td>
-                <td>{item.soLuongTaiLieu}</td>
-                <td>{item.trangThai}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center">
-                Không có dữ liệu
-              </td>
-            </tr>
-          )}
-        </tbody>
+      {/* Nội dung */}
+      <div ref={contentRef}
+        style={{
+          display: "flex",
+          gap: "20px",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Biểu đồ Doughnut */}
+        <div
+          style={{
+            flex: 1,
+            backgroundColor: "#fff",
+            borderRadius: "10px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#044D82",
+              padding: "10px",
+              color: "#fff",
+              fontWeight: "bold",
+              textAlign: "center",
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+            }}
+          >
+            Báo cáo phiếu yêu cầu khai thác sử dụng
+          </div>
+          <div style={{ height: "400px", padding: "20px" }}>
+            <Doughnut data={doughnutData} options={doughnutOptions} />
+          </div>
+        </div>
 
-        <tfoot>
-          <tr className="fw-bold">
-            <td colSpan="1" className="text-center">
-              Tổng cộng:
-            </td>
-            <td>{summary.tongSoMaPhieu}</td>
-            <td>{summary.tongSoNguoiKhaiThac}</td>
-            <td>{summary.tongSoHoSo}</td>
-            <td>{summary.tongSoTaiLieu}</td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
+        {/* Thống kê tổng hợp */}
+        <div
+          style={{
+            flex: 1,
+            backgroundColor: "#fff",
+            borderRadius: "10px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#044D82",
+              padding: "10px",
+              color: "#fff",
+              fontWeight: "bold",
+              textAlign: "center",
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+            }}
+          >
+            Thống kê tổng hợp
+          </div>
+          <div style={{ padding: "20px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                backgroundColor: "#ddd",
+                padding: "10px",
+                borderRadius: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <span>Tổng số phiếu YCKTSD:</span>
+              <span>{summary.tongSoPhieuYCKTSD}</span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                backgroundColor: "#ddd",
+                padding: "10px",
+                borderRadius: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <span>Tổng số hồ sơ:</span>
+              <span>{summary.tongSoHoSo}</span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                backgroundColor: "#ddd",
+                padding: "10px",
+                borderRadius: "10px",
+              }}
+            >
+              <span>Tổng số tài liệu:</span>
+              <span>{summary.tongSoTaiLieu}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -198,11 +198,41 @@ class HoSoController {
     // Lấy thông tin tổng quan về hồ sơ
     getHoSoSummary = async (req, res) => {
         try {
-            const tongSoHoSo = await prisma.hoSo.count();
-            const soHoSoDaSoHoa = await prisma.hoSo.count({
-                where: { trangThai: "Đã nhận lưu kho" },
+            // Danh sách trạng thái hồ sơ chưa số hóa
+            const trangThaiChuaSoHoa = [
+                "Đã trình duyệt lưu kho",
+                "BMCL",
+                "Đã nhận NLLS",
+                "Cần thu thập lại",
+                "Từ chối NLLS",
+                "Đã trình duyệt NLLS",
+                "Từ chối nộp lưu",
+                "Đã trình duyệt",
+                "Tạo mới",
+            ];
+    
+            // Danh sách trạng thái hồ sơ đã số hóa
+            const trangThaiDaSoHoa = [
+                "Đã duyệt QĐTH",
+                "Từ chối QĐTH",
+                "Chờ duyệt QĐTH",
+                "Đóng băng",
+                "Chờ QĐTH",
+                "Đã nhận lưu kho",
+            ];
+    
+            // Số hồ sơ chưa số hóa
+            const soHoSoChuaSoHoa = await prisma.hoSo.count({
+                where: { trangThai: { in: trangThaiChuaSoHoa } },
             });
-            const soHoSoChuaSoHoa = tongSoHoSo - soHoSoDaSoHoa;
+    
+            // Số hồ sơ đã số hóa
+            const soHoSoDaSoHoa = await prisma.hoSo.count({
+                where: { trangThai: { in: trangThaiDaSoHoa } },
+            });
+    
+            // Tổng số hồ sơ
+            const tongSoHoSo = soHoSoChuaSoHoa + soHoSoDaSoHoa;
     
             res.status(200).json({
                 tongSoHoSo,
@@ -212,6 +242,25 @@ class HoSoController {
         } catch (error) {
             console.error('Error fetching HoSo summary:', error);
             res.status(500).json({ message: 'Lỗi khi lấy thông tin tổng quan hồ sơ', error: error.message });
+        }
+    };
+
+    getHoSoTrangThai = async (req, res) => {
+        try {
+            const trangThaiHoSo = await prisma.hoSo.groupBy({
+                by: ['trangThai'],
+                _count: {
+                    _all: true,
+                },
+            });
+    
+            res.status(200).json(trangThaiHoSo.map(item => ({
+                trangThai: item.trangThai,
+                soLuong: item._count._all,
+            })));
+        } catch (error) {
+            console.error('Error fetching HoSo statuses:', error);
+            res.status(500).json({ message: 'Lỗi khi lấy danh sách trạng thái hồ sơ', error: error.message });
         }
     };
 

@@ -3,6 +3,8 @@ const router = express.Router();
 const HoSoController = require('../app/controllers/HoSoController');
 const TaiLieuController = require('../app/controllers/TaiLieuController');
 
+router.get('/trang-thai', HoSoController.getHoSoTrangThai);
+
 // Route: Lấy thông tin tổng quan
 router.get('/summary', HoSoController.getHoSoSummary);
 
@@ -38,5 +40,7 @@ router.get('/da-so-hoa', HoSoController.getHoSoDaSoHoa);
 
 // Route: Lấy danh sách hồ sơ chưa số hóa
 router.get('/chua-so-hoa', HoSoController.getHoSoChuaSoHoa);
+
+
 
 module.exports = router;

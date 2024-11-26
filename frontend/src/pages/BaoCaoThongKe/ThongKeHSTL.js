@@ -5,6 +5,17 @@ import infoIcon from "../../assets/images/Function/info.png";
 import jsPDF from "jspdf";
 import domtoimage from "dom-to-image";
 import RobotoFont from "../../assets/fonts/font-times-new-roman-base64"; 
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ThongKeHSTL = () => {
   const [data, setData] = useState([]);
@@ -16,8 +27,55 @@ const ThongKeHSTL = () => {
     tongSoMaHoSo: 0, // Thêm tổng mã hồ sơ
   });
   const tableRef = useRef(null); 
+  const contentRef = useRef(null); // Tạo ref để trỏ đến nội dung
   const navigate = useNavigate(); // Hook điều hướng
-
+  const barChartData = {
+    labels: data.map((item) => item.tieuDeHoSo || "Không xác định"), // OX: Tên hồ sơ
+    datasets: [
+      {
+        label: "Số lượt khai thác",
+        data: data.map((item) => item.soLuotKhaiThac || 0), // OY: Số lượt khai thác
+        backgroundColor: "#044D82", // Màu cột
+        borderColor: "#044D82",
+        borderWidth: 1,
+        barThickness: 50, 
+      },
+    ],
+  };
+  
+  // Cấu hình tùy chọn biểu đồ
+  const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Thống kê số lượt khai thác theo hồ sơ",
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          stepSize: 1, // Chỉ hiển thị giá trị nguyên
+        },
+        title: {
+          display: true,
+          text: "Tên hồ sơ",
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Số lượt khai thác",
+        },
+      },
+    },
+  };
   // Lấy dữ liệu từ API
   useEffect(() => {
     const fetchData = async () => {
@@ -44,42 +102,36 @@ const ThongKeHSTL = () => {
   }, [startDate, endDate]);
 
   const handleExportPDF = async () => {
-    const table = tableRef.current;
+    const content = contentRef.current; // Lấy nội dung từ ref
   
-    if (table) {
+    if (content) {
       try {
-        // Chuyển bảng thành ảnh PNG
-        const imgData = await domtoimage.toPng(table);
+        // Chuyển nội dung thành hình ảnh
+        const imgData = await domtoimage.toPng(content);
   
-        // Khởi tạo file PDF
+        // Tạo file PDF
         const pdf = new jsPDF("p", "mm", "a4");
   
-        // Nhúng font chữ hỗ trợ tiếng Việt
+        // Nhúng font hỗ trợ tiếng Việt
         pdf.addFileToVFS("Roboto-Regular-normal.ttf", RobotoFont);
         pdf.addFont("Roboto-Regular-normal.ttf", "Roboto", "normal");
         pdf.setFont("Roboto");
   
         // Kích thước PDF
         const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (pdfWidth * table.offsetHeight) / table.offsetWidth;
+        const pdfHeight = (pdfWidth * content.offsetHeight) / content.offsetWidth;
   
-        // Thêm tiêu đề "Thống kê khai thác"
-        pdf.setFontSize(20); // Đặt kích thước chữ
-        pdf.text("Thống kê HSTL", pdfWidth / 2, 20, { align: "center" }); // Căn giữa tiêu đề
-  
-        // Thêm khoảng cách lề
-        const topMargin = 30; // Khoảng cách từ tiêu đề đến bảng
-  
-        // Thêm hình ảnh bảng vào PDF
-        pdf.addImage(imgData, "PNG", 0, topMargin, pdfWidth, pdfHeight);
+        // Thêm nội dung hình ảnh vào PDF
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
   
         // Lưu file PDF
-        pdf.save("ThongKeKhaiThac.pdf");
+        pdf.save("ThongKeHSTL.pdf");
       } catch (error) {
-        console.error("Error generating PDF with dom-to-image:", error);
+        console.error("Error generating PDF:", error);
       }
     }
   };
+  
   
 
   // Tính toán tổng cộng
@@ -162,46 +214,91 @@ const ThongKeHSTL = () => {
         </div>
       </div>
 
-      {/* Bảng */}
-      <table className="table table-striped table-hover align-middle"  ref={tableRef}>
-        <thead style={{ backgroundColor: "#2289E7", color: "#fff" }}>
-          <tr>
-            <th>STT</th>
-            <th>Mã hồ sơ</th>
-            <th>Tiêu đề hồ sơ</th>
-            <th>Số lượt khai thác</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data && data.length > 0 ? (
-            data.map((item, index) => (
-              <tr key={index}>
-                <td>{item.stt}</td>
-                <td>{item.maHoSo}</td>
-                <td>{item.tieuDeHoSo}</td>
-                <td>{item.soLuotKhaiThac}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" className="text-center">
-                Không có dữ liệu
-              </td>
-            </tr>
-          )}
-        </tbody>
 
-        <tfoot>
-          <tr className="fw-bold">
-            <td colSpan="1" className="text-center">
-              Tổng cộng:
-            </td>
-            <td>{summary.tongSoMaHoSo}</td> {/* Tổng mã hồ sơ */}
-            <td>{summary.tongSoHoSo}</td> {/* Tổng tiêu đề hồ sơ */}
-            <td>{summary.tongSoLuotKhaiThac}</td> {/* Tổng số lượt khai thác */}
-          </tr>
-        </tfoot>
-      </table>
+      <div ref={contentRef}>
+        <div
+          style={{
+            backgroundColor: "#fff", // Nền trắng cho khung
+            borderRadius: "10px", // Bo góc toàn khung
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)", // Đổ bóng nhẹ
+            marginTop: "20px", // Khoảng cách phía trên khung
+          }}
+        >
+          {/* Tiêu đề */}
+          <div
+            style={{
+              backgroundColor: "#044D82", // Màu nền tiêu đề
+              padding: "10px",
+              borderTopLeftRadius: "10px", // Bo góc phía trên bên trái
+              borderTopRightRadius: "10px", // Bo góc phía trên bên phải
+              color: "#fff", // Màu chữ
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            Hiện trạng số hóa hồ sơ tài liệu
+          </div>
+  
+          {/* Biểu đồ */}
+          <div className="mt-3" style={{ height: "400px" }}>
+            <Bar data={barChartData} options={barChartOptions} />
+          </div>
+        </div>
+  
+        <div
+          style={{
+            backgroundColor: "#fff", // Nền trắng cho khung
+            borderRadius: "10px", // Bo góc toàn khung
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)", // Đổ bóng nhẹ
+            marginTop: "20px", // Khoảng cách phía trên khung
+          }}
+        >
+          {/* Tiêu đề */}
+          <div
+            style={{
+              backgroundColor: "#044D82", // Màu nền tiêu đề
+              padding: "10px",
+              borderTopLeftRadius: "10px", // Bo góc phía trên bên trái
+              borderTopRightRadius: "10px", // Bo góc phía trên bên phải
+              color: "#fff", // Màu chữ
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            Thống kê tổng hợp
+          </div>
+          <div style={{ marginTop: "20px", padding:20}}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: "#ddd",
+                borderRadius: "10px",
+                padding: "10px 20px",
+                marginBottom: "10px",
+              }}
+            >
+              <span style={{ fontWeight: "bold", fontSize: "16px" }}>Tổng số hồ sơ:</span>
+              <span style={{ fontWeight: "bold", fontSize: "16px" }}>{summary.tongSoHoSo}</span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: "#ddd",
+                borderRadius: "10px",
+                padding: "10px 20px",
+              }}
+            >
+              <span style={{ fontWeight: "bold", fontSize: "16px" }}>Tổng số lượt khai thác:</span>
+              <span style={{ fontWeight: "bold", fontSize: "16px" }}>{summary.tongSoLuotKhaiThac}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };
