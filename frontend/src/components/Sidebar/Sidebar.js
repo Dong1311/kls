@@ -59,12 +59,12 @@ const Sidebar = () => {
           toggleMenu={() => toggleMenu('keHoach')}
           isOpen={activeMenu === 'keHoach'}
         >
-          {role === 'CB bao quan' && (
+          {/* {role === 'CB bao quan' && ( */}
             <SubmenuItem to="/lap-ke-hoach-thu-thap" text="Lập kế hoạch thu thập" />
-          )}
-          {role === 'Lanh dao CQ bao quan' &&(
+          {/* )} */}
+          {/* {role === 'Lanh dao CQ bao quan' &&( */}
             <SubmenuItem to="/duyet-ke-hoach-thu-thap" text="Duyệt kế hoạch thu thập" />
-          )}
+          {/* )} */}
           <SubmenuItem to="/danh-sach-ke-hoach-da-duyet" text="Danh sách kế hoạch đã duyệt" />
           <SubmenuItem to="/quan-ly-ho-so" text="Quản lý hồ sơ" />
           <SubmenuItem to="/quan-ly-tai-lieu" text="Quản lý tài liệu" />
