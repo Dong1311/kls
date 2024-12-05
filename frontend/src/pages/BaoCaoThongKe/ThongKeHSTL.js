@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // Thêm điều hướng
+import { useNavigate } from "react-router-dom"; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import infoIcon from "../../assets/images/Function/info.png";
 import jsPDF from "jspdf";
@@ -60,7 +60,7 @@ const ThongKeHSTL = () => {
     scales: {
       x: {
         ticks: {
-          stepSize: 1, // Chỉ hiển thị giá trị nguyên
+          stepSize: 1, 
         },
         title: {
           display: true,
@@ -85,15 +85,14 @@ const ThongKeHSTL = () => {
           endDate: endDate || "",
         }).toString();
 
-        const response = await fetch(`/api/ctphieuyc/thong-ke?${query}`);
+        const response = await fetch(`/api/ctphieuyc/thong-ke-2?${query}`);
         const result = await response.json();
 
-        // Đảm bảo data luôn là một mảng
         setData(result.data || []);
         calculateSummary(result.data || []);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setData([]); // Đặt data thành mảng rỗng nếu có lỗi
+        setData([]); 
         calculateSummary([]);
       }
     };
@@ -102,7 +101,7 @@ const ThongKeHSTL = () => {
   }, [startDate, endDate]);
 
   const handleExportPDF = async () => {
-    const content = contentRef.current; // Lấy nội dung từ ref
+    const content = contentRef.current; 
   
     if (content) {
       try {

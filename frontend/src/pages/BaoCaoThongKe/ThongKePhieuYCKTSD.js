@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom"; 
 import { Doughnut } from "react-chartjs-2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import infoIcon from "../../assets/images/Function/info.png";
@@ -15,10 +16,18 @@ const ThongKePhieuYCKTSD = () => {
     tongSoPhieuTraQuaHan: 0,
     tongSoPhieuTraChuaTra: 0,
   });
+  const navigate = useNavigate();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const contentRef = useRef(null);
-
+  const handlePicklistChange = (event) => {
+    const value = event.target.value;
+    if (value === "ThongKeHSTL") {
+      navigate("/thong-ke-hstl");
+    } else if (value === "ThongKePhieuYCKTSD") {
+      navigate("/thong-ke-phieu-ycktsd");
+    }
+  };
   // Lấy dữ liệu từ API
   useEffect(() => {
     const fetchData = async () => {
@@ -115,6 +124,27 @@ const ThongKePhieuYCKTSD = () => {
           Xuất biểu mẫu
         </button>
       </div>
+
+      <div>
+          <select
+            className="form-select mt-4 mb-4"
+            style={{
+              width: "400px",
+              fontSize: "18px", 
+              fontWeight: "600", 
+              color: "#043371",
+            }}
+            onChange={handlePicklistChange}
+          >
+            <option value="ThongKePhieuYCKTSD">
+              Thống kê Phiếu YCKTSD
+            </option>
+            <option value="ThongKeHSTL">
+              Thống kê HSTL đưa vào Phiếu YCKTSD
+            </option>
+            
+          </select>
+        </div>
 
       {/* Bộ lọc */}
       <div className="d-flex mb-4">
