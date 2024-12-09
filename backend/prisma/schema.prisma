@@ -167,7 +167,6 @@ model PhongBan {
   id              Int              @id @default(autoincrement())
   maPhongBan      String
   tenPhongBan     String
-  maDonVi         String
   ghiChu          String?
   chucNang        String?
   nhiemVu         String
@@ -177,7 +176,6 @@ model PhongBan {
 model CanBo {
   id         Int     @id @default(autoincrement())
   maCanBo    String  @unique
-  maDonVi    String
   chucVu     String
   ghiChu     String?
   email      String
@@ -185,14 +183,6 @@ model CanBo {
   maPhongBan String
   tenCanBo   String
   user       User?   @relation("UserToCanBo")
-}
-
-model Kho {
-  id        Int     @id @default(autoincrement())
-  maKho     String
-  tenKho    String
-  diaChiKho String
-  ghiChu    String?
 }
 
 model PhongLuuTru {
