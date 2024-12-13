@@ -101,8 +101,29 @@ class TaiLieuController {
               hoSo: { select: { tieuDeHoSo: true, trangThai: true } }, // Lấy tên và trạng thái của hồ sơ
             },
           });
+
+          const statusOrder = {
+            'Tạo mới': 0,
+            'Cần thu thập lại': 1,
+            'Từ chối nộp lưu': 2,
+            'Đã trình duyệt': 3,
+        };
+
+        taiLieuList.sort((a, b) => {
+            // Sắp xếp theo trạng thái hồ sơ
+            const statusA = statusOrder[a.hoSo.trangThai] !== undefined ? statusOrder[a.hoSo.trangThai] : 999;
+            const statusB = statusOrder[b.hoSo.trangThai] !== undefined ? statusOrder[b.hoSo.trangThai] : 999;
+            if (statusA !== statusB) {
+                return statusA - statusB;  // Sắp xếp theo trạng thái hồ sơ
+            }
+
+            // Nếu trạng thái giống nhau, sắp xếp theo ngày tạo của tài liệu
+            const dateA = new Date(a.ngayTao);
+            const dateB = new Date(b.ngayTao);
+            return dateA - dateB;  // Sắp xếp theo ngày tạo
+        });
       
-          res.status(200).json(taiLieuList);
+        res.status(200).json(taiLieuList);
         } catch (error) {
           console.error('Error fetching TaiLieu list:', error);
           res.status(500).json({ message: 'Lỗi khi lấy danh sách tài liệu', error: error.message });

@@ -52,33 +52,41 @@ class BienBanBanGiaoController {
  
     // Lấy danh sách tất cả các biên bản bàn giao
     async getBienBanBanGiaoList(req, res) {
-        const { tieuDe, ngayLap } = req.query; // Lấy từ khóa tìm kiếm từ query string
+        const { tieuDe, ngayLap } = req.query; 
     
         try {
-            const filter = {}; // Tạo bộ lọc
+            const filter = {};
     
-            // Nếu `tieuDe` có giá trị, thêm điều kiện tìm kiếm theo `tieuDe`
             if (tieuDe) {
                 filter.tieuDe = {
                     contains: tieuDe,
-                    mode: 'insensitive', // Không phân biệt chữ hoa/thường
+                    mode: 'insensitive', 
                 };
             }
     
-            // Kiểm tra `ngayLap` có giá trị hợp lệ trước khi thêm vào bộ lọc
             if (ngayLap && !isNaN(new Date(ngayLap))) {
                 filter.ngayLap = {
                     equals: new Date(ngayLap),
                 };
             }
     
-            // Thực hiện tìm kiếm với bộ lọc (nếu có)
             const bienBanList = await prisma.bienBanBanGiao.findMany({
                 where: filter,
                 include: {
-                    canCu: true, // Bao gồm thông tin từ bảng KeHoachThuThap thông qua canCuId
-                    donViNopLuu: true, // Bao gồm thông tin từ bảng PhongBan thông qua donViNopLuuId
+                    canCu: true, 
+                    donViNopLuu: true, 
                 },
+            });
+            const statusOrder = {
+                'Tạo mới': 0,
+                'Đã trình duyệt': 1,
+                'Đã duyệt': 2,
+            };
+
+            bienBanList.sort((a, b) => {
+                const statusA = statusOrder[a.trangThai] !== undefined ? statusOrder[a.trangThai] : 999;
+                const statusB = statusOrder[b.trangThai] !== undefined ? statusOrder[b.trangThai] : 999;
+                return statusA - statusB;
             });
     
             res.status(200).json(bienBanList);

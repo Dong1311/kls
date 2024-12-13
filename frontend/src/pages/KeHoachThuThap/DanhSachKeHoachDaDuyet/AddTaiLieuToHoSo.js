@@ -83,10 +83,10 @@ const AddTaiLieuToHoSo = () => {
   };
 
   const handleSave = () => {
-    if (!taiLieu.link) {
-      setUploadStatus('Chưa có link tài liệu. Vui lòng tải lên tệp.');
-      return;
-    }
+    // if (!taiLieu.link) {
+    //   setUploadStatus('Chưa có link tài liệu. Vui lòng tải lên tệp.');
+    //   return;
+    // }
 
     fetch(`/api/ho-so/${id}/tai-lieu`, {
       method: 'POST',
@@ -104,6 +104,7 @@ const AddTaiLieuToHoSo = () => {
         console.error('Lỗi khi lưu tài liệu:', error);
         setUploadStatus('Lỗi khi lưu tài liệu');
       });
+    navigate(-1);
 };
 
 

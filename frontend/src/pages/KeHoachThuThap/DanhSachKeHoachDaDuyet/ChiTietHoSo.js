@@ -6,7 +6,7 @@ import addIcon from '../../../assets/images/Function/Add.png';
 import editIcon from '../../../assets/images/Function/ChinhSua.png';
 import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 import { Link } from 'react-router-dom';
-
+import SelectInput from '../../../components/SelectInput';
 const ChiTietHoSo = () => {
   const { id } = useParams(); 
   const [hoSo, setHoSo] = useState(null);
@@ -148,21 +148,26 @@ const ChiTietHoSo = () => {
         <InputField label="Tổng số tài liệu" name="tongSoTaiLieu" value={hoSo.tongSoTaiLieu} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
         <InputField label="Tiêu đề hồ sơ" name="tieuDeHoSo" value={hoSo.tieuDeHoSo} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
         <InputField label="Tổng số trang" name="tongSoTrang" value={hoSo.tongSoTrang} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
-        <InputField label="Chế độ sử dụng" name="cheDoSuDung" value={hoSo.cheDoSuDung} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
-        <InputField label="Tình trạng vật lý" name="tinhTrangVatLy" value={hoSo.tinhTrangVatLy} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
-        <InputField label="Thời gian bảo quản" name="thoiHanBaoQuan" value={hoSo.thoiHanBaoQuan} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
-        <InputField label="Chú giải" name="chuGiai" value={hoSo.chuGiai} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
-        <InputField label="Đơn vị nộp lưu" name="donViNopLuu" value={hoSo.donViNopLuu} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
-
-        {/* Ngày bắt đầu và kết thúc */}
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày bắt đầu:</label>
           <input type="date" className="form-control" name="ngayBatDau" value={hoSo.ngayBatDau ? new Date(hoSo.ngayBatDau).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
         </div>
+        {/* <InputField label="Chế độ sử dụng" name="cheDoSuDung" value={hoSo.cheDoSuDung} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} /> */}
+        <SelectInput label="Chế độ sử dụng" name="cheDoSuDung" value={hoSo.cheDoSuDung} onChange={handleInputChange} options={["Hạn chế", "Không hạn chế"]} disabled={hoSo.trangThai !== 'Tạo mới'}/>
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày kết thúc:</label>
           <input type="date" className="form-control" name="ngayKetThuc" value={hoSo.ngayKetThuc ? new Date(hoSo.ngayKetThuc).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
         </div>
+        {/* <InputField label="Tình trạng vật lý" name="tinhTrangVatLy" value={hoSo.tinhTrangVatLy} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} /> */}
+        <SelectInput label="Tình trạng vật lý" name="tinhTrangVatLy" value={hoSo.tinhTrangVatLy} onChange={handleInputChange} options={["Bình thường", "Bị hư hỏng", "Bị mốc nhẹ"]} disabled={hoSo.trangThai !== 'Tạo mới'}/>
+        {/* <InputField label="Thời gian bảo quản" name="thoiHanBaoQuan" value={hoSo.thoiHanBaoQuan} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} /> */}
+        <SelectInput label="Thời gian bảo quản" name="thoiHanBaoQuan" value={hoSo.thoiHanBaoQuan} onChange={handleInputChange} options={["1 năm", "2 năm", "5 năm", "10 năm", "20 năm", "50 năm", "Vĩnh viễn"]} disabled={hoSo.trangThai !== 'Tạo mới'}/>
+        <InputField label="Từ khóa" name="tuKhoa" value={hoSo.tuKhoa} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
+
+        <InputField label="Chú giải" name="chuGiai" value={hoSo.chuGiai} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
+        <InputField label="Đơn vị nộp lưu" name="donViNopLuu" value={hoSo.donViNopLuu} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
+        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={hoSo.ngonNgu} onChange={handleInputChange} options={['VN', 'EN']} />
+
 
         {/* Trạng thái */}
         <InputField label="Trạng thái" value={hoSo.trangThai} disabled />

@@ -8,6 +8,7 @@ const ChiTietKeHoachThuThap = () => {
   const { id } = useParams();
   const [keHoachDetail, setKeHoachDetail] = useState(null);
   const navigate = useNavigate();
+  const [donViNopLuu, setDonViNopLuu] = useState('');
   const [taiLieuList, setTaiLieuList] = useState([]); 
   const { name } = useContext(UserContext);
   console.log('name:', name);
@@ -16,7 +17,16 @@ const ChiTietKeHoachThuThap = () => {
       .then((response) => response.json())
       .then((data) => {
         setKeHoachDetail(data);
-  
+
+        if (data.donViNopLuuId) {
+          fetch(`/api/phong-ban/${data.donViNopLuuId}`)
+            .then((response) => response.json())
+            .then((unitData) => {
+              setDonViNopLuu(unitData.tenPhongBan || 'N/A');
+            })
+            .catch((error) => console.error('Error fetching unit:', error));
+        }
+
         return fetch(`/api/lap-ke-hoach-thu-thap/${id}/tai-lieu-huong-dan`);
       })
       .then((response) => response.json())
@@ -25,8 +35,8 @@ const ChiTietKeHoachThuThap = () => {
       })
       .catch((error) => console.error('Error fetching data:', error));
   }, [id]);
-  
 
+  
   if (!keHoachDetail) {
     return <div>Loading...</div>;
   }
@@ -102,6 +112,16 @@ const ChiTietKeHoachThuThap = () => {
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label me-2" style={{ minWidth: '120px' }}>Trạng thái:</label>
           <input type="text" className="form-control" value={keHoachDetail.trangThai || ''} disabled />
+        </div>
+
+        <div className="col-md-6 d-flex align-items-center mb-3">
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>Ngày tạo:</label>
+          <input type="date" className="form-control" value={formatDate(keHoachDetail.ngayTao) || ''} disabled />
+        </div>
+
+        <div className="col-md-6 d-flex align-items-center mb-3">
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>Đơn vị nộp lưu:</label>
+          <input type="text" className="form-control" value={donViNopLuu || 'N/A'} disabled />
         </div>
 
         {/* Nội dung */}

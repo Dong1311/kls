@@ -73,12 +73,26 @@ class LapKeHoachThuThapController {
             }
     
             const keHoachs = await prisma.keHoachThuThap.findMany(filter);
+            
+            const statusOrder = {
+                'Tạo mới': 0,
+                'Từ chối': 1,
+                'Đã trình duyệt': 2
+            };
+    
+            keHoachs.sort((a, b) => {
+                const statusA = statusOrder[a.trangThai] !== undefined ? statusOrder[a.trangThai] : 999;
+                const statusB = statusOrder[b.trangThai] !== undefined ? statusOrder[b.trangThai] : 999;
+                return statusA - statusB;
+            });
+    
             res.status(200).json(keHoachs);
         } catch (error) {
             console.error('Error retrieving ke hoach thu thap:', error);
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
+    
     
     getKeHoachThuThapById = async (req, res) => {
         const { id } = req.params;

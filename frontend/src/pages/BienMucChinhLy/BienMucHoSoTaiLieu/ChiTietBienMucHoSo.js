@@ -152,6 +152,7 @@ const ChiTietBienMucHoSo = () => {
         <InputField label="Tình trạng vật lý" name="tinhTrangVatLy" value={hoSo.tinhTrangVatLy} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Thời gian bảo quản" name="thoiHanBaoQuan" value={hoSo.thoiHanBaoQuan} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Chú giải" name="chuGiai" value={hoSo.chuGiai} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
+        <InputField label="Từ khóa" name="tuKhoa" value={hoSo.tuKhoa} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Đơn vị nộp lưu" name="donViNopLuu" value={hoSo.donViNopLuu} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
 
         {/* Ngày bắt đầu và kết thúc */}

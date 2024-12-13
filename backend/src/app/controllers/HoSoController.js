@@ -66,47 +66,63 @@ class HoSoController {
     // Lấy danh sách hồ sơ có thể lọc theo trạng thái và tìm kiếm
     getHoSoList = async (req, res) => {
         const { trangThai, search, nguoiTao, ngayTao } = req.query;
-      
+    
         try {
-          const hoSoList = await prisma.hoSo.findMany({
-            where: {
-              trangThai: trangThai || undefined,
-              AND: [
-                ngayTao ? { ngayTao: { equals: new Date(ngayTao) } } : {},
-                {
-                  OR: [
-                    search ? { maHoSo: { contains: search, mode: 'insensitive' } } : {},
-                    search ? { tieuDeHoSo: { contains: search, mode: 'insensitive' } } : {},
-                    nguoiTao ? { nguoiTao: { contains: nguoiTao, mode: 'insensitive' } } : {},
-                  ],
+            const hoSoList = await prisma.hoSo.findMany({
+                where: {
+                    trangThai: trangThai || undefined,
+                    AND: [
+                        ngayTao ? { ngayTao: { equals: new Date(ngayTao) } } : {},
+                        {
+                            OR: [
+                                search ? { maHoSo: { contains: search, mode: 'insensitive' } } : {},
+                                search ? { tieuDeHoSo: { contains: search, mode: 'insensitive' } } : {},
+                                nguoiTao ? { nguoiTao: { contains: nguoiTao, mode: 'insensitive' } } : {},
+                            ],
+                        },
+                    ],
                 },
-              ],
-            },
-            include: {
-              keHoachThuThap: {  // Kết nối với bảng KeHoachThuThap
-                select: {
-                  tieuDe: true,  // Lấy tên kế hoạch (tieuDe)
+                include: {
+                    keHoachThuThap: { 
+                        select: {
+                            tieuDe: true,  
+                        },
+                    },
                 },
-              },
-            },
-          });
-      
-          res.status(200).json(hoSoList);
+            });
+    
+            // Định nghĩa thứ tự ưu tiên cho các trạng thái
+            const statusOrder = {
+                'Tạo mới': 0,
+                'Cần thu thập lại': 1,
+                'Từ chối nộp lưu': 2,
+                'Đã trình duyệt': 3,
+                'Đã trình NLLS': 4,
+                'Biên mục chỉnh lý': 5,
+                'Đã nhận NLLS': 6,
+                'Từ chối lưu kho': 7,
+            };
+    
+            // Sắp xếp hồ sơ theo trạng thái
+            hoSoList.sort((a, b) => {
+                const statusA = statusOrder[a.trangThai] !== undefined ? statusOrder[a.trangThai] : 999;
+                const statusB = statusOrder[b.trangThai] !== undefined ? statusOrder[b.trangThai] : 999;
+                return statusA - statusB;
+            });
+    
+            res.status(200).json(hoSoList);
         } catch (error) {
-          console.error('Error fetching HoSo list:', error);
-          res.status(500).json({ message: 'Lỗi khi lấy danh sách hồ sơ' });
+            console.error('Error fetching HoSo list:', error);
+            res.status(500).json({ message: 'Lỗi khi lấy danh sách hồ sơ' });
         }
-      };
-      
-   
-
+    };
     // Lấy chi tiết hồ sơ
     getHoSoDetail = async (req, res) => {
         const { id } = req.params;
 
         try {
             const hoSo = await prisma.hoSo.findUnique({
-                where: { id: parseInt(id, 10) },  // Ép kiểu id thành Int
+                where: { id: parseInt(id, 10) },  
             });
 
             if (!hoSo) {

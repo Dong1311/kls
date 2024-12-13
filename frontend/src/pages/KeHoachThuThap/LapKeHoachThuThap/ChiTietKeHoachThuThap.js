@@ -11,6 +11,7 @@ import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
 
 import InputField from './InputField'; 
 import SelectInput2 from './SelectInput2';
+import InputFieldDate from './InputFieldDate';
 import ButtonGroup from './ButtonGroup';  
 
 const ChiTietKeHoachThuThap = () => {
@@ -26,22 +27,19 @@ const ChiTietKeHoachThuThap = () => {
   const fileInputRef = useRef(null); 
 
   useEffect(() => {
-    // Lấy chi tiết kế hoạch thu thập
     fetch(`/api/lap-ke-hoach-thu-thap/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setKeHoachDetail(data);
         setFilePath(data.taiLieuHD);
-        // Gọi API để lấy danh sách tài liệu hướng dẫn
         return fetch(`/api/lap-ke-hoach-thu-thap/${id}/tai-lieu-huong-dan`);
       })
       .then((response) => response.json())
       .then((data) => {
-        setTaiLieuList(data);  // Lưu danh sách tài liệu vào state
+        setTaiLieuList(data); 
       })
       .catch((error) => console.error('Error fetching data:', error));
 
-    // Fetch danh sách phòng ban để tạo options cho SelectInput
     fetch('/api/phong-ban')
       .then(response => response.json())
       .then(data => {
@@ -58,9 +56,9 @@ const ChiTietKeHoachThuThap = () => {
     const { name, value } = e.target;
     setKeHoachDetail(prevState => ({
       ...prevState,
-      [name]: value,
+      [name]: value,  
     }));
-  };
+  };  
   
 
   const handleUpdateKeHoach = (status) => {
@@ -208,9 +206,6 @@ const ChiTietKeHoachThuThap = () => {
       });
   };
   
-  
-  
-
   // Kích hoạt input file
   const triggerFileInput = () => {
     if (fileInputRef.current) {
@@ -236,19 +231,21 @@ const ChiTietKeHoachThuThap = () => {
       </h5>
       
       <div className="row g-3 mb-4">
-        <InputField label="Số kế hoạch" value={keHoachDetail.soKeHoach} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
+        <InputField onChange={handleChange} label="Số kế hoạch" name="soKeHoach" value={keHoachDetail.soKeHoach} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
         
-        <InputField label="Tên kế hoạch" value={keHoachDetail.tieuDe} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
+        <InputField onChange={handleChange} label="Tên kế hoạch" name="tieuDe" value={keHoachDetail.tieuDe} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
 
-        <InputField label="Từ ngày:" value={formatDate(keHoachDetail.ngayBatDau)} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
+        <InputFieldDate onChange={handleChange} label="Từ ngày" name="ngayBatDau"  value={formatDate(keHoachDetail.ngayBatDau)} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
 
-        <InputField label="Người duyệt" value={keHoachDetail.nguoiDuyet || 'Chưa có người duyệt'} disabled={true} />
+        <InputField onChange={handleChange} label="Người duyệt" name="nguoiDuyet"   value={keHoachDetail.nguoiDuyet || 'Chưa có người duyệt'} disabled={true} />
 
-        <InputField label="Đến ngày:" value={formatDate(keHoachDetail.ngayKetThuc)} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
+        <InputFieldDate onChange={handleChange} label="Đến ngày" name="ngayKetThuc"   value={formatDate(keHoachDetail.ngayKetThuc)} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
 
-        <InputField label="Người tạo" value={keHoachDetail.nguoiTao || 'N/A'} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
+        <InputField onChange={handleChange} label="Người tạo" name="nguoiTao"  value={keHoachDetail.nguoiTao || 'N/A'} disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
 
-        <InputField label="Trạng thái" value={keHoachDetail.trangThai} disabled />
+        <InputFieldDate onChange={handleChange} label="Ngày tạo" name="ngayTao" value={formatDate(keHoachDetail.ngayTao)}disabled={keHoachDetail.trangThai !== 'Tạo mới'} />
+
+        <InputField onChange={handleChange} label="Trạng thái" name="trangThai"  value={keHoachDetail.trangThai} disabled />
 
         <SelectInput2 
           label="Đơn vị thu thập"
@@ -262,8 +259,8 @@ const ChiTietKeHoachThuThap = () => {
 
         {/* Nội dung */}
         <div className="col-md-12 d-flex mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Nội dung:</label>
-          <textarea className="form-control" rows="3" value={keHoachDetail.noiDung || ''} disabled={keHoachDetail.trangThai !== 'Tạo mới'} ></textarea>
+          <label className="form-label me-2 text-start" style={{ minWidth: '150px' }}>Nội dung:</label>
+          <textarea className="form-control" name="noiDung" rows="3" value={keHoachDetail.noiDung || ''} onChange={handleChange} disabled={keHoachDetail.trangThai !== 'Tạo mới'} ></textarea>
         </div>
       </div>
 

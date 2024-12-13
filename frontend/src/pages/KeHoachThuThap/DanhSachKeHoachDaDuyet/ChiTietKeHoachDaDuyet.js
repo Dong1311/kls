@@ -10,6 +10,7 @@ const ChiTietKeHoachDaDuyet = () => {
   const { id } = useParams();
   const [keHoachDetail, setKeHoachDetail] = useState(null);
   const navigate = useNavigate();
+  const [donViNopLuu, setDonViNopLuu] = useState(null);
   const [taiLieuList, setTaiLieuList] = useState([]); 
   const [hoSoList , setHoSoList ] = useState([]); 
 
@@ -19,7 +20,14 @@ const ChiTietKeHoachDaDuyet = () => {
       .then((data) => {
         setKeHoachDetail(data);
   
-        return fetch(`/api/lap-ke-hoach-thu-thap/${id}/tai-lieu-huong-dan`);
+        fetch(`/api/phong-ban/${data.donViNopLuuId}`)
+        .then((response) => response.json())
+        .then((unitData) => {
+          setDonViNopLuu(unitData);  // Lưu thông tin đơn vị vào state
+        })
+        .catch((error) => console.error('Error fetching don vi nop luu:', error));
+
+      return fetch(`/api/lap-ke-hoach-thu-thap/${id}/tai-lieu-huong-dan`);
       })
       .then((response) => response.json())
       .then((data) => {
@@ -116,6 +124,18 @@ const ChiTietKeHoachDaDuyet = () => {
           <input type="date" className="form-control" value={formatDate(keHoachDetail.ngayTao)} disabled />
         </div>
 
+        {/* Đơn vị nộp lưu */}
+        <div className="col-md-6 d-flex align-items-center mb-3">
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>Đơn vị nộp lưu:</label>
+          <input 
+            type="text" 
+            className="form-control" 
+            value={donViNopLuu ? donViNopLuu.tenPhongBan : 'Đang tải...'} 
+            disabled 
+          />
+        </div>
+
+
         {/* Trạng thái */}
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label me-2" style={{ minWidth: '120px' }}>Trạng thái:</label>
@@ -128,6 +148,8 @@ const ChiTietKeHoachDaDuyet = () => {
           <textarea className="form-control" rows="3" value={keHoachDetail.noiDung || ''} disabled></textarea>
         </div>
       </div>
+
+
 
       {/* Buttons */}
       <div className="d-flex justify-content-end mb-4">

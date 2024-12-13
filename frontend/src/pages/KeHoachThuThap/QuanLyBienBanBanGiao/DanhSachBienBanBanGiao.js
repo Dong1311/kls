@@ -27,7 +27,7 @@ const DanhSachBienBanBanGiao = () => {
 
   useEffect(() => {
     fetchBienBans();
-  }, [searchTerm, ngayLap]); // Gọi lại khi `searchTerm` hoặc `ngayLap` thay đổi
+  }, [searchTerm, ngayLap]);
 
   const handleEditBienBan = (bienBanId) => {
     navigate(`/bien-ban-ban-giao/${bienBanId}`);

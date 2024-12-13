@@ -15,7 +15,6 @@ const DanhSachBienMucHoSo = () => {
     fetch(`/api/ho-so?search=${searchTerm}`)
       .then(response => response.json())
       .then(data => {
-        // Lọc danh sách hồ sơ theo yêu cầu
         const filteredHoSoList = data.filter(
           hoSo =>
             (hoSo.trangThai === 'Từ chối lưu kho' ||
