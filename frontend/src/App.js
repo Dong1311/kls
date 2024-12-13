@@ -71,6 +71,8 @@ import HienTrangSoHoaKhoDuLieu from './pages/BaoCaoThongKe/HienTrangSoHoaKhoDuLi
 import ThongKeHopCap from './pages/BaoCaoThongKe/ThongKeHopCap';
 import ThongKeHSTL from './pages/BaoCaoThongKe/ThongKeHSTL';
 import ThongKePhieuYCKTSD from './pages/BaoCaoThongKe/ThongKePhieuYCKTSD';
+
+import TrangChu from './pages/TrangChu/TrangChu';
 function App() {
   // Kiểm tra trạng thái đăng nhập từ localStorage
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true'); 
@@ -100,7 +102,7 @@ function App() {
                   <Header />
                   <div className="content">
                     <Routes> 
-                      <Route path="/" element={<HienTrangSoHoaKhoDuLieu />} />
+                      <Route path="/" element={<TrangChu />} />
                       <Route path="/trang-chu" element={<HienTrangSoHoaKhoDuLieu />} />
                       <Route path="/lap-ke-hoach-thu-thap" element={<KeHoachThuThap />} />
                       <Route path="/ke-hoach-thu-thap/:id/" element={<ChiTietKeHoachThuThap />} />

@@ -157,11 +157,11 @@ const ChiTietHoSo = () => {
         {/* Ngày bắt đầu và kết thúc */}
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày bắt đầu:</label>
-          <input type="date" className="form-control" name="thoiGianBatDau" value={hoSo.thoiGianBatDau ? new Date(hoSo.thoiGianBatDau).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
+          <input type="date" className="form-control" name="ngayBatDau" value={hoSo.ngayBatDau ? new Date(hoSo.ngayBatDau).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
         </div>
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày kết thúc:</label>
-          <input type="date" className="form-control" name="thoiGianKetThuc" value={hoSo.thoiGianKetThuc ? new Date(hoSo.thoiGianKetThuc).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
+          <input type="date" className="form-control" name="ngayKetThuc" value={hoSo.ngayKetThuc ? new Date(hoSo.ngayKetThuc).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai !== 'Tạo mới'} />
         </div>
 
         {/* Trạng thái */}
