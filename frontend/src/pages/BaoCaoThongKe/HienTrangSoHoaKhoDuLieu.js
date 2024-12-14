@@ -92,11 +92,11 @@ const HienTrangSoHoaKhoDuLieu = () => {
       x: {
         beginAtZero: true,
         ticks: {
-          stepSize: 1, // Chỉ hiển thị giá trị nguyên
+          stepSize: 1,
         },
         title: {
           display: true,
-          text: "Số lượng hồ sơ", // Thêm chú thích cho trục OX
+          text: "Số lượng hồ sơ", 
         },
       },
       y: {
@@ -113,7 +113,7 @@ const HienTrangSoHoaKhoDuLieu = () => {
     labels: trangThaiDaSoHoa, 
     datasets: [
       {
-        // label: "Hồ sơ đã số hóa",
+        label: "Hồ sơ đã số hóa",
         data: hoSoDaSoHoaData, 
         backgroundColor: "#4CAF50", 
         barThickness: 30,
@@ -128,6 +128,7 @@ const HienTrangSoHoaKhoDuLieu = () => {
       legend: { display: false },
       // title: { display: true, text: "Hồ sơ đã số hóa" },
     },
+    
     maintainAspectRatio: false, 
     indexAxis: "y", 
     scales: {

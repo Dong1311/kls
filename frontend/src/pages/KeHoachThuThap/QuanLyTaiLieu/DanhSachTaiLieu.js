@@ -115,7 +115,7 @@ const DanhSachTaiLieu = () => {
             <th scope="col">Ngày tháng năm VB</th>
             <th scope="col">Cơ quan ban hành</th>
             <th scope="col">Trạng thái</th>
-            <th scope="col">Hành động</th>
+            <th style={{minWidth:'120px'}} scope="col">Hành động</th>
           </tr>
         </thead>
         <tbody>

@@ -138,7 +138,7 @@ const AddKeHoachThuThap = () => {
 
 
         <div className="col-md-12 d-flex mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Nội dung:</label>
+          <label className="form-label me-2 text-start" style={{ minWidth: '150px' }}>Nội dung:</label>
           <textarea
             className="form-control"
             name="noiDung"

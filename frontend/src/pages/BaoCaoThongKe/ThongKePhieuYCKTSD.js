@@ -147,7 +147,7 @@ const ThongKePhieuYCKTSD = () => {
         </div>
 
       {/* Bộ lọc */}
-      <div className="d-flex mb-4">
+      {/* <div className="d-flex mb-4">
         <div className="me-3">
           <label htmlFor="startDate" className="form-label">
             Từ ngày:
@@ -172,7 +172,7 @@ const ThongKePhieuYCKTSD = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Nội dung */}
       <div ref={contentRef}

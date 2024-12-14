@@ -100,7 +100,7 @@ const LapKeHoachThuThap = () => {
             <th scope="col">Từ ngày</th>
             <th scope="col">Đến ngày</th>
             <th scope="col">Tình trạng</th>
-            <th scope="col">Hành động</th>
+            <th style={{minWidth:'120px'}} scope="col">Hành động</th>
           </tr>
         </thead>
         <tbody>

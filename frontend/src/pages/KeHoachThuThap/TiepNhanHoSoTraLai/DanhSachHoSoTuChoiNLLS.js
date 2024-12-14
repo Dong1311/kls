@@ -99,7 +99,7 @@ const DanhSachHoSoTuChoiNLLS = () => {
             <th scope="col">Ngày tạo</th>
             <th scope="col">Số lượng tài liệu</th>
             <th scope="col">Trạng thái</th>
-            <th scope="col">Hành động</th>
+            <th style={{minWidth:'120px'}} scope="col">Hành động</th>
           </tr>
         </thead>
         <tbody>

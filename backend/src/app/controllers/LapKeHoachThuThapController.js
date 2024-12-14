@@ -6,7 +6,7 @@ class LapKeHoachThuThapController {
     postLapKeHoach = async (req, res) => {
         console.log('Received request body:', req.body);
     
-        const { soKeHoach, tieuDe, nguoiTao, nguoiDuyet, noiDung, donViNopLuuId, ngayBatDau, ngayKetThuc, trangThai } = req.body;
+        const { soKeHoach, tieuDe, nguoiTao, nguoiDuyet, noiDung, donViNopLuuId, ngayBatDau, ngayKetThuc, trangThai, ngayTao } = req.body;
     
         if (!soKeHoach || !tieuDe || !nguoiTao || !trangThai) {
             console.log("Missing required fields");
@@ -28,6 +28,7 @@ class LapKeHoachThuThapController {
                     noiDung,
                     donViNopLuuId: donViNopLuuId ? parseInt(donViNopLuuId) : null, // Sử dụng donViNopLuuId thay vì donViNopLuu
                     ngayBatDau: ngayBatDau ? new Date(ngayBatDau) : null,
+                    ngayTao: ngayTao ? new Date(ngayTao) : null,
                     ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null,
                     trangThai,
                 },
@@ -115,7 +116,7 @@ class LapKeHoachThuThapController {
     
     updateKeHoachThuThap = async (req, res) => {
         const { id } = req.params;
-        const { soKeHoach, tieuDe, nguoiTao, nguoiDuyet, noiDung, donViNopLuuId, ngayBatDau, ngayKetThuc, trangThai } = req.body;
+        const { soKeHoach, tieuDe, nguoiTao, nguoiDuyet, noiDung, donViNopLuuId, ngayBatDau, ngayKetThuc, trangThai, ngayTao } = req.body;
     
         try {
             const updatedKeHoach = await prisma.keHoachThuThap.update({
@@ -128,6 +129,7 @@ class LapKeHoachThuThapController {
                     noiDung,
                     donViNopLuuId: donViNopLuuId ? parseInt(donViNopLuuId) : null, 
                     ngayBatDau: ngayBatDau ? new Date(ngayBatDau) : null,
+                    ngayTao: ngayTao ? new Date(ngayTao) : null,
                     ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null,
                     trangThai,
                 },

@@ -1,10 +1,3 @@
-// const { PrismaClient } = require("@prisma/client");
-// const prisma = new PrismaClient();
-
-// class CTPhieuYCController {
-
-
-// module.exports = new CTPhieuYCController();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -68,7 +61,6 @@ class CTPhieuYCController {
     try {
       const { startDate, endDate } = req.query;
 
-      // Lọc theo ngày nếu có
       const whereCondition = {};
       if (startDate) {
         whereCondition.PhieuYCKhaiThacSuDung = {
@@ -82,19 +74,17 @@ class CTPhieuYCController {
         };
       }
 
-      // Lấy danh sách chi tiết phiếu yêu cầu khai thác sử dụng
       const danhSachCTPhieuYC = await prisma.cTPhieuYCKhaiThacSuDung.findMany({
         where: whereCondition,
         include: {
           HoSo: {
             include: {
-              taiLieus: true, // Bao gồm cả tài liệu trong hồ sơ
+              taiLieus: true, 
             },
           },
         },
       });
 
-      // Tính tổng số hồ sơ
       const hoSoSet = new Set(
         danhSachCTPhieuYC
           .filter((item) => item.HoSo)
@@ -102,13 +92,11 @@ class CTPhieuYCController {
       );
       const tongSoHoSo = hoSoSet.size;
 
-      // Tính tổng số tài liệu
       let tongSoTaiLieu = 0;
       danhSachCTPhieuYC.forEach((item) => {
         tongSoTaiLieu += item.HoSo?.taiLieus?.length || 0;
       });
 
-      // Lấy tổng số phiếu yêu cầu khai thác sử dụng
       const tongSoPhieuYCKTSD = await prisma.phieuYCKhaiThacSuDung.count({
         where: {
           khaiThacTuNgay: startDate ? { gte: new Date(startDate) } : undefined,
@@ -116,7 +104,6 @@ class CTPhieuYCController {
         },
       });
 
-      // Lấy danh sách phiếu trả và tính toán theo trạng thái
       const phieuTra = await prisma.phieuTra.findMany({
         where: {
           ngayTao: startDate ? { gte: new Date(startDate) } : undefined,

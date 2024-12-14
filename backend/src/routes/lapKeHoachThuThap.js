@@ -33,4 +33,5 @@ router.delete('/tai-lieu-huong-dan/:id', lapKeHoachController.deleteTaiLieuHuong
 
 // Route để lấy danh sách hồ sơ theo id kế hoạch thu thập
 router.get('/:id/ho-so', lapKeHoachController.getHoSoByKeHoachThuThapId);
+
 module.exports = router;
