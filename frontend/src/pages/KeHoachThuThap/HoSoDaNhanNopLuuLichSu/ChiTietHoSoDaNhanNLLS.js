@@ -69,14 +69,15 @@ const ChiTietHoSoDaNhanNLLS = () => {
       <div className="row g-3 mb-4">
         {/* Các trường thông tin chi tiết hồ sơ */}
         <InputField label="Mã hồ sơ" name="maHoSo" value={hoSo.maHoSo} disabled />
-        <InputField label="Ký hiệu thông tin" name="kyHieuThongTin" value={hoSo.kyHieuThongTin} disabled />
+        <InputField label="Tiêu đề hồ sơ" name="tieuDeHoSo" value={hoSo.tieuDeHoSo} disabled />
         <InputField label="Mã định danh cơ quan" name="maDinhDanhCoQuan" value={hoSo.maDinhDanhCoQuan} disabled />
         <InputField label="Người tạo" name="nguoiTao" value={hoSo.nguoiTao} disabled />
         <InputField label="Mục lục số/năm HS" name="mucLucSoNamHS" value={hoSo.mucLucSoNamHS} disabled />
         <InputField label="Ngày tạo" name="ngayTao" type="date" value={hoSo.ngayTao ? formatDate(hoSo.ngayTao) : ''} disabled />
         <InputField label="Số và ký hiệu hồ sơ" name="soVaKyHieuHoSo" value={hoSo.soVaKyHieuHoSo} disabled />
         <InputField label="Tổng số tài liệu" name="tongSoTaiLieu" value={hoSo.tongSoTaiLieu} disabled />
-        <InputField label="Tiêu đề hồ sơ" name="tieuDeHoSo" value={hoSo.tieuDeHoSo} disabled />
+        <InputField label="Ký hiệu thông tin" name="kyHieuThongTin" value={hoSo.kyHieuThongTin} disabled />
+
         <InputField label="Tổng số trang" name="tongSoTrang" value={hoSo.tongSoTrang} disabled />
         <InputField label="Kế hoạch thu thập" name="tenKeHoachThuThap" value={keHoachThuThap ? keHoachThuThap.tieuDe : ''} disabled />
 

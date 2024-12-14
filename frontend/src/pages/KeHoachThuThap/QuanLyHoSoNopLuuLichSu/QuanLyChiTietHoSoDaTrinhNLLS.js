@@ -10,6 +10,8 @@ const QuanLyChiTietHoSoDaTrinhNLLS = () => {
   const [taiLieuList, setTaiLieuList] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [keHoachThuThap, setKeHoachThuThap] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,13 +29,24 @@ const QuanLyChiTietHoSoDaTrinhNLLS = () => {
         setError(error.message);
         setLoading(false);
       });
-
+  
     // Fetch danh sách tài liệu
     fetch(`/api/ho-so/${id}/tai-lieu`)
       .then((response) => response.json())
       .then((data) => setTaiLieuList(data))
       .catch((error) => console.error('Lỗi khi lấy danh sách tài liệu:', error));
-  }, [id]);
+  }, [id]);  
+  
+  useEffect(() => {
+    if (hoSo && hoSo.keHoachThuThapId) {
+      fetch(`/api/lap-ke-hoach-thu-thap/${hoSo.keHoachThuThapId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setKeHoachThuThap(data);
+        })
+        .catch((error) => console.error('Lỗi khi lấy kế hoạch thu thập:', error));
+    }
+  }, [hoSo]);
 
   const handleYeuCauThuThapLai = () => {
     const updatedHoSo = { ...hoSo, trangThai: 'Từ chối NLLS' };
@@ -97,20 +110,36 @@ const QuanLyChiTietHoSoDaTrinhNLLS = () => {
       <div className="row g-3 mb-4">
         {/* Các trường thông tin chi tiết hồ sơ */}
         <InputField label="Mã hồ sơ" name="maHoSo" value={hoSo.maHoSo} disabled />
-        <InputField label="Ký hiệu thông tin" name="kyHieuThongTin" value={hoSo.kyHieuThongTin} disabled />
+        <InputField label="Tiêu đề hồ sơ" name="tieuDeHoSo" value={hoSo.tieuDeHoSo} disabled />
+
         <InputField label="Mã định danh cơ quan" name="maDinhDanhCoQuan" value={hoSo.maDinhDanhCoQuan} disabled />
         <InputField label="Người tạo" name="nguoiTao" value={hoSo.nguoiTao} disabled />
         <InputField label="Mục lục số/năm HS" name="mucLucSoNamHS" value={hoSo.mucLucSoNamHS} disabled />
         <InputField label="Ngày tạo" name="ngayTao" type="date" value={hoSo.ngayTao ? formatDate(hoSo.ngayTao) : ''} disabled />
         <InputField label="Số và ký hiệu hồ sơ" name="soVaKyHieuHoSo" value={hoSo.soVaKyHieuHoSo} disabled />
         <InputField label="Tổng số tài liệu" name="tongSoTaiLieu" value={hoSo.tongSoTaiLieu} disabled />
-        <InputField label="Tiêu đề hồ sơ" name="tieuDeHoSo" value={hoSo.tieuDeHoSo} disabled />
+        <InputField label="Ký hiệu thông tin" name="kyHieuThongTin" value={hoSo.kyHieuThongTin} disabled />
+
         <InputField label="Tổng số trang" name="tongSoTrang" value={hoSo.tongSoTrang} disabled />
+        <InputField label="Kế hoạch thu thập" name="tenKeHoachThuThap" value={keHoachThuThap ? keHoachThuThap.tieuDe : ''} disabled />
+
         <InputField label="Chế độ sử dụng" name="cheDoSuDung" value={hoSo.cheDoSuDung} disabled />
+        <div className="col-md-6 d-flex align-items-center mb-3">
+          <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày bắt đầu:</label>
+          <input type="date" className="form-control" name="ngayBatDau" value={hoSo.ngayBatDau ? new Date(hoSo.ngayBatDau).toISOString().split('T')[0] : ''} disabled />
+        </div>
         <InputField label="Tình trạng vật lý" name="tinhTrangVatLy" value={hoSo.tinhTrangVatLy} disabled />
+        <div className="col-md-6 d-flex align-items-center mb-3">
+          <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày kết thúc:</label>
+          <input type="date" className="form-control" name="ngayKetThuc" value={hoSo.ngayKetThuc ? new Date(hoSo.ngayKetThuc).toISOString().split('T')[0] : ''} disabled />
+        </div>
+        <InputField label="Từ khóa" name="tuKhoa" value={hoSo.tuKhoa} disabled/>
+
         <InputField label="Thời gian bảo quản" name="thoiHanBaoQuan" value={hoSo.thoiHanBaoQuan} disabled />
         <InputField label="Chú giải" name="chuGiai" value={hoSo.chuGiai} disabled />
         <InputField label="Đơn vị nộp lưu" name="donViNopLuu" value={hoSo.donViNopLuu} disabled />
+        <InputField label="Ngôn ngữ" name="ngonNgu" value={hoSo.ngonNgu} disabled />
+
         <InputField label="Trạng thái" value={hoSo.trangThai} disabled />
       </div>
 

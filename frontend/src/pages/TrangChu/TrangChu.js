@@ -191,19 +191,6 @@ const TrangChu = () => {
             Hiện trạng số hóa hồ sơ tài liệu
           </h5>
         </div>
-        <button
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#0063ba",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-          onClick={handleExportPDF} // Gọi hàm xuất PDF
-        >
-          Xuất biểu mẫu
-        </button>
       </div>
 
       {/* Nội dung */}

@@ -166,7 +166,10 @@ const getTrangThaiStyle = (trangThai) => {
     case 'Đã duyệt':
       backgroundColor = '#28a745';
       break;
-    case 'Từ chối nộp lưu':
+    case 'Từ chối nộp lưu' :
+      backgroundColor = '#dc3545';
+      break;
+    case 'Cần thu thập lại':
       backgroundColor = '#dc3545';
       break;
     default:

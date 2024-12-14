@@ -38,7 +38,8 @@ const HienTrangSoHoaKhoDuLieu = () => {
 
   const trangThaiChuaSoHoa = [
     "Đã trình duyệt lưu kho",
-    "BMCL",
+    // "BMCL",
+    "Biên mục chỉnh lý",
     "Đã nhận NLLS",
     "Cần thu thập lại",
     "Từ chối NLLS",
@@ -68,6 +69,8 @@ const HienTrangSoHoaKhoDuLieu = () => {
         data: hoSoChuaSoHoaData, 
         backgroundColor: "#0063ba", 
         barThickness: 30,
+        categoryPercentage: 0.8, 
+        barPercentage: 0.9,
       },
     ],
   };
@@ -77,7 +80,7 @@ const HienTrangSoHoaKhoDuLieu = () => {
       legend: { display: false },
       title: {
         display: true,
-        text: "Hồ sơ chưa số hóa", // Tiêu đề biểu đồ
+        // text: "Hồ sơ chưa số hóa", 
         font: {
           size: 18,
         },
@@ -110,7 +113,7 @@ const HienTrangSoHoaKhoDuLieu = () => {
     labels: trangThaiDaSoHoa, 
     datasets: [
       {
-        label: "Hồ sơ đã số hóa",
+        // label: "Hồ sơ đã số hóa",
         data: hoSoDaSoHoaData, 
         backgroundColor: "#4CAF50", 
         barThickness: 30,
@@ -123,7 +126,7 @@ const HienTrangSoHoaKhoDuLieu = () => {
   const barChartOptionsDaSoHoa = {
     plugins: {
       legend: { display: false },
-      title: { display: true, text: "Hồ sơ đã số hóa" },
+      // title: { display: true, text: "Hồ sơ đã số hóa" },
     },
     maintainAspectRatio: false, 
     indexAxis: "y", 
@@ -131,11 +134,11 @@ const HienTrangSoHoaKhoDuLieu = () => {
       x: {
         beginAtZero: true,
         ticks: {
-          stepSize: 1, // Chỉ hiển thị giá trị nguyên
+          stepSize: 1,
         },
         title: {
           display: true,
-          text: "Số lượng hồ sơ", // Thêm chú thích cho trục OX
+          text: "Số lượng hồ sơ", 
         },
       },
       y: {

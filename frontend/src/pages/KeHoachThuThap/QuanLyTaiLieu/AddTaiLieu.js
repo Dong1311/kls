@@ -134,12 +134,13 @@ const AddTaiLieu = () => {
     <div className="container mt-4">
       <h5 className="mb-4">Thêm mới tài liệu</h5>
       <div className="row g-3">
-        <TextInput label="Tên tài liệu" name="tenTaiLieu" value={taiLieu.tenTaiLieu} onChange={handleChange} />
+        {/* <TextInput label="Tên tài liệu" name="tenTaiLieu" value={taiLieu.tenTaiLieu} onChange={handleChange} /> */}
         <SelectInput label="Khung biên mục" name="khungBienMuc" value={taiLieu.khungBienMuc} onChange={handleChange} options={['Văn bản', 'Tài liệu phim ảnh', 'Tài liệu phim âm thanh']}/>
+        <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} onChange={handleChange} />
         <HoSoSelectInput label="Tên hồ sơ" name="hoSoId" value={taiLieu.hoSoId} onChange={handleChange} options={hoSoList.map(hoSo => ({ value: hoSo.id, label: hoSo.tieuDeHoSo }))} />
         <SelectInput label="Tên cơ quan ban hành" name="tenCoQuanBanHanh" value={taiLieu.tenCoQuanBanHanh} onChange={handleChange} options={['Bộ Nội vụ', 'Bộ Quốc phòng']} />
         <TextInput label="Mã định danh văn bản" name="maDinhDanhVanBan" value={taiLieu.maDinhDanhVanBan} onChange={handleChange} />
-        <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} onChange={handleChange} />
+        {/* <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} onChange={handleChange} /> */}
         <SelectInput label="Ngôn ngữ" name="ngonNgu" value={taiLieu.ngonNgu} onChange={handleChange} options={['VN', 'EN']} />
         <TextInput label="STT trong hồ sơ" name="sttTrongHoSo" value={taiLieu.sttTrongHoSo} onChange={handleChange} />
         <TextInput label="Số lượng trang" name="soLuongTrang" value={taiLieu.soLuongTrang} onChange={handleChange} />

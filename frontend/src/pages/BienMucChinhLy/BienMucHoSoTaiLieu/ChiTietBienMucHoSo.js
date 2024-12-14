@@ -49,7 +49,7 @@ const ChiTietBienMucHoSo = () => {
   
 
   const handleSave = () => {
-    const updatedHoSo = { ...hoSo, trangThai: 'biên mục chỉnh lý' };
+    const updatedHoSo = { ...hoSo, trangThai: 'Biên mục chỉnh lý' };
     fetch(`/api/ho-so/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -148,7 +148,15 @@ const ChiTietBienMucHoSo = () => {
         <InputField label="Tổng số tài liệu" name="tongSoTaiLieu" value={hoSo.tongSoTaiLieu} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Tiêu đề hồ sơ" name="tieuDeHoSo" value={hoSo.tieuDeHoSo} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Tổng số trang" name="tongSoTrang" value={hoSo.tongSoTrang} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
+        <div className="col-md-6 d-flex align-items-center mb-3">
+          <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày bắt đầu:</label>
+          <input type="date" className="form-control" name="thoiGianBatDau" value={hoSo.thoiGianBatDau ? new Date(hoSo.thoiGianBatDau).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
+        </div>
         <InputField label="Chế độ sử dụng" name="cheDoSuDung" value={hoSo.cheDoSuDung} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
+        <div className="col-md-6 d-flex align-items-center mb-3">
+          <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày kết thúc:</label>
+          <input type="date" className="form-control" name="thoiGianKetThuc" value={hoSo.thoiGianKetThuc ? new Date(hoSo.thoiGianKetThuc).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
+        </div>
         <InputField label="Tình trạng vật lý" name="tinhTrangVatLy" value={hoSo.tinhTrangVatLy} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Thời gian bảo quản" name="thoiHanBaoQuan" value={hoSo.thoiHanBaoQuan} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Chú giải" name="chuGiai" value={hoSo.chuGiai} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
@@ -156,14 +164,8 @@ const ChiTietBienMucHoSo = () => {
         <InputField label="Đơn vị nộp lưu" name="donViNopLuu" value={hoSo.donViNopLuu} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
 
         {/* Ngày bắt đầu và kết thúc */}
-        <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày bắt đầu:</label>
-          <input type="date" className="form-control" name="thoiGianBatDau" value={hoSo.thoiGianBatDau ? new Date(hoSo.thoiGianBatDau).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
-        </div>
-        <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày kết thúc:</label>
-          <input type="date" className="form-control" name="thoiGianKetThuc" value={hoSo.thoiGianKetThuc ? new Date(hoSo.thoiGianKetThuc).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
-        </div>
+        
+        
 
         {/* Trạng thái */}
         <InputField label="Trạng thái" value={hoSo.trangThai} disabled />

@@ -130,7 +130,8 @@ const DanhSachTaiLieu = () => {
                   to={`/tai-lieu/${taiLieu.id}`} 
                   style={{ color: '#007bff', textDecoration: 'underline' }}
                 >
-                  {taiLieu.maDinhDanhTL || `TL000${taiLieu.id}`}
+                  {/* {taiLieu.maDinhDanhTL || `TL000${taiLieu.id}`} */}
+                  {taiLieu.maDinhDanhVanBan}
                 </Link>
               </td>
               <td>

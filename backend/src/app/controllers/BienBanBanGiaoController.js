@@ -79,15 +79,17 @@ class BienBanBanGiaoController {
             });
             const statusOrder = {
                 'Tạo mới': 0,
-                'Đã trình duyệt': 1,
-                'Đã duyệt': 2,
+                'Đã gửi duyệt': 1,
+                'Đã nhận': 2,
             };
 
             bienBanList.sort((a, b) => {
-                const statusA = statusOrder[a.trangThai] !== undefined ? statusOrder[a.trangThai] : 999;
-                const statusB = statusOrder[b.trangThai] !== undefined ? statusOrder[b.trangThai] : 999;
-                return statusA - statusB;
+                const statusA = statusOrder[a.trangThaiBienBan] !== undefined ? statusOrder[a.trangThaiBienBan] : 999;
+                const statusB = statusOrder[b.trangThaiBienBan] !== undefined ? statusOrder[b.trangThaiBienBan] : 999;
+            
+                return statusA - statusB; 
             });
+            
     
             res.status(200).json(bienBanList);
         } catch (error) {
