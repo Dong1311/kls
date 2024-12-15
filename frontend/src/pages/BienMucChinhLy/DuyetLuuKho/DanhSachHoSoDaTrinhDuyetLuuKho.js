@@ -135,7 +135,7 @@ const getTrangThaiStyle = (trangThai) => {
       backgroundColor = '#ffc107';
       break;
     case 'Đã trình duyệt lưu kho':
-        backgroundColor = '#28a745';
+        backgroundColor = '#ffc107';
         break;
     case 'Từ chối lưu kho':
       backgroundColor = '#dc3545';

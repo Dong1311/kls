@@ -202,9 +202,14 @@ const AddBienBanBanGiao = () => {
             name="canCu" 
             value={bienBan.canCu} 
             onChange={handleChange} 
-            options={keHoachOptions.map(keHoach => ({ value: keHoach.id, label: keHoach.tieuDe }))} 
+            //options={keHoachOptions.map(keHoach => ({ value: keHoach.id, label: keHoach.tieuDe }))} 
+            options={
+              keHoachOptions
+                  .filter(keHoach => keHoach.trangThai === "Đã duyệt") // Lọc kế hoạch có trạng thái "Đã duyệt"
+                  .map(keHoach => ({ value: keHoach.id, label: keHoach.tieuDe })) // Ánh xạ dữ liệu phù hợp
+            } 
             required 
-        />
+          />
 
         <SelectInput2
           label="Đại diện bên nhận" 

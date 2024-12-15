@@ -83,7 +83,7 @@ const ChiTietBienBanBanGiao = () => {
 
   useEffect(() => {
     if (bienBan.canCuId) {
-      fetch(`/api/lap-ke-hoach-thu-thap/${bienBan.canCuId}/ho-so?trangThai=Đã trình NLLS`)
+      fetch(`/api/lap-ke-hoach-thu-thap/${bienBan.canCuId}/ho-so?trangThai=Đã nhận NLLS`)
         .then(response => response.json())
         .then(data => setHoSoOptions(data))
         .catch(error => console.error('Lỗi khi lấy hồ sơ:', error));
@@ -105,14 +105,14 @@ const ChiTietBienBanBanGiao = () => {
 
   const handleSubmit = async (status) => {
     // Kiểm tra các trường bắt buộc
-    if (!bienBan.soBienBan || !bienBan.tieuDe) {
-      setError('Vui lòng nhập đầy đủ thông tin các trường bắt buộc');
-      return;
-    }
-    if (selectedHoSoList.length === 0 || selectedHoSoList.some(hoSo => !hoSo.id)) {
-      setError('Vui lòng chọn ít nhất một hồ sơ hợp lệ');
-      return;
-    }
+    // if (!bienBan.soBienBan || !bienBan.tieuDe) {
+    //   setError('Vui lòng nhập đầy đủ thông tin các trường bắt buộc');
+    //   return;
+    // }
+    // if (selectedHoSoList.length === 0 || selectedHoSoList.some(hoSo => !hoSo.id)) {
+    //   setError('Vui lòng chọn ít nhất một hồ sơ hợp lệ');
+    //   return;
+    // }
   
     const updatedBienBan = {
       ...bienBan,

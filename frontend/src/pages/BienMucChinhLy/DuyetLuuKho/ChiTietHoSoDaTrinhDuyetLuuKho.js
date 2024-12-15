@@ -154,15 +154,15 @@ const ChiTietHoSoDaTrinhDuyetLuuKho = () => {
         <InputField label="Chú giải" name="chuGiai" value={hoSo.chuGiai} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Từ khóa" name="tuKhoa" value={hoSo.tuKhoa} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         <InputField label="Đơn vị nộp lưu" name="donViNopLuu" value={hoSo.donViNopLuu} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
-
+        <SelectInput label="Ngôn ngữ" name="ngonNgu" value={hoSo.ngonNgu} onChange={handleInputChange} options={['VN', 'EN']} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'} />
         {/* Ngày bắt đầu và kết thúc */}
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày bắt đầu:</label>
-          <input type="date" className="form-control" name="thoiGianBatDau" value={hoSo.thoiGianBatDau ? new Date(hoSo.thoiGianBatDau).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
+          <input type="date" className="form-control" name="ngayBatDau" value={hoSo.ngayBatDau ? new Date(hoSo.ngayBatDau).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         </div>
         <div className="col-md-6 d-flex align-items-center mb-3">
           <label className="form-label 4 me-2 text-start" style={{ minWidth: '180px' }}>Ngày kết thúc:</label>
-          <input type="date" className="form-control" name="thoiGianKetThuc" value={hoSo.thoiGianKetThuc ? new Date(hoSo.thoiGianKetThuc).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
+          <input type="date" className="form-control" name="ngayKetThuc" value={hoSo.ngayKetThuc ? new Date(hoSo.ngayKetThuc).toISOString().split('T')[0] : ''} onChange={handleInputChange} disabled={hoSo.trangThai === 'Đã nhận lưu kho' || hoSo.trangThai === 'Đã trình duyệt lưu kho'}  />
         </div>
 
         {/* Trạng thái */}

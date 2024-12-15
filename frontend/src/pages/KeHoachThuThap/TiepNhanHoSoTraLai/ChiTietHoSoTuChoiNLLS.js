@@ -163,8 +163,8 @@ const ChiTietHoSoTuChoiNLLS = () => {
           <thead style={{ backgroundColor: '#2289E7', color: '#fff' }}>
             <tr>
               <th scope="col">STT</th>
-              <th scope="col">Mã tài liệu</th>
-              <th scope="col">Tên tài liệu</th>
+              <th scope="col">Mã định danh văn bản</th>
+              {/* <th scope="col">Tên tài liệu</th> */}
               <th scope="col">Trích yếu nội dung</th>
               <th scope="col">Chế độ sử dụng</th>
               {/* <th scope="col">Đơn vị nộp lưu</th> */}
@@ -177,15 +177,23 @@ const ChiTietHoSoTuChoiNLLS = () => {
               taiLieuList.map((taiLieu, index) => (
                 <tr key={taiLieu.id}>
                   <td>{index + 1}</td>
-                  <td>TL000{taiLieu.id}</td>
+                  {/* <td>TL000{taiLieu.id}</td> */}
                   <td>
+                    <Link 
+                      to={`/ho-so-da-trinh-nlls/${id}/tai-lieu/${taiLieu.id}`}
+                      style={{ color: '#043371', display: 'block' }} 
+                    >
+                      {taiLieu.maDinhDanhVanBan}
+                    </Link>
+                  </td>
+                  {/* <td>
                     <Link 
                       to={`/ho-so-tu-choi-nlls/${id}/tai-lieu/${taiLieu.id}`}
                       style={{ color: '#043371', display: 'block' }} 
                     >
                       {taiLieu.tenTaiLieu}
                     </Link>
-                  </td>
+                  </td> */}
                   <td>
                     <a href={taiLieu.link} target="_blank" rel="noopener noreferrer" style={{ color: '#043371' }}>
                       Xem nội dung
