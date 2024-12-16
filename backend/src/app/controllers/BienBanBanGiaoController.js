@@ -133,15 +133,69 @@ class BienBanBanGiaoController {
     }
 
     // Cập nhật một biên bản bàn giao
+    // async updateBienBanBanGiao(req, res) {
+    //     const { id } = req.params;
+    //     const {
+    //         soBienBan,
+    //         tieuDe,
+    //         ngayLap,
+    //         canCuId, 
+    //         tenCoQuanThuThap,
+    //         donViNopLuuId, 
+    //         daiDienBenGiaoId,
+    //         daiDienBenNhanId,
+    //         trangThaiBienBan,
+    //         hoSos = []
+    //     } = req.body;
+    
+    //     try {
+    //         const bienBan = await prisma.bienBanBanGiao.update({
+    //             where: { id: parseInt(id, 10) },
+    //             data: {
+    //                 soBienBan,
+    //                 tieuDe,
+    //                 ngayLap: new Date(ngayLap),
+    //                 canCu: { 
+    //                     connect: { 
+    //                         id: parseInt(canCuId, 10) 
+    //                     } 
+    //                 },
+    //                 tenCoQuanThuThap,
+    //                 donViNopLuu: { 
+    //                     connect: { 
+    //                         id: parseInt(donViNopLuuId, 10) 
+    //                     } 
+    //                 },
+    //                 daiDienBenGiaoId,
+    //                 daiDienBenNhanId,
+    //                 trangThaiBienBan,
+    //                 hoSos: {
+    //                     set: hoSos.map(id => ({ id: parseInt(id, 10) })) 
+    //                 }
+    //             }
+    //         });
+    
+    //         res.status(200).json({
+    //             message: 'Biên bản bàn giao đã được cập nhật thành công',
+    //             data: bienBan,
+    //         });
+    //     } catch (error) {
+    //         console.error('Error updating BienBanBanGiao:', error);
+    //         res.status(500).json({
+    //             message: 'Lỗi khi cập nhật biên bản bàn giao',
+    //             error: error.message,
+    //         });
+    //     }
+    // }
     async updateBienBanBanGiao(req, res) {
         const { id } = req.params;
         const {
             soBienBan,
             tieuDe,
             ngayLap,
-            canCuId, // Chỉ nhận `id` cho canCu
+            canCuId, 
             tenCoQuanThuThap,
-            donViNopLuuId, // Chỉ nhận `id` cho donViNopLuu
+            donViNopLuuId, 
             daiDienBenGiaoId,
             daiDienBenNhanId,
             trangThaiBienBan,
@@ -149,6 +203,7 @@ class BienBanBanGiaoController {
         } = req.body;
     
         try {
+            // Cập nhật Biên bản bàn giao
             const bienBan = await prisma.bienBanBanGiao.update({
                 where: { id: parseInt(id, 10) },
                 data: {
@@ -157,21 +212,31 @@ class BienBanBanGiaoController {
                     ngayLap: new Date(ngayLap),
                     canCu: { 
                         connect: { 
-                            id: parseInt(canCuId, 10) // Chuyển đổi ID căn cứ sang số nguyên
+                            id: parseInt(canCuId, 10) 
                         } 
                     },
                     tenCoQuanThuThap,
                     donViNopLuu: { 
                         connect: { 
-                            id: parseInt(donViNopLuuId, 10) // Chuyển đổi ID đơn vị nộp lưu sang số nguyên
+                            id: parseInt(donViNopLuuId, 10) 
                         } 
                     },
                     daiDienBenGiaoId,
                     daiDienBenNhanId,
                     trangThaiBienBan,
                     hoSos: {
-                        set: hoSos.map(id => ({ id: parseInt(id, 10) })) // Chuyển đổi từng ID hồ sơ sang số nguyên
+                        connect: hoSos.map(id => ({ id: parseInt(id, 10) })) // Sử dụng connect thay vì set
                     }
+                }
+            });
+    
+            // Cập nhật bienBanBanGiaoId trong các hồ sơ được kết nối (nếu cần)
+            await prisma.hoSo.updateMany({
+                where: {
+                    id: { in: hoSos.map(id => parseInt(id, 10)) }
+                },
+                data: {
+                    bienBanBanGiaoId: bienBan.id 
                 }
             });
     
@@ -187,6 +252,8 @@ class BienBanBanGiaoController {
             });
         }
     }
+    
+    
     
 
     // Xóa một biên bản bàn giao
