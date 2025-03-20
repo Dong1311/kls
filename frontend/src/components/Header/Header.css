@@ -3,10 +3,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #044D82 !important; /* Màu nền của header */
+  background-color: #044d82 !important; /* Màu nền của header */
   padding: 10px 20px;
   color: white;
-  font-family: Arial, sans-serif; 
+  font-family: Arial, sans-serif;
   height: 70px;
 }
 

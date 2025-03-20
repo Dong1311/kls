@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import './Header.css';
-import logo from '../../assets/images/logo-bo-cong-an.jpg';
-import { UserContext } from '../../context/UserContext'; // Import UserContext
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import './Header.css'
+import logo from '../../assets/images/logo-bo-cong-an.jpg'
+import { UserContext } from '../../context/UserContext' // Import UserContext
 
 const Header = () => {
-  const { name } = useContext(UserContext); // Lấy thông tin name từ UserContext
+  const { name } = useContext(UserContext) // Lấy thông tin name từ UserContext
 
   return (
     <header className="header">
@@ -18,7 +18,7 @@ const Header = () => {
         <span className="notification">🔔</span>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

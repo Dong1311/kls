@@ -1,46 +1,46 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import MenuLink from '../MenuLink';  
-import SubmenuItem from '../SidebarBtn/SubmenuItem'; 
-import trangchuIcon from '../../assets/images/Module/TrangChu.png';
-import quanlykehoachIcon from '../../assets/images/Module/QuanLyKehoach.png';
-import bienmucchinlyIcon from '../../assets/images/Module/BienMucChinhLy.png';
-import khaithacsudungIcon from '../../assets/images/Module/KhaiThacSuDung.png';
-import kholichsuIcon from '../../assets/images/Module/KhoLichSu.png';
-import quanlydanhmucIcon from '../../assets/images/Module/QuanLyDanhMuc.png';
-import tieuhuyhosoIcon from '../../assets/images/Module/TieuHuyHoSo.png';
-import baocaothongkeIcon from '../../assets/images/Module/BaoCaoThongKe.png';
+import React, { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom' // Import useNavigate
+import MenuLink from '../MenuLink'
+import SubmenuItem from '../SidebarBtn/SubmenuItem'
+import trangchuIcon from '../../assets/images/Module/TrangChu.png'
+import quanlykehoachIcon from '../../assets/images/Module/QuanLyKehoach.png'
+import bienmucchinlyIcon from '../../assets/images/Module/BienMucChinhLy.png'
+import khaithacsudungIcon from '../../assets/images/Module/KhaiThacSuDung.png'
+import kholichsuIcon from '../../assets/images/Module/KhoLichSu.png'
+import quanlydanhmucIcon from '../../assets/images/Module/QuanLyDanhMuc.png'
+import tieuhuyhosoIcon from '../../assets/images/Module/TieuHuyHoSo.png'
+import baocaothongkeIcon from '../../assets/images/Module/BaoCaoThongKe.png'
 
-import settingIcon from '../../assets/images/Function/Setting.png';
-import { AuthContext } from '../../context/AuthContext';
+import settingIcon from '../../assets/images/Function/Setting.png'
+import { AuthContext } from '../../context/AuthContext'
 
-import './Sidebar.css'; 
+import './Sidebar.css'
 
 const Sidebar = () => {
-  const { role } = useContext(AuthContext);
-  const [activeMenu, setActiveMenu] = useState(null);  
-  const [showSettings, setShowSettings] = useState(false);
-  
-  const navigate = useNavigate(); 
+  const { role } = useContext(AuthContext)
+  const [activeMenu, setActiveMenu] = useState(null)
+  const [showSettings, setShowSettings] = useState(false)
+
+  const navigate = useNavigate()
 
   const toggleMenu = (menu) => {
-    setActiveMenu(activeMenu === menu ? null : menu); 
-  };
+    setActiveMenu(activeMenu === menu ? null : menu)
+  }
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings); 
-  };
+    setShowSettings(!showSettings)
+  }
 
   const handleLogout = () => {
-    localStorage.clear(); 
-    window.location.href = '/login'; 
-  };
+    localStorage.clear()
+    window.location.href = '/login'
+  }
 
   const goToHomePage = () => {
-    navigate('/'); 
-  };
-  
-  const isAnyMenuExpanded = activeMenu !== null; 
+    navigate('/')
+  }
+
+  const isAnyMenuExpanded = activeMenu !== null
 
   return (
     <div className="sidebar">
@@ -50,7 +50,7 @@ const Sidebar = () => {
           title="Trang chủ"
           toggleMenu={goToHomePage}
           isOpen={activeMenu === 'trangChu'}
-          hideArrow = {true}
+          hideArrow={true}
         />
 
         <MenuLink
@@ -60,15 +60,15 @@ const Sidebar = () => {
           isOpen={activeMenu === 'keHoach'}
         >
           {/* {role === 'CB bao quan' && ( */}
-            <SubmenuItem to="/lap-ke-hoach-thu-thap" text="Lập kế hoạch thu thập" />
+          <SubmenuItem to="/lap-ke-hoach-thu-thap" text="Lập kế hoạch thu thập" />
           {/* )} */}
           {/* {role === 'Lanh dao CQ bao quan' &&( */}
-            <SubmenuItem to="/duyet-ke-hoach-thu-thap" text="Duyệt kế hoạch thu thập" />
+          <SubmenuItem to="/duyet-ke-hoach-thu-thap" text="Duyệt kế hoạch thu thập" />
           {/* )} */}
           <SubmenuItem to="/danh-sach-ke-hoach-da-duyet" text="Danh sách kế hoạch đã duyệt" />
           <SubmenuItem to="/quan-ly-ho-so" text="Quản lý hồ sơ" />
           <SubmenuItem to="/quan-ly-tai-lieu" text="Quản lý tài liệu" />
-          
+
           <SubmenuItem to="/danh-sach-ho-so-da-trinh-duyet" text="Duyệt & gửi hồ sơ nộp lưu" />
           <SubmenuItem to="/danh-sach-ho-so-da-trinh-nlls" text="Danh sách hồ sơ đã nộp lưu" />
           <SubmenuItem to="/danh-sach-ho-so-tu-choi-nlls" text="Tiếp nhận hồ sơ trả lại" />
@@ -76,7 +76,6 @@ const Sidebar = () => {
           <SubmenuItem to="/danh-sach-ho-so-da-nhan-nlls" text="Hồ sơ đã nhận nộp lưu lịch sử" />
           <SubmenuItem to="/danh-sach-bien-ban-ban-giao" text="Quản lý biên bản bàn giao" />
           <SubmenuItem to="/danh-sach-bien-ban-ban-giao-da-gui-duyet" text="Duyệt biên bản bàn giao" />
-
         </MenuLink>
 
         <MenuLink
@@ -89,7 +88,6 @@ const Sidebar = () => {
           <SubmenuItem to="/danh-sach-ho-so-da-trinh-duyet-luu-kho" text="Duyệt lưu kho" />
           <SubmenuItem to="/bien-muc-chinh-ly-bo-sung" text="Biên mục chỉnh lý bổ sung" />
           <SubmenuItem to="/duyet-bien-muc-chinh-ly-bo-sung" text="Duyệt biên mục chỉnh lý bổ sung" />
-
         </MenuLink>
 
         <MenuLink
@@ -160,13 +158,17 @@ const Sidebar = () => {
 
         {showSettings && (
           <div className="settings-popup">
-            <button onClick={handleLogout} className="settings-option">Đăng xuất</button>
-            <button onClick={() => alert('Đổi mật khẩu')} className="settings-option">Đổi mật khẩu</button>
+            <button onClick={handleLogout} className="settings-option">
+              Đăng xuất
+            </button>
+            <button onClick={() => alert('Đổi mật khẩu')} className="settings-option">
+              Đổi mật khẩu
+            </button>
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

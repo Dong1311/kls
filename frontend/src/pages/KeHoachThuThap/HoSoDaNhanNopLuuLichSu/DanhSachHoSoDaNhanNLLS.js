@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import addIcon from '../../../assets/images/Function/Add.png';
-import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
-import editIcon from '../../../assets/images/Function/ChinhSua.png';
-import infoIcon from '../../../assets/images/Function/info.png';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import addIcon from '../../../assets/images/Function/Add.png'
+import deleteIcon from '../../../assets/images/Function/DeleteFile.png'
+import editIcon from '../../../assets/images/Function/ChinhSua.png'
+import infoIcon from '../../../assets/images/Function/info.png'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const DanhSachHoSoDaNhanNLLS = () => {
-  const [hoSoList, setHoSoList] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [nguoiTao, setNguoiTao] = useState('');
-  const [ngayTao, setNgayTao] = useState('');
-  const navigate = useNavigate();
+  const [hoSoList, setHoSoList] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [nguoiTao, setNguoiTao] = useState('')
+  const [ngayTao, setNgayTao] = useState('')
+  const navigate = useNavigate()
 
   const fetchHoSos = () => {
     const query = new URLSearchParams({
@@ -19,21 +19,21 @@ const DanhSachHoSoDaNhanNLLS = () => {
       search: searchTerm,
       nguoiTao,
       ngayTao,
-    }).toString();
+    }).toString()
 
     fetch(`/api/ho-so?${query}`)
-      .then(response => response.json())
-      .then(data => setHoSoList(data))
-      .catch(error => console.error('Error fetching data:', error));
-  };
+      .then((response) => response.json())
+      .then((data) => setHoSoList(data))
+      .catch((error) => console.error('Error fetching data:', error))
+  }
 
   useEffect(() => {
-    fetchHoSos();
-  }, [searchTerm, nguoiTao, ngayTao]);
+    fetchHoSos()
+  }, [searchTerm, nguoiTao, ngayTao])
 
   const handleEditHoSo = (hoSoId) => {
-    navigate(`/ho-so-da-nhan-nlls/${hoSoId}`);
-  };
+    navigate(`/ho-so-da-nhan-nlls/${hoSoId}`)
+  }
 
   return (
     <div className="container mt-4">
@@ -48,31 +48,30 @@ const DanhSachHoSoDaNhanNLLS = () => {
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">
-          <input 
-            type="text" 
-            className="form-control me-2" 
-            placeholder="Tìm kiếm theo tiêu đề hồ sơ..." 
+          <input
+            type="text"
+            className="form-control me-2"
+            placeholder="Tìm kiếm theo tiêu đề hồ sơ..."
             style={{ width: '300px' }}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} 
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <input 
-            type="text" 
-            className="form-control me-2" 
-            placeholder="Tìm theo người tạo..." 
+          <input
+            type="text"
+            className="form-control me-2"
+            placeholder="Tìm theo người tạo..."
             style={{ width: '200px' }}
             value={nguoiTao}
             onChange={(e) => setNguoiTao(e.target.value)}
           />
-          <input 
-            type="date" 
-            className="form-control me-2" 
+          <input
+            type="date"
+            className="form-control me-2"
             style={{ width: '200px' }}
             value={ngayTao}
             onChange={(e) => setNgayTao(e.target.value)}
           />
         </div>
-
       </div>
 
       <table className="table table-striped table-hover align-middle">
@@ -89,7 +88,9 @@ const DanhSachHoSoDaNhanNLLS = () => {
             <th scope="col">Ngày tạo</th>
             <th scope="col">Số lượng tài liệu</th>
             <th scope="col">Trạng thái</th>
-            <th style={{minWidth:'120px'}} scope="col">Hành động</th>
+            <th style={{ minWidth: '120px' }} scope="col">
+              Hành động
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -105,20 +106,21 @@ const DanhSachHoSoDaNhanNLLS = () => {
                   {hoSo.tieuDeHoSo}
                 </Link>
               </td>
-              <td>{hoSo.keHoachThuThap ? hoSo.keHoachThuThap.tieuDe : 'N/A'}</td>              <td>{hoSo.nguoiTao}</td>
+              <td>{hoSo.keHoachThuThap ? hoSo.keHoachThuThap.tieuDe : 'N/A'}</td> <td>{hoSo.nguoiTao}</td>
               <td>{new Date(hoSo.ngayTao).toLocaleDateString()}</td>
               <td>{hoSo.tongSoTaiLieu}</td>
               <td>
-                <span style={getTrangThaiStyle(hoSo.trangThai)}>
-                  {hoSo.trangThai}
-                </span>
+                <span style={getTrangThaiStyle(hoSo.trangThai)}>{hoSo.trangThai}</span>
               </td>
               <td>
                 <button className="btn btn-light me-2" onClick={() => handleEditHoSo(hoSo.id)}>
                   <img src={editIcon} alt="edit" width="20" />
                 </button>
-                <button className="btn btn-light" onClick={() => handleDeleteHoSo(hoSo.id)}
-                disabled={!(hoSo.trangThai === 'Đã trình duyệt')}>
+                <button
+                  className="btn btn-light"
+                  onClick={() => handleDeleteHoSo(hoSo.id)}
+                  disabled={!(hoSo.trangThai === 'Đã trình duyệt')}
+                >
                   <img src={deleteIcon} alt="delete" width="20" />
                 </button>
               </td>
@@ -127,28 +129,28 @@ const DanhSachHoSoDaNhanNLLS = () => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
 const getTrangThaiStyle = (trangThai) => {
-  let backgroundColor = '';
-  let color = '#fff';
+  let backgroundColor = ''
+  let color = '#fff'
   switch (trangThai) {
     case 'Tạo mới':
-      backgroundColor = '#2289E7';
-      break;
+      backgroundColor = '#2289E7'
+      break
     case 'Đã trình NLLS':
-      backgroundColor = '#ffc107';
-      break;
+      backgroundColor = '#ffc107'
+      break
     case 'Đã nhận NLLS':
-      backgroundColor = '#09BF1B';
-      break;
+      backgroundColor = '#09BF1B'
+      break
     case 'Từ chối':
-      backgroundColor = '#dc3545';
-      break;
+      backgroundColor = '#dc3545'
+      break
     default:
-      backgroundColor = '#6c757d';
-      break;
+      backgroundColor = '#6c757d'
+      break
   }
 
   return {
@@ -161,7 +163,7 @@ const getTrangThaiStyle = (trangThai) => {
     fontSize: '14px',
     minWidth: '110px',
     textAlign: 'center',
-  };
-};
+  }
+}
 
-export default DanhSachHoSoDaNhanNLLS;
+export default DanhSachHoSoDaNhanNLLS

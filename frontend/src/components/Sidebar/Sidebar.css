@@ -1,6 +1,6 @@
 /* Sidebar chính */
 .sidebar {
-  background-color: #044D82;
+  background-color: #044d82;
   color: white;
   width: 370px;
   height: 140vh;
@@ -9,23 +9,23 @@
   overflow-y: auto;
   scrollbar-width: thin;
   flex-direction: column;
-  scrollbar-color: #044D82 #004080;
+  scrollbar-color: #044d82 #004080;
 }
 
 .sidebar::-webkit-scrollbar {
-  width:z 8px;
+  width: z 8px;
   margin-right: 8px;
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: #044D82;
+  background: #044d82;
   border-radius: 10px;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
   background-color: #0056b3;
   border-radius: 10px;
-  border: 2px solid #044D82;
+  border: 2px solid #044d82;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
@@ -53,9 +53,11 @@
   font-size: 16px;
   border-radius: 30px;
   text-decoration: none;
-  background-color: #044D82;
+  background-color: #044d82;
   color: white;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   cursor: pointer;
 }
 
@@ -84,7 +86,7 @@
 /* Submenu */
 .submenu {
   list-style: none;
-  padding: 0; 
+  padding: 0;
   margin: 0;
 }
 
@@ -93,21 +95,23 @@
 }
 
 .submenu-link {
-  padding: 10px 15px; 
+  padding: 10px 15px;
   font-size: 14px;
   display: block;
   text-decoration: none;
-  background-color: #044D82; 
+  background-color: #044d82;
   color: white;
   border-radius: 10px;
-  border: 1px solid white; 
-  transition: background-color 0.3s ease, color 0.3s ease;
+  border: 1px solid white;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   text-align: left;
 }
 
 .submenu-link:hover {
   background-color: white; /* Khi hover, nền sẽ chuyển thành trắng */
-  color: #044D82; /* Chữ sẽ chuyển thành màu xanh */
+  color: #044d82; /* Chữ sẽ chuyển thành màu xanh */
   border-color: white; /* Border vẫn giữ màu trắng khi hover */
 }
 /* Vùng chứa nút cài đặt */
@@ -137,7 +141,7 @@
 
 /* Popup cài đặt */
 .settings-popup {
-  background-color: #044D82;
+  background-color: #044d82;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px;
@@ -149,7 +153,7 @@
 /* Các tùy chọn trong popup */
 .settings-option {
   display: block;
-  background-color: #044D82;
+  background-color: #044d82;
   color: white;
   padding: 15px 20px;
   margin: 0;
@@ -160,11 +164,13 @@
   cursor: pointer;
   font-size: 16px;
   margin-bottom: 10px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .settings-option:hover {
   background-color: white;
-  color: #044D82;
+  color: #044d82;
   border-color: white;
 }

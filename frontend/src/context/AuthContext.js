@@ -1,35 +1,31 @@
-import React, { createContext, useState, useEffect } from 'react';
-import {jwtDecode} from 'jwt-decode';
+import React, { createContext, useState, useEffect } from 'react'
+import { jwtDecode } from 'jwt-decode'
 
-export const AuthContext = createContext();
+export const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
-  const [role, setRole] = useState(null); 
+  const [role, setRole] = useState(null)
 
   const getRoleFromToken = () => {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token')
     if (token) {
       try {
-        const decodedToken = jwtDecode(token);
-        const userRole = decodedToken.role; 
-        setRole(userRole);
+        const decodedToken = jwtDecode(token)
+        const userRole = decodedToken.role
+        setRole(userRole)
       } catch (error) {
-        console.error('Error decoding token', error);
-        setRole(null);
+        console.error('Error decoding token', error)
+        setRole(null)
       }
     }
-  };
+  }
 
   useEffect(() => {
-    getRoleFromToken(); 
-  }, []);
+    getRoleFromToken()
+  }, [])
 
-  return (
-    <AuthContext.Provider value={{ role, setRole }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  return <AuthContext.Provider value={{ role, setRole }}>{children}</AuthContext.Provider>
+}
 
 // Export AuthProvider dưới dạng mặc định
-export default AuthProvider;
+export default AuthProvider

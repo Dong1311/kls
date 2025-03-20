@@ -1,10 +1,10 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './Dashboard.css';
-import { ProgressBar } from 'react-bootstrap';
-import { AuthContext } from '../../context/AuthContext';
+import React from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './Dashboard.css'
+import { ProgressBar } from 'react-bootstrap'
+import { AuthContext } from '../../context/AuthContext'
 const Dashboard = () => {
-  const { role } = useContext(AuthContext);
+  const { role } = useContext(AuthContext)
   return (
     <div className="container-fluid">
       <div className="row mt-4">
@@ -14,7 +14,11 @@ const Dashboard = () => {
               <h5 className="card-title">Hiện trạng số hóa hồ sơ tài liệu</h5>
               <div className="d-flex justify-content-between align-items-center">
                 <div className="progress-circle">
-                  <ProgressBar now={63} variant="primary" style={{ width: '200px', height: '200px', borderRadius: '50%' }} />
+                  <ProgressBar
+                    now={63}
+                    variant="primary"
+                    style={{ width: '200px', height: '200px', borderRadius: '50%' }}
+                  />
                 </div>
                 <div>
                   <p>Hồ sơ đã số hóa: 12</p>
@@ -42,7 +46,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import TextInput from '../../../components/TextInput';
-import SelectInput from '../../../components/SelectInput';
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import TextInput from '../../../components/TextInput'
+import SelectInput from '../../../components/SelectInput'
 
 const ChiTietTaiLieuDaTrinhNLLS = () => {
-  const { taiLieuId } = useParams();
-  const navigate = useNavigate();
+  const { taiLieuId } = useParams()
+  const navigate = useNavigate()
   const [taiLieu, setTaiLieu] = useState({
     tenTaiLieu: '',
     khungBienMuc: '',
@@ -30,27 +30,27 @@ const ChiTietTaiLieuDaTrinhNLLS = () => {
     mucDoTinCay: 'Cao',
     tinhTrangVatLy: 'Nguyên vẹn',
     ngayTao: '',
-    link: ''
-  });
+    link: '',
+  })
 
   useEffect(() => {
     fetch(`/api/tai-lieu/${taiLieuId}`)
-      .then(response => response.json())
-      .then(data => {
-        setTaiLieu(data);
-        return fetch(`/api/ho-so/${data.hoSoId}/name-status`);
+      .then((response) => response.json())
+      .then((data) => {
+        setTaiLieu(data)
+        return fetch(`/api/ho-so/${data.hoSoId}/name-status`)
       })
-      .then(response => response.json())
-      .then(data => {
-        setTaiLieu(prevState => ({
+      .then((response) => response.json())
+      .then((data) => {
+        setTaiLieu((prevState) => ({
           ...prevState,
-          hoSoTen: data.tenHoSo
-        }));
+          hoSoTen: data.tenHoSo,
+        }))
       })
-      .catch(error => console.error('Lỗi khi lấy chi tiết tài liệu:', error));
-  }, [taiLieuId]);
+      .catch((error) => console.error('Lỗi khi lấy chi tiết tài liệu:', error))
+  }, [taiLieuId])
 
-  const handleBack = () => navigate(-1);
+  const handleBack = () => navigate(-1)
 
   return (
     <div className="container mt-4">
@@ -58,7 +58,13 @@ const ChiTietTaiLieuDaTrinhNLLS = () => {
       <div className="row g-3">
         <TextInput label="Tên tài liệu" name="tenTaiLieu" value={taiLieu.tenTaiLieu} disabled />
         <TextInput label="Khung biên mục" name="khungBienMuc" value={taiLieu.khungBienMuc} disabled />
-        <TextInput label="Tên cơ quan ban hành" name="tenCoQuanBanHanh" value={taiLieu.tenCoQuanBanHanh} options={['Bộ Nội vụ', 'Bộ Quốc phòng']} disabled />
+        <TextInput
+          label="Tên cơ quan ban hành"
+          name="tenCoQuanBanHanh"
+          value={taiLieu.tenCoQuanBanHanh}
+          options={['Bộ Nội vụ', 'Bộ Quốc phòng']}
+          disabled
+        />
         <TextInput label="Mã định danh văn bản" name="maDinhDanhVanBan" value={taiLieu.maDinhDanhVanBan} disabled />
         <TextInput label="Trích yếu nội dung" name="trichYeuNoiDung" value={taiLieu.trichYeuNoiDung} disabled />
         <TextInput label="Tên hồ sơ" name="hoSoTen" value={taiLieu.hoSoTen} disabled />
@@ -72,13 +78,39 @@ const ChiTietTaiLieuDaTrinhNLLS = () => {
         <TextInput label="Ký hiệu tài liệu" name="kyHieuTaiLieu" value={taiLieu.kyHieuTaiLieu} disabled />
         <TextInput label="Từ khóa" name="tuKhoa" value={taiLieu.tuKhoa} disabled />
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2 text-start" style={{ minWidth: '180px' }} disabled>Ngày tháng năm VB:</label>
-          <input type="date" className="form-control" name="ngayThangNamVB" value={taiLieu.ngayThangNamVB ? new Date(taiLieu.ngayThangNamVB).toISOString().split('T')[0] : ''} disabled />
+          <label className="form-label me-2 text-start" style={{ minWidth: '180px' }} disabled>
+            Ngày tháng năm VB:
+          </label>
+          <input
+            type="date"
+            className="form-control"
+            name="ngayThangNamVB"
+            value={taiLieu.ngayThangNamVB ? new Date(taiLieu.ngayThangNamVB).toISOString().split('T')[0] : ''}
+            disabled
+          />
         </div>
         <TextInput label="Bút tích" name="butTich" value={taiLieu.butTich} disabled />
-        <TextInput label="Chế độ sử dụng" name="cheDoSuDung" value={taiLieu.cheDoSuDung} options={['Mật', 'Không mật']} disabled={true} />
-        <TextInput label="Tình trạng vật lý" name="tinhTrangVatLy" value={taiLieu.tinhTrangVatLy} options={['Bị mốc nhẹ', 'Nguyên vẹn']} disabled={true} />
-        <TextInput label="Mức độ tin cậy" name="mucDoTinCay" value={taiLieu.mucDoTinCay} options={['Cao', 'Thấp']} disabled={true} />
+        <TextInput
+          label="Chế độ sử dụng"
+          name="cheDoSuDung"
+          value={taiLieu.cheDoSuDung}
+          options={['Mật', 'Không mật']}
+          disabled={true}
+        />
+        <TextInput
+          label="Tình trạng vật lý"
+          name="tinhTrangVatLy"
+          value={taiLieu.tinhTrangVatLy}
+          options={['Bị mốc nhẹ', 'Nguyên vẹn']}
+          disabled={true}
+        />
+        <TextInput
+          label="Mức độ tin cậy"
+          name="mucDoTinCay"
+          value={taiLieu.mucDoTinCay}
+          options={['Cao', 'Thấp']}
+          disabled={true}
+        />
       </div>
 
       {/* Liên kết để xem tài liệu nếu có link */}
@@ -92,10 +124,12 @@ const ChiTietTaiLieuDaTrinhNLLS = () => {
 
       {/* Nút đóng */}
       <div className="d-flex justify-content-end mt-4">
-        <button className="btn btn-secondary mx-2" onClick={handleBack}>Đóng</button>
+        <button className="btn btn-secondary mx-2" onClick={handleBack}>
+          Đóng
+        </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChiTietTaiLieuDaTrinhNLLS;
+export default ChiTietTaiLieuDaTrinhNLLS

@@ -1,0 +1,84 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:prettier/recommended",
+    "next",
+    "plugin:tailwindcss/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "simple-import-sort", "prettier", "tailwindcss"],
+  "rules": {
+    "@next/next/no-img-element": "off",
+    "@next/next/no-page-custom-font": "off",
+    "@next/next/no-server-import-in-page": "off",
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/consistent-type-imports": [
+      "warn",
+      {
+        "fixStyle": "inline-type-imports",
+        "prefer": "type-imports"
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-member-accessibility": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/indent": 0,
+    "@typescript-eslint/member-delimiter-style": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-namespace": "warn",
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      {
+        "argsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": 0,
+    "@typescript-eslint/no-var-requires": 0,
+    "no-console": [
+      2,
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "prettier/prettier": [
+      0,
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "react/display-name": 0,
+    "react/prop-types": 0,
+    "react/react-in-jsx-scope": 0,
+    "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "error",
+    "testing-library/no-container": 0,
+    "testing-library/no-node-access": 0,
+    "testing-library/no-unnecessary-act": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    },
+    "react": {
+      "version": "detect"
+    },
+    "tailwindcss": {
+      "callees": ["cn", "cva"],
+      "classRegex": "^(class(Name)?|tw)$",
+      "config": "./tailwind.config.ts"
+    }
+  }
+}

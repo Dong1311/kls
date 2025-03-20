@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import addIcon from '../../../assets/images/Function/Add.png';
-import deleteIcon from '../../../assets/images/Function/DeleteFile.png';
-import editIcon from '../../../assets/images/Function/ChinhSua.png';
-import infoIcon from '../../../assets/images/Function/info.png';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import addIcon from '../../../assets/images/Function/Add.png'
+import deleteIcon from '../../../assets/images/Function/DeleteFile.png'
+import editIcon from '../../../assets/images/Function/ChinhSua.png'
+import infoIcon from '../../../assets/images/Function/info.png'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Link } from 'react-router-dom'
 
 const DanhSachTaiLieu = () => {
-  const [taiLieuList, setTaiLieuList] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [ngayThangNamVB, setNgayThangNamVB] = useState('');
-  const navigate = useNavigate();
+  const [taiLieuList, setTaiLieuList] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [ngayThangNamVB, setNgayThangNamVB] = useState('')
+  const navigate = useNavigate()
 
   const fetchTaiLieus = async () => {
     try {
@@ -19,52 +19,51 @@ const DanhSachTaiLieu = () => {
       const query = new URLSearchParams({
         search: searchTerm,
         ngayThangNamVB: ngayThangNamVB ? new Date(ngayThangNamVB).toISOString() : '', // chuyển đổi thành chuỗi ISO cho đúng định dạng
-      }).toString();
-  
-      const response = await fetch(`/api/tai-lieu?${query}`);
-      const data = await response.json();
-  
+      }).toString()
+
+      const response = await fetch(`/api/tai-lieu?${query}`)
+      const data = await response.json()
+
       const updatedData = await Promise.all(
         data.map(async (taiLieu) => {
-          const hoSoResponse = await fetch(`/api/ho-so/${taiLieu.hoSoId}/name-status`);
-          const hoSoData = await hoSoResponse.json();
-  
-          if (["Tạo mới", "Đã trình duyệt", "Cần thu thập lại", "Từ chối nộp lưu"].includes(hoSoData.trangThai)) {
+          const hoSoResponse = await fetch(`/api/ho-so/${taiLieu.hoSoId}/name-status`)
+          const hoSoData = await hoSoResponse.json()
+
+          if (['Tạo mới', 'Đã trình duyệt', 'Cần thu thập lại', 'Từ chối nộp lưu'].includes(hoSoData.trangThai)) {
             return {
               ...taiLieu,
               tenHoSo: hoSoData.tenHoSo || 'Không tìm thấy',
               trangThaiHoSo: hoSoData.trangThai || 'Không xác định',
-            };
+            }
           }
-          return null;
+          return null
         })
-      );
-  
-      const filteredData = updatedData.filter((item) => item !== null);
-      setTaiLieuList(filteredData);
+      )
+
+      const filteredData = updatedData.filter((item) => item !== null)
+      setTaiLieuList(filteredData)
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error)
     }
-  };
-  
+  }
+
   useEffect(() => {
-    fetchTaiLieus();
-  }, [searchTerm, ngayThangNamVB]);
-  
+    fetchTaiLieus()
+  }, [searchTerm, ngayThangNamVB])
 
   const handleEditTaiLieu = (taiLieuId) => {
-    navigate(`/tai-lieu/${taiLieuId}`);
-  };
+    navigate(`/tai-lieu/${taiLieuId}`)
+  }
 
   const handleDeleteTaiLieu = (taiLieuId) => {
     if (window.confirm('Bạn có chắc muốn xóa tài liệu này không?')) {
       fetch(`/api/tai-lieu/${taiLieuId}`, { method: 'DELETE' })
         .then(() => {
-          setTaiLieuList(taiLieuList.filter(taiLieu => taiLieu.id !== taiLieuId));
+          setTaiLieuList(taiLieuList.filter((taiLieu) => taiLieu.id !== taiLieuId))
         })
-        .catch(error => console.error('Lỗi khi xóa tài liệu:', error));
+        .catch((error) => console.error('Lỗi khi xóa tài liệu:', error))
     }
-  };
+  }
 
   return (
     <div className="container mt-4">
@@ -79,10 +78,10 @@ const DanhSachTaiLieu = () => {
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">
-          <input 
-            type="text" 
-            className="form-control me-2" 
-            placeholder="Tìm kiếm..." 
+          <input
+            type="text"
+            className="form-control me-2"
+            placeholder="Tìm kiếm..."
             style={{ width: '300px' }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -115,7 +114,9 @@ const DanhSachTaiLieu = () => {
             <th scope="col">Ngày tháng năm VB</th>
             <th scope="col">Cơ quan ban hành</th>
             <th scope="col">Trạng thái</th>
-            <th style={{minWidth:'120px'}} scope="col">Hành động</th>
+            <th style={{ minWidth: '120px' }} scope="col">
+              Hành động
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -126,20 +127,14 @@ const DanhSachTaiLieu = () => {
               </td>
               <td>{index + 1}</td>
               <td>
-                <Link 
-                  to={`/tai-lieu/${taiLieu.id}`} 
-                  style={{ color: '#007bff', textDecoration: 'underline' }}
-                >
+                <Link to={`/tai-lieu/${taiLieu.id}`} style={{ color: '#007bff', textDecoration: 'underline' }}>
                   {/* {taiLieu.maDinhDanhTL || `TL000${taiLieu.id}`} */}
                   {taiLieu.maDinhDanhVanBan}
                 </Link>
               </td>
               <td>
-                <Link 
-                  to={`/ho-so/${taiLieu.hoSoId}`} 
-                  style={{ color: '#007bff', textDecoration: 'underline' }}
-                >
-                  {taiLieu.tenHoSo }
+                <Link to={`/ho-so/${taiLieu.hoSoId}`} style={{ color: '#007bff', textDecoration: 'underline' }}>
+                  {taiLieu.tenHoSo}
                 </Link>
               </td>
               {/* <td>{taiLieu.tenHoSo}</td> Hiển thị tên hồ sơ */}
@@ -164,28 +159,28 @@ const DanhSachTaiLieu = () => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
 const getTrangThaiStyle = (trangThai) => {
-  let backgroundColor = '';
-  let color = '#fff';
+  let backgroundColor = ''
+  let color = '#fff'
   switch (trangThai) {
     case 'Tạo mới':
-      backgroundColor = '#2289E7';
-      break;
+      backgroundColor = '#2289E7'
+      break
     case 'Đã trình duyệt':
-      backgroundColor = '#ffc107';
-      break;
+      backgroundColor = '#ffc107'
+      break
     case 'Đã duyệt':
-      backgroundColor = '#28a745';
-      break;
+      backgroundColor = '#28a745'
+      break
     case 'Từ chối nộp lưu':
-      backgroundColor = '#dc3545';
-      break;
+      backgroundColor = '#dc3545'
+      break
     default:
-      backgroundColor = '#6c757d';
-      break;
+      backgroundColor = '#6c757d'
+      break
   }
 
   return {
@@ -198,7 +193,7 @@ const getTrangThaiStyle = (trangThai) => {
     fontSize: '14px',
     minWidth: '80px',
     textAlign: 'center',
-  };
-};
+  }
+}
 
-export default DanhSachTaiLieu;
+export default DanhSachTaiLieu

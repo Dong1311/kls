@@ -1,62 +1,52 @@
-import React, { useState, useEffect, useRef } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import infoIcon from "../../assets/images/Function/info.png";
-import jsPDF from "jspdf";
-import domtoimage from "dom-to-image";
-import RobotoFont from "../../assets/fonts/font-times-new-roman-base64"; 
+import React, { useState, useEffect, useRef } from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import infoIcon from '../../assets/images/Function/info.png'
+import jsPDF from 'jspdf'
+import domtoimage from 'dom-to-image'
+import RobotoFont from '../../assets/fonts/font-times-new-roman-base64'
 
 const ThongKeHopCap = () => {
-  const [data, setData] = useState([]);
-  const [giaFilter, setGiaFilter] = useState("");
-  const [hopCapFilter, setHopCapFilter] = useState("");
+  const [data, setData] = useState([])
+  const [giaFilter, setGiaFilter] = useState('')
+  const [hopCapFilter, setHopCapFilter] = useState('')
   const [summary, setSummary] = useState({
     tongSoGia: 0,
     tongSoHop: 0,
     tongSoHoSo: 0,
     tongSoTaiLieu: 0,
-  });
+  })
 
-  const tableRef = useRef(null); // Ref để truy cập bảng HTML  
+  const tableRef = useRef(null) // Ref để truy cập bảng HTML
 
   // Lấy dữ liệu từ API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/hop-cap/thong-ke");
-        const result = await response.json();
-        setData(result.data || []); // Đảm bảo data luôn là mảng
+        const response = await fetch('/api/hop-cap/thong-ke')
+        const result = await response.json()
+        setData(result.data || []) // Đảm bảo data luôn là mảng
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error)
       }
-    };
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const filteredData = data.filter((item) => {
-    return (
-      (!giaFilter || item.gia === giaFilter) &&
-      (!hopCapFilter || item.hopCap === hopCapFilter)
-    );
-  });
+    return (!giaFilter || item.gia === giaFilter) && (!hopCapFilter || item.hopCap === hopCapFilter)
+  })
 
   useEffect(() => {
-    const uniqueGia = new Set(filteredData.map((item) => item.gia));
-    const tongSoGia = uniqueGia.size;
-    const tongSoHop = filteredData.length;
-    const tongSoHoSo = filteredData.reduce(
-      (acc, item) => acc + (item.soLuongHoSo || 0),
-      0
-    );
-    const tongSoTaiLieu = filteredData.reduce(
-      (acc, item) => acc + (item.soLuongTaiLieu || 0),
-      0
-    );
-  
-    setSummary({ tongSoGia, tongSoHop, tongSoHoSo, tongSoTaiLieu });
-  }, [data, giaFilter, hopCapFilter]); // Chỉ phụ thuộc vào `data` và bộ lọc
-  
-  
+    const uniqueGia = new Set(filteredData.map((item) => item.gia))
+    const tongSoGia = uniqueGia.size
+    const tongSoHop = filteredData.length
+    const tongSoHoSo = filteredData.reduce((acc, item) => acc + (item.soLuongHoSo || 0), 0)
+    const tongSoTaiLieu = filteredData.reduce((acc, item) => acc + (item.soLuongTaiLieu || 0), 0)
+
+    setSummary({ tongSoGia, tongSoHop, tongSoHoSo, tongSoTaiLieu })
+  }, [data, giaFilter, hopCapFilter]) // Chỉ phụ thuộc vào `data` và bộ lọc
+
   // Tính toán tổng kết
   // const calculateSummary = (data) => {
   //   const uniqueGia = new Set(data.map((item) => item.gia)); // Lưu các giá trị "gia" duy nhất
@@ -70,42 +60,42 @@ const ThongKeHopCap = () => {
 
   // Hàm xuất PDF
   const handleExportPDF = async () => {
-    const table = tableRef.current;
-  
+    const table = tableRef.current
+
     if (table) {
       try {
         // Chuyển bảng thành ảnh PNG
-        const imgData = await domtoimage.toPng(table);
-  
+        const imgData = await domtoimage.toPng(table)
+
         // Khởi tạo file PDF
-        const pdf = new jsPDF("p", "mm", "a4");
-  
+        const pdf = new jsPDF('p', 'mm', 'a4')
+
         // Nhúng font Roboto hỗ trợ tiếng Việt
-        pdf.addFileToVFS("Roboto-Regular-normal.ttf", RobotoFont);
-        pdf.addFont("Roboto-Regular-normal.ttf", "Roboto", "normal");
-        pdf.setFont("Roboto");
-  
+        pdf.addFileToVFS('Roboto-Regular-normal.ttf', RobotoFont)
+        pdf.addFont('Roboto-Regular-normal.ttf', 'Roboto', 'normal')
+        pdf.setFont('Roboto')
+
         // Kích thước PDF
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (pdfWidth * table.offsetHeight) / table.offsetWidth;
-  
+        const pdfWidth = pdf.internal.pageSize.getWidth()
+        const pdfHeight = (pdfWidth * table.offsetHeight) / table.offsetWidth
+
         // Thêm tiêu đề "Thống kê hộp cặp"
-        pdf.setFontSize(20); // Đặt kích thước chữ
-        pdf.text("Thống kê hộp cặp", pdfWidth / 2, 20, { align: "center" }); // Căn giữa tiêu đề
-  
+        pdf.setFontSize(20) // Đặt kích thước chữ
+        pdf.text('Thống kê hộp cặp', pdfWidth / 2, 20, { align: 'center' }) // Căn giữa tiêu đề
+
         // Thêm khoảng cách lề
-        const topMargin = 30; // Khoảng cách từ tiêu đề đến bảng
-  
+        const topMargin = 30 // Khoảng cách từ tiêu đề đến bảng
+
         // Thêm hình ảnh bảng vào PDF
-        pdf.addImage(imgData, "PNG", 0, topMargin, pdfWidth, pdfHeight);
-  
+        pdf.addImage(imgData, 'PNG', 0, topMargin, pdfWidth, pdfHeight)
+
         // Lưu file PDF
-        pdf.save("ThongKeHopCap.pdf");
+        pdf.save('ThongKeHopCap.pdf')
       } catch (error) {
-        console.error("Error generating PDF with dom-to-image:", error);
+        console.error('Error generating PDF with dom-to-image:', error)
       }
     }
-  };
+  }
 
   return (
     <div className="container mt-4">
@@ -162,7 +152,7 @@ const ThongKeHopCap = () => {
 
       {/* Bảng */}
       <table className="table table-striped table-hover align-middle" ref={tableRef}>
-        <thead style={{ backgroundColor: "#2289E7", color: "#fff" }}>
+        <thead style={{ backgroundColor: '#2289E7', color: '#fff' }}>
           <tr>
             <th>STT</th>
             <th>Giá</th>
@@ -195,7 +185,7 @@ const ThongKeHopCap = () => {
         </tfoot>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default ThongKeHopCap;
+export default ThongKeHopCap

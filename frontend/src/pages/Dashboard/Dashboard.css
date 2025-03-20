@@ -1,28 +1,27 @@
 .container-fluid {
-    padding: 20px;
-  }
-  
-  .card {
-    margin-bottom: 20px;
-    border-radius: 10px; /* Bo tròn các cạnh của thẻ */
-  }
-  
-  .card-title {
-    font-size: 18px; /* Kích thước tiêu đề */
-    font-weight: bold;
-  }
-  
-  .list-group-item {
-    border: none;  /* Loại bỏ viền cho các item */
-    padding: 10px 15px; /* Điều chỉnh padding */
-  }
-  
-  .progress-circle {
-    position: relative;
-    display: inline-block;
-    width: 200px;
-    height: 200px;
-    background: conic-gradient(#004080 0% 63%, #cccccc 63% 100%);
-    border-radius: 50%;
-  }
-  
+  padding: 20px;
+}
+
+.card {
+  margin-bottom: 20px;
+  border-radius: 10px; /* Bo tròn các cạnh của thẻ */
+}
+
+.card-title {
+  font-size: 18px; /* Kích thước tiêu đề */
+  font-weight: bold;
+}
+
+.list-group-item {
+  border: none; /* Loại bỏ viền cho các item */
+  padding: 10px 15px; /* Điều chỉnh padding */
+}
+
+.progress-circle {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  background: conic-gradient(#004080 0% 63%, #cccccc 63% 100%);
+  border-radius: 50%;
+}

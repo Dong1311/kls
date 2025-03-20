@@ -1,69 +1,67 @@
-import React, { useState, useEffect, useContext  } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { UserContext } from '../../../context/UserContext';
+import React, { useState, useEffect, useContext } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { UserContext } from '../../../context/UserContext'
 import CustomPopup from '../../../components/CustomPopUp'
 
 const ChiTietKeHoachThuThap = () => {
-  const { id } = useParams();
-  const [keHoachDetail, setKeHoachDetail] = useState(null);
-  const navigate = useNavigate();
-  const [donViNopLuu, setDonViNopLuu] = useState('');
-  const [taiLieuList, setTaiLieuList] = useState([]); 
-  const { name } = useContext(UserContext);
-  console.log('name:', name);
+  const { id } = useParams()
+  const [keHoachDetail, setKeHoachDetail] = useState(null)
+  const navigate = useNavigate()
+  const [donViNopLuu, setDonViNopLuu] = useState('')
+  const [taiLieuList, setTaiLieuList] = useState([])
+  const { name } = useContext(UserContext)
+  console.log('name:', name)
   useEffect(() => {
     fetch(`/api/lap-ke-hoach-thu-thap/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        setKeHoachDetail(data);
+        setKeHoachDetail(data)
 
         if (data.donViNopLuuId) {
           fetch(`/api/phong-ban/${data.donViNopLuuId}`)
             .then((response) => response.json())
             .then((unitData) => {
-              setDonViNopLuu(unitData.tenPhongBan || 'N/A');
+              setDonViNopLuu(unitData.tenPhongBan || 'N/A')
             })
-            .catch((error) => console.error('Error fetching unit:', error));
+            .catch((error) => console.error('Error fetching unit:', error))
         }
 
-        return fetch(`/api/lap-ke-hoach-thu-thap/${id}/tai-lieu-huong-dan`);
+        return fetch(`/api/lap-ke-hoach-thu-thap/${id}/tai-lieu-huong-dan`)
       })
       .then((response) => response.json())
       .then((data) => {
-        setTaiLieuList(data);  
+        setTaiLieuList(data)
       })
-      .catch((error) => console.error('Error fetching data:', error));
-  }, [id]);
+      .catch((error) => console.error('Error fetching data:', error))
+  }, [id])
 
-  
   if (!keHoachDetail) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   const formatDate = (dateString) => {
-    if (!dateString) return '';
-    return new Date(dateString).toISOString().split('T')[0]; 
-  };
+    if (!dateString) return ''
+    return new Date(dateString).toISOString().split('T')[0]
+  }
 
   const handleUpdateStatus = (newStatus) => {
-    const dataToSend = { trangThai: newStatus, nguoiDuyet: name };
-  
-  console.log("Data being sent:", dataToSend);
+    const dataToSend = { trangThai: newStatus, nguoiDuyet: name }
+
+    console.log('Data being sent:', dataToSend)
     fetch(`/api/lap-ke-hoach-thu-thap/${id}/trang-thai`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ trangThai: newStatus, nguoiDuyet: name  }),
+      body: JSON.stringify({ trangThai: newStatus, nguoiDuyet: name }),
     })
       .then((response) => response.json())
       .then(() => {
-        navigate('/duyet-ke-hoach-thu-thap'); 
+        navigate('/duyet-ke-hoach-thu-thap')
       })
-      .catch((error) => console.error('Error updating status:', error));
-  };
-  
+      .catch((error) => console.error('Error updating status:', error))
+  }
 
   return (
     <div className="container mt-4">
@@ -74,82 +72,113 @@ const ChiTietKeHoachThuThap = () => {
       <div className="row g-3 mb-4">
         {/* Số kế hoạch */}
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Số kế hoạch:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Số kế hoạch:
+          </label>
           <input type="text" className="form-control" value={keHoachDetail.soKeHoach || ''} disabled />
         </div>
 
         {/* Tên kế hoạch */}
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Tên kế hoạch:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Tên kế hoạch:
+          </label>
           <input type="text" className="form-control" value={keHoachDetail.tieuDe || ''} disabled />
         </div>
 
         {/* Ngày bắt đầu */}
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Từ ngày:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Từ ngày:
+          </label>
           <input type="date" className="form-control" value={formatDate(keHoachDetail.ngayBatDau)} disabled />
         </div>
 
         {/* Người duyệt */}
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Người duyệt:</label>
-          <input type="text" className="form-control" value={keHoachDetail.nguoiDuyet || 'Chưa có người duyệt'} disabled />
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Người duyệt:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            value={keHoachDetail.nguoiDuyet || 'Chưa có người duyệt'}
+            disabled
+          />
         </div>
 
         {/* Ngày kết thúc */}
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Đến ngày:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Đến ngày:
+          </label>
           <input type="date" className="form-control" value={formatDate(keHoachDetail.ngayKetThuc)} disabled />
         </div>
 
         {/* Người tạo */}
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Người tạo:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Người tạo:
+          </label>
           <input type="text" className="form-control" value={keHoachDetail.nguoiTao || 'N/A'} disabled />
         </div>
 
         {/* Trạng thái */}
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Trạng thái:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Trạng thái:
+          </label>
           <input type="text" className="form-control" value={keHoachDetail.trangThai || ''} disabled />
         </div>
 
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Ngày tạo:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Ngày tạo:
+          </label>
           <input type="date" className="form-control" value={formatDate(keHoachDetail.ngayTao) || ''} disabled />
         </div>
 
         <div className="col-md-6 d-flex align-items-center mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Đơn vị nộp lưu:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Đơn vị nộp lưu:
+          </label>
           <input type="text" className="form-control" value={donViNopLuu || 'N/A'} disabled />
         </div>
 
         {/* Nội dung */}
         <div className="col-md-12 d-flex mb-3">
-          <label className="form-label me-2" style={{ minWidth: '120px' }}>Nội dung:</label>
+          <label className="form-label me-2" style={{ minWidth: '120px' }}>
+            Nội dung:
+          </label>
           <textarea className="form-control" rows="3" value={keHoachDetail.noiDung || ''} disabled></textarea>
         </div>
       </div>
 
       {/* Buttons */}
       <div className="d-flex justify-content-end mb-4">
-      <CustomPopup
-        className="btn btn-success mx-2 flex-grow-1"
-        style={{ maxWidth: '150px' }}
-        title="Duyệt"
-        text="Đồng chí có chắc muốn duyệt kế hoạch này?"
-        onConfirm={() => handleUpdateStatus('Đã duyệt')} 
-      />
+        <CustomPopup
+          className="btn btn-success mx-2 flex-grow-1"
+          style={{ maxWidth: '150px' }}
+          title="Duyệt"
+          text="Đồng chí có chắc muốn duyệt kế hoạch này?"
+          onConfirm={() => handleUpdateStatus('Đã duyệt')}
+        />
 
-      <CustomPopup
-        className="btn btn-danger mx-2 flex-grow-1"
-        style={{ maxWidth: '150px' }}
-        title="Từ chối"
-        text="Đồng chí có chắc muốn từ chối kế hoạch này?"
-        onConfirm={() => handleUpdateStatus('Từ chối')} 
-      />
+        <CustomPopup
+          className="btn btn-danger mx-2 flex-grow-1"
+          style={{ maxWidth: '150px' }}
+          title="Từ chối"
+          text="Đồng chí có chắc muốn từ chối kế hoạch này?"
+          onConfirm={() => handleUpdateStatus('Từ chối')}
+        />
 
-        <button className="btn btn-secondary mx-2 flex-grow-1" style={{ maxWidth: '150px' }} onClick={() => navigate('/duyet-ke-hoach-thu-thap')}>Đóng</button>
+        <button
+          className="btn btn-secondary mx-2 flex-grow-1"
+          style={{ maxWidth: '150px' }}
+          onClick={() => navigate('/duyet-ke-hoach-thu-thap')}
+        >
+          Đóng
+        </button>
       </div>
 
       {/* Danh sách tài liệu */}
@@ -189,9 +218,8 @@ const ChiTietKeHoachThuThap = () => {
           </tbody>
         </table>
       </div>
-
     </div>
-  );
-};
+  )
+}
 
-export default ChiTietKeHoachThuThap;
+export default ChiTietKeHoachThuThap

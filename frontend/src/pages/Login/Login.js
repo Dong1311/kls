@@ -1,23 +1,23 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './Login.css';
-import logo from '../../assets/images/logo-bo-cong-an.jpg';
-import {jwtDecode} from 'jwt-decode';
-import { UserContext } from '../../context/UserContext'; 
-import { AuthContext } from '../../context/AuthContext'; 
+import React, { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './Login.css'
+import logo from '../../assets/images/logo-bo-cong-an.jpg'
+import { jwtDecode } from 'jwt-decode'
+import { UserContext } from '../../context/UserContext'
+import { AuthContext } from '../../context/AuthContext'
 
-const Login = ({ onLogin }) => {  
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+const Login = ({ onLogin }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
 
-  const { setRole } = useContext(AuthContext); 
-  const { updateName } = useContext(UserContext); 
+  const { setRole } = useContext(AuthContext)
+  const { updateName } = useContext(UserContext)
 
   const handleLogin = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     fetch('/api/login', {
       method: 'POST',
@@ -29,32 +29,32 @@ const Login = ({ onLogin }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-          localStorage.setItem('token', data.token);
-          
+          localStorage.setItem('token', data.token)
+
           // Decode token để lấy thông tin name và role
-          const decodedToken = jwtDecode(data.token);
-          const role = decodedToken.role;
-          const name = decodedToken.name;
+          const decodedToken = jwtDecode(data.token)
+          const role = decodedToken.role
+          const name = decodedToken.name
 
-          setRole(role);
-          updateName(name);
+          setRole(role)
+          updateName(name)
 
-          onLogin(); 
-          navigate('/'); 
+          onLogin()
+          navigate('/')
         } else {
-          setError('Tên đăng nhập hoặc mật khẩu không đúng');
+          setError('Tên đăng nhập hoặc mật khẩu không đúng')
         }
       })
       .catch(() => {
-        setError('Có lỗi xảy ra. Vui lòng thử lại.');
-      });
-  };
+        setError('Có lỗi xảy ra. Vui lòng thử lại.')
+      })
+  }
 
   return (
     <div className="login-container d-flex align-items-center justify-content-center">
       <div className="card p-4 shadow-lg login-card">
         <div className="text-center mb-4">
-          <img src={logo} alt="Logo" className="login-logo mb-3" /> 
+          <img src={logo} alt="Logo" className="login-logo mb-3" />
           <h4>Đăng Nhập</h4>
         </div>
 
@@ -62,7 +62,9 @@ const Login = ({ onLogin }) => {
 
         <form onSubmit={handleLogin}>
           <div className="form-group mb-3">
-            <label htmlFor="username" className="form-label">Tên đăng nhập</label>
+            <label htmlFor="username" className="form-label">
+              Tên đăng nhập
+            </label>
             <input
               type="text"
               id="username"
@@ -74,7 +76,9 @@ const Login = ({ onLogin }) => {
             />
           </div>
           <div className="form-group mb-3">
-            <label htmlFor="password" className="form-label">Mật khẩu</label>
+            <label htmlFor="password" className="form-label">
+              Mật khẩu
+            </label>
             <input
               type="password"
               id="password"
@@ -86,15 +90,19 @@ const Login = ({ onLogin }) => {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">Đăng Nhập</button>
+          <button type="submit" className="btn btn-primary w-100">
+            Đăng Nhập
+          </button>
 
           <div className="text-center mt-3">
-            <a href="#" className="forgot-password-link">Quên mật khẩu?</a>
+            <a href="#" className="forgot-password-link">
+              Quên mật khẩu?
+            </a>
           </div>
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

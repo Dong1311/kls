@@ -12,7 +12,7 @@
 
 /* Hiển thị mũi tên tùy chỉnh khi không bị disabled */
 .custom-select-container select:not(:disabled) + .custom-select-container::after {
-  content: "▼";
+  content: '▼';
   font-size: 12px;
   color: #6c757d;
   position: absolute;

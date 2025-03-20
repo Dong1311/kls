@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import addIcon from '../../../assets/images/Function/Add.png';
-import infoIcon from '../../../assets/images/Function/info.png';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import addIcon from '../../../assets/images/Function/Add.png'
+import infoIcon from '../../../assets/images/Function/info.png'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const DanhSachKeHoachDaDuyet = () => {
-  const [keHoachList, setKeHoachList] = useState([]);
-  const [tieuDe, setTieuDe] = useState('');
-  const [nguoiDuyet, setNguoiDuyet] = useState('');
-  const [tuNgay, setTuNgay] = useState(''); 
-  const navigate = useNavigate(); 
+  const [keHoachList, setKeHoachList] = useState([])
+  const [tieuDe, setTieuDe] = useState('')
+  const [nguoiDuyet, setNguoiDuyet] = useState('')
+  const [tuNgay, setTuNgay] = useState('')
+  const navigate = useNavigate()
 
   const fetchKeHoachs = () => {
     const query = new URLSearchParams({
       tieuDe,
       nguoiDuyet,
       tuNgay,
-      trangThai: 'Đã duyệt', 
-    }).toString();
-  
+      trangThai: 'Đã duyệt',
+    }).toString()
+
     fetch(`/api/lap-ke-hoach-thu-thap?${query}`)
-      .then(response => response.json())
-      .then(data => setKeHoachList(data))
-      .catch(error => console.error('Error fetching data:', error));
-  };
+      .then((response) => response.json())
+      .then((data) => setKeHoachList(data))
+      .catch((error) => console.error('Error fetching data:', error))
+  }
 
   useEffect(() => {
-    fetchKeHoachs();
-  }, [tieuDe, nguoiDuyet, tuNgay]);
+    fetchKeHoachs()
+  }, [tieuDe, nguoiDuyet, tuNgay])
 
   const handleDetailClick = (id) => {
-    navigate(`/chi-tiet-danh-sach-ke-hoach-da-duyet/${id}`);
-  };
+    navigate(`/chi-tiet-danh-sach-ke-hoach-da-duyet/${id}`)
+  }
 
   return (
     <div className="container mt-4">
@@ -47,35 +47,34 @@ const DanhSachKeHoachDaDuyet = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex align-items-center">
           {/* Ô tìm kiếm theo tiêu đề */}
-          <input 
-            type="text" 
-            className="form-control me-2" 
-            placeholder="Tìm theo tên kế hoạch..." 
+          <input
+            type="text"
+            className="form-control me-2"
+            placeholder="Tìm theo tên kế hoạch..."
             style={{ width: '250px' }}
             value={tieuDe}
             onChange={(e) => setTieuDe(e.target.value)}
           />
-          
+
           {/* Ô tìm kiếm theo người duyệt */}
-          <input 
-            type="text" 
-            className="form-control me-2" 
-            placeholder="Tìm theo người duyệt..." 
+          <input
+            type="text"
+            className="form-control me-2"
+            placeholder="Tìm theo người duyệt..."
             style={{ width: '250px' }}
             value={nguoiDuyet}
-            onChange={(e) => setNguoiDuyet(e.target.value)} 
+            onChange={(e) => setNguoiDuyet(e.target.value)}
           />
 
           {/* Ô tìm kiếm theo ngày bắt đầu */}
-          <input 
-            type="date" 
-            className="form-control me-2" 
+          <input
+            type="date"
+            className="form-control me-2"
             style={{ width: '200px' }}
             value={tuNgay}
-            onChange={(e) => setTuNgay(e.target.value)} 
+            onChange={(e) => setTuNgay(e.target.value)}
           />
         </div>
-
       </div>
 
       <table className="table table-striped table-hover align-middle">
@@ -99,43 +98,44 @@ const DanhSachKeHoachDaDuyet = () => {
                 <input type="checkbox" />
               </td>
               <td>{index + 1}</td>
-              <td><a href="#" onClick={() => handleDetailClick(keHoach.id)}>{keHoach.tieuDe}</a></td>
+              <td>
+                <a href="#" onClick={() => handleDetailClick(keHoach.id)}>
+                  {keHoach.tieuDe}
+                </a>
+              </td>
               <td>{keHoach.nguoiDuyet}</td>
               <td>{new Date(keHoach.ngayBatDau).toLocaleDateString()}</td>
               <td>{new Date(keHoach.ngayKetThuc).toLocaleDateString()}</td>
               <td>
-                <span style={getTrangThaiStyle(keHoach.trangThai)}>
-                  {keHoach.trangThai}
-                </span>
+                <span style={getTrangThaiStyle(keHoach.trangThai)}>{keHoach.trangThai}</span>
               </td>
-
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
 const getTrangThaiStyle = (trangThai) => {
-  let backgroundColor = '';
-  let color = '#fff'; 
+  let backgroundColor = ''
+  let color = '#fff'
   switch (trangThai) {
     case 'Tạo mới':
-      backgroundColor = '#2289E7'; 
-      break;
+      backgroundColor = '#2289E7'
+      break
     case 'Đã trình duyệt':
-      backgroundColor = '#ffc107';
-      break;
+      backgroundColor = '#ffc107'
+      break
     case 'Đã duyệt':
-      backgroundColor = '#28a745'; 
-      break;
+      backgroundColor = '#28a745'
+      break
     case 'Từ chối':
-      backgroundColor = '#dc3545'; 
-      break;
+      backgroundColor = '#dc3545'
+      break
     default:
-      backgroundColor = '#6c757d'; 
-      break;
+      backgroundColor = '#6c757d'
+      break
   }
 
   return {
@@ -144,11 +144,11 @@ const getTrangThaiStyle = (trangThai) => {
     padding: '5px 10px',
     borderRadius: '8px',
     display: 'inline-block',
-    fontWeight: '400', 
-    fontSize: '14px', 
-    minWidth: '110px', 
-    textAlign: 'center', 
-  };
-};
+    fontWeight: '400',
+    fontSize: '14px',
+    minWidth: '110px',
+    textAlign: 'center',
+  }
+}
 
-export default DanhSachKeHoachDaDuyet;
+export default DanhSachKeHoachDaDuyet
